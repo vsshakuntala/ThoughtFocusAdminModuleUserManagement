@@ -1,0 +1,88 @@
+
+.gap {
+	margin-top: 60px;
+}
+
+p.RegistrationHeading {
+	text-align: center;
+	font-family: sans-serif;
+	font-weight: bold;
+	font-size: 23px;
+	/* color: #FF5291; */
+}
+
+hr.re {
+	border: ipx solid grey;
+	height: 1px;
+	background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+	background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+	background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+	background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+}
+
+label {
+	font-size: 16px;
+	color: #000000;
+	font-weight: normal;
+}
+
+#notes {
+	resize: none;
+	height: 85px;
+}
+
+.intl-tel-input {
+	width: 100%;
+}
+
+#fName, #mName, #lName, #uName, #uEmail, #mobile, #company,
+	#userDivision {
+	border-radius: 0;
+}
+
+.newUserPageButtons {
+	width: 5em;
+	line-height: 1.5;
+	font-size: 20px;
+	/* font-weight: bold;  */
+	justify-content: center;
+}
+
+.regdPageBtnPosition {
+	text-align: center;
+}
+
+em {
+	color: #333;
+}
+
+.error {
+	color: red;
+}
+
+.rk-btn button:focus {
+	border-color: #3c8dbc;
+	box-shadow: none;
+	background-color: white;
+}
+
+.rk-btn button:hover {
+	border-color: #d3d7cf;
+	background-color: white;
+}
+
+.multiselect-parent.btn-group.dropdown-multiselect>button {
+	text-align: left;
+	border-radius: 0px;
+	background-color: white;
+}
+
+.dropdown-menu label {
+	font-weight: normal;
+	display: block;
+	white-space: pre;
+	min-height: 1.2em;
+	padding: 0px 2px 1px;
+	font-size: 14px;
+	color: rgb(68, 68, 68);
+}

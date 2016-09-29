@@ -1,0 +1,177 @@
+<div class="container">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2 gap">
+			<p class="RegistrationHeading">Update User</p>
+			<hr class="re" />
+			<div class="row">
+				<div class="col-md-10 col-md-offset-1 col-sm-8 col-sm-offset-1 col-xs-10 col-xs-offset-1">
+					<!--Update User Form -->
+					<form name="updateUserForm" ng-submit="updateUserForm.$valid && submitUpdateForm(user)"	
+					class="form-horizontal" role="form" novalidate>
+
+						<!-- USER NAME -->
+						<div class="form-group">
+							<label for="userName" class="control-label col-md-3">User
+								Name <em>*</em>
+							</label>
+							<div class="col-md-9">
+								<input type="text" ng-model="user.userName" name="userName"
+									id="uName" class="form-control" required readonly />
+							</div>
+						</div>
+
+						<!-- FIRST NAME -->
+						<div class="form-group">
+							<label for="fisrtName" class="control-label col-md-3">First
+								Name <em>*</em>
+							</label>
+							<div class="col-md-9">
+								<input type="text" ng-model="user.firstName" name="firstName"
+									id="fName" class="form-control" required />
+								<div ng-show="updateUserForm.$submitted">
+									<small class="error"
+										ng-show="updateUserForm.firstName.$error.required"> First
+										name is required </small>
+								</div>
+							</div>
+						</div>
+						<!-- MIDDLE NAME -->
+						<div class="form-group">
+							<label for="middleName" class="control-label col-md-3">Middle
+								Name </label>
+							<div class="col-md-9">
+								<input type="text" ng-model="user.middleName" name="mName"
+									id="mName" class="form-control" />
+							</div>
+						</div>
+						<!-- LAST NAME -->
+						<div class="form-group">
+							<label for="lastName" class="control-label col-md-3">Last
+								Name <em>*</em>
+							</label>
+							<div class="col-md-9">
+								<input type="text" ng-model="user.lastName" name="lName"
+									id="lName" class="form-control" required />
+								<div ng-show="updateUserForm.$submitted">
+									<small class="error"
+										ng-show="updateUserForm.lName.$error.required"> Last
+										name is required </small>
+								</div>
+							</div>
+						</div>
+
+						<!-- EMAIL -->
+						<div class="form-group">
+							<label for="Email" class="control-label col-md-3">Email <em>*</em></label>
+							<div class="col-md-9">
+								<input type="email" ng-model="user.email" name="uEmail"
+									id="uEmail" class="form-control" required readonly />
+							</div>
+						</div>
+						<!-- MOBILE NUMBER -->
+						<div class="form-group">
+							<label for="Mobile" class="control-label col-md-3">Phone
+								<em>*</em>
+							</label>
+							<div class="col-md-9">
+								<input type="text" ng-model="user.phoneNumber" name="mobile"
+									id="mobile" class="form-control" allow-pattern="\d" ng-intl-tel-input required />
+								<div ng-show="updateUserForm.$submitted">
+									<small class="error"
+										ng-show="updateUserForm.mobile.$error.required"> Phone
+										number is required </small>
+								</div>
+							</div>
+						</div>
+						<!-- COMPANY -->
+						<div class="form-group">
+							<label for="Company" class="control-label col-md-3">Company
+							</label>
+							<div class="col-md-9">
+								<input type="text" ng-model="user.companyName" name="company"
+									id="company" class="form-control" />
+							</div>
+						</div>
+						
+						<!-- ADDRESS -->
+						<div class="form-group">
+							<label for="Address" class="control-label col-md-3">Address
+							</label>
+							<div class="col-md-9">
+								<textarea type="text" ng-model="user.address" name="address" 
+								id="notes" class="form-control" ></textarea>
+							</div>
+						</div>
+
+
+						<!-- CUSTOMER ACCOUNT -->
+						<div class="form-group">
+							<label for="Customer Account" class="control-label col-md-3">Customer
+								Account </label>
+							<div class="col-md-9">
+								<input type="text" ng-model="user.customerAccount"
+									name="customeraccount" id="customeraccount"
+									class="form-control" />
+							</div>
+						</div>
+
+						<!-- DIVISIONS -->
+						<div class="form-group">
+							<label for="divisions" class="control-label col-md-3">Division(s)
+								<em>*</em>
+							</label>
+							<div class="col-md-9">
+								<div ng-dropdown-multiselect="" id="userDivision"
+									options="divisionList" selected-model="user.commonUserDivisions"	
+									translation-texts="customTexts" extra-settings="userDivision" 
+									checkboxes="true" class="rk-btn" ></div>
+
+								<div ng-show="updateUserForm.$submitted">
+									<small class="error" ng-if="user.userDivision==''">
+										Division is required 
+									</small>
+								</div>
+							</div>
+						</div>
+
+						<!-- LANGUAGE -->
+						<div class="form-group">
+							<label for="divisions" class="control-label col-md-3">Language
+								<em>*</em>
+							</label>
+							<div class="col-md-9">
+								<select class="form-control" id="userLanguage"
+									name="userLanguage" ng-model="user.userLanguage"  required>
+									<option value="">-- Select language --</option>
+									<option selected disabled hidden>{{lang}}</option>
+									<option value="{{language.languageId}}" 
+										ng-repeat='language in languageList' ng-selected="{{lang}}" >{{language.languageDescription}}</option>
+								</select>
+								<!-- 
+								<div ng-show="createUserForm.$submitted">
+									<small class="error"
+										ng-show="createUserForm.userLanguage.$error.required">
+										Language is required </small>
+								</div> -->
+								<div ng-show="updateUserForm.$submitted">
+									<small class="error" ng-if="user.userLanguage==''">
+										Language is required 
+									</small>
+								</div>
+							</div>
+						</div>
+						<!-- BUTTONS -->
+						<div class="regdPageBtnPosition">
+							<input type="submit" class="btn newUserPageButtons btn-primary"
+								id="submit1" name="submit1" value="Update" /> 
+							<input type="submit" class="btn newUserPageButtons btn-danger"
+								ng-click="goBackToDivision()" id="cancel" name="cancel"
+								value="Cancel" />
+						</div>
+					</form>
+					<!-- End of updating form -->
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

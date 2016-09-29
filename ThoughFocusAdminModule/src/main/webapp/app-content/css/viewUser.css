@@ -1,0 +1,135 @@
+@CHARSET "UTF-8";
+
+#downloadButtonViewUser {
+	font-size: 25px;
+	color: black;
+	margin-left: 10px;
+	margin-top: 11px;
+}
+
+#companySearchBox {
+	width: 160px;
+}
+
+#headingColor {
+	color: white;
+}
+
+#resultButton {
+	margin-top: -13px;
+}
+
+#nameInputBox {
+	width: 160px;
+}
+
+#searchButtonViewUser {
+	margin-top: 104px;
+    margin-left: 25px;
+}
+
+#tableRowViewUser {
+	margin-top: 10px;
+}
+
+#rowIdViewUser {
+	margin-top: 5px;
+}
+
+#filterbuttonViewUser {
+	font-size: 25px;
+	color: black;
+	margin-left: 10px;
+}
+
+#createUserButton {
+	font-size: 25px;
+	margin-left: 10px;
+}
+
+#viewUserMainRow {
+	min-height: 73px;
+}
+
+#filterDivisionViewUser {
+	/*padding: 3px;*/
+	margin-top: 6px;
+}
+
+#registeredFrom {
+	width: 161px;
+}
+
+#registeredTo {
+	width: 161px;
+}
+
+select {
+	width: 100%;
+	background-color:;
+}
+
+div.divisionDiv {
+	background-color:;
+	height: 100px;
+	overflow: scroll;
+	overflow-x: hidden;
+}
+
+div.filterDiv {
+	margin-top: 10px;
+}
+
+.ifApproved {
+	background-color: rgb(58, 167, 58);
+	color: rgb(255, 255, 255);
+	font-weight: bolder;
+	border-radius: 5px;
+	padding-left: 16px;
+	width: 95%
+}
+
+.ifPending {
+	background-color: #F49507;
+	color: rgb(255, 255, 255);
+	font-weight: bolder;
+	border-radius: 5px;
+	padding-left: 20px;
+	width: 94%;
+}
+
+.tableCenterAlignViewUser {
+	text-align: center;
+	font-weight: bolder;
+	font-size: 16px;
+	font-family: serif;
+}
+
+.ifDeleted {
+	background-color: red;
+	color: rgb(255, 255, 255);
+	font-weight: bolder;
+	border-radius: 5px;
+	padding-left: 23px;
+	width: 95%;
+}
+.panel-heading-border{
+	border-top: 4px solid #222d32 !important;
+	border-bottom: none !important;
+	background-color: #fff !important;
+}
+.panel-body-border{
+	border-top: none !important;
+	background-color: #fff !important;
+}
+.links{
+	cursor: pointer;
+}
+
+.label-bold{
+	font-weight: bold;
+}
+.user-search-form{
+	padding: 5px 15px 0px 15px;
+	background-color: #fff;
+}

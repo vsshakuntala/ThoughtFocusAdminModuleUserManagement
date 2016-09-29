@@ -1,0 +1,14 @@
+.user-role-check{
+    height: auto !important;
+}
+.hide-scroll{
+    overflow: hidden;
+}
+.button-margin{
+    margin-bottom: 15px;
+}
+
+option.fa.check-style {
+    font-weight: bolder;
+    font-size: 15px;
+}

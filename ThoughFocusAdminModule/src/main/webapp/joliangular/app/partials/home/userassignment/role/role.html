@@ -1,0 +1,205 @@
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb">
+    <li><a href="#">Home</a></li>
+    <li><a ui-sref="home.user.viewusers" ui-sref-opts="{reload:true}" class="cursor-point">List Of Users</a></li>
+    <li><a ui-sref="home.userassignment.division" ui-sref-opts="{reload:true}" class="cursor-point">User Dashboard</a></li>
+    <li class="active">Role Management</li>
+</ul>
+<!-- END BREADCRUMB -->
+
+<!-- PAGE TITLE -->
+<!--<div class="page-title">
+    <div class="row">
+        <div class="col-sm-6">
+            <h2> Role Management</h2>
+        </div>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-10">
+                    <span class="fa fa-3x"></span>
+                </div>
+                <div class="col-sm-2">
+                    <div class="">
+                        <span class="fa fa-arrow-circle-o-left fa-3x return-to-user-list-icon cursor-point" ui-sref="home.user.viewusers"></span>
+                        <p class="return-to-user-list pull-right">User List</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+<!-- END PAGE TITLE -->
+
+<!-- START USER DATA -->
+<div class="page-title">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="user-name">{{userDetails.userName}}</label><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <label class="organization-name">{{organization.organizationName}}</label><br>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="horizontal-line">
+</div>
+<!-- END USER DATA -->
+
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <div class="row">
+        <!--<div class="col-sm-3">
+            <div class="widget widget-success widget-item-icon">
+                <div class="widget-item-left">
+                    <span class="fa fa-sitemap"></span>
+                </div>
+                <div class="widget-data">
+                    <div class="widget-title custom-widget-title">Division</div>
+                    <div class="widget-title custom-widget-title">{{organization.organizationName}}</div>
+                </div>
+                <div class="widget-controls">
+                </div>
+            </div>
+        </div>-->
+        <!-- START OF RIGHT PANEL -->
+        <div class="col-sm-offset-2 col-sm-8">
+            <div class="panel panel-default">
+                <div class="row">
+
+
+                    <div class="col-sm-12">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!--<div class="panel panel-default">
+                                    <div class="panel-body panel-body-search">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-search"></span></span>
+                                            <input type="text" class="form-control" ng-model="searchUnassignedList" placeholder="Search...">
+                                        </div>
+                                    </div>
+                                </div>-->
+                                <!-- LOGIN WIDGET -->
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <h3>Unassigned Role(s)</h3>
+                                        <div class="panel panel-default">
+                                            <div class="panel-body panel-body-search">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-search"></span></span>
+                                                    <input type="text" class="form-control" ng-model="searchUnassignedList" placeholder="Search...">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <select size="2" class="form-control hide-scroll" ng-model="unAssignedCheck" ng-change="checkToggleUnAssigned(unAssignedCheck)">
+                                                    <option value="check" ng-click="checkToggleUnAssigned(unAssignedCheck)"  class="fa check-style" style="display:inherit;"> &#xf00c;&nbsp;Check all</option>
+                                                    <option value="uncheck" ng-click="checkToggleUnAssigned(unAssignedCheck)" class="fa check-style" style="display:inherit;">&#xf00d;&nbsp;Uncheck all</option>
+                                            </select>
+                                        </div>
+                                        <div class="">
+                                            <select multiple="" class="form-control" id="unassignedRolesBox " ng-model="unassignedSelectedRole " size="7 " ng-click="getPermissions(unassignedSelectedRole)" ng-options="role as role.roleName for role in unAssignedRole | filter : searchUnassignedList | orderBy : 'roleName' "></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <!--<div class="panel panel-default">
+                                    <div class="panel-body panel-body-search">
+                                        <div class="input-group">
+                                            <span class="input-group-addon"><span class="fa fa-search"></span></span>
+                                            <input type="text" class="form-control" placeholder="Search..." ng-model="searchAssignedList ">
+                                        </div>
+                                    </div>
+                                </div>-->
+                                <!-- LOGIN WIDGET -->
+                                <div class="panel panel-default">
+                                    <div class="panel-body">
+                                        <h3>Assigned role(s)</h3>
+                                        <div class="panel panel-default">
+                                            <div class="panel-body panel-body-search">
+                                                <div class="input-group">
+                                                    <span class="input-group-addon"><span class="fa fa-search"></span></span>
+                                                    <input type="text" class="form-control" placeholder="Search..." ng-model="searchAssignedList ">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                            <select size="2" class="form-control hide-scroll" ng-model="assignedCheck" ng-change="checkToggleAssigned(assignedCheck)">
+                                            <option value="check" ng-click="checkToggleAssigned(assignedCheck)" class="fa check-style" style="display:inherit;"> &#xf00c;&nbsp;Check all</option>
+                                            <option value="uncheck" ng-click="checkToggleAssigned(assignedCheck)" class="fa check-style" style="display:inherit;">&#xf00d;&nbsp;Uncheck all</option>
+                                        </select>
+                                        </div>
+                                        <div class="">
+                                            <select multiple="" class="form-control" id="assignedRolesBox" ng-model="assignedSelectedRole" ng-click="getPermissions(assignedSelectedRole)" ng-options="role as role.roleName for role in assignedRole | filter : searchAssignedList | orderBy : 'roleName'"
+                                                size="7"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-offset-4 col-sm-2 text-center">
+                                <span title="Click to assign role"><i class="fa fa-chevron-right fa-2x cursor-point" aria-hidden="true" ng-click="moveToAssigned(unassignedSelectedRole)"></i></span>
+                            </div>
+                            <div class="col-sm-2 text-center">
+                                <span title="Click to unassign role"><i class="fa fa-chevron-left fa-2x cursor-point" aria-hidden="true" ng-click="moveToUnAssigned(assignedSelectedRole)"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-offset-4 col-sm-12 text-center button-margin">
+
+                        <button type="button" class="btn btn-success" ng-click="saverole()">Save</button>
+                        <button type="button" class="btn btn-danger mb-control" ui-sref="home.userassignment.division">Cancel</button>
+
+                    </div>
+                </div>
+            </div>
+            <!-- END OF RIGHT PANEL -->
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-2 col-sm-8">
+            <div class="panel panel-default">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <!-- LOGIN WIDGET -->
+                        <div class="panel-body">
+                            <h2>Permissions</h2>
+                            <div class="">
+                                <select multiple="" class="form-control" ng-disabled="true" ng-model="a" ng-options="permission as permission.permissionName for permission in permissions" size="7"></select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- PAGE CONTENT WRAPPER -->
+
+<!-- MESSAGE BOX-->
+<!--<div class="message-box animated fadeIn" data-sound="alert" id="role-confirm">
+    <div class="mb-container">
+        <div class="mb-middle">
+            <div class="mb-title"><span class="fa"></span><strong>Confirm</strong>?</div>
+            <div class="mb-content">
+                <p>Are you sure you want to cancel?</p>
+                <p>Press No if you want to continue work. Press Yes to return to user dashboard.</p>
+            </div>
+            <div class="mb-footer">
+                <div class="pull-right">
+                    <a class="btn btn-success btn-lg" ui-sref="home.userassignment.division">Yes</a>
+                    <button class="btn btn-default btn-lg mb-control-close">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+<!-- END MESSAGE BOX-->

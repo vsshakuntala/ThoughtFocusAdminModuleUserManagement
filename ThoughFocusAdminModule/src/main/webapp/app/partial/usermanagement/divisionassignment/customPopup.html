@@ -1,0 +1,48 @@
+<div class="modal-header">
+            <h3 class="modal-title" id="modal-title">{{heading}}</h3>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <div class="container-fluid">
+				<div class="row" style="margin-bottom: 15px;">
+					<label>{{title}}</label>
+				</div>
+
+					<div class="row" style="">
+						 <form name="notesForm" role="form"
+							ng-submit="submitNotes(userNotesInput)" novalidate>
+							<div class="form-group">
+								<textarea class="form-control" id="inputNote" rows="3"
+									style="resize: none;" ng-model="userNotesInput.notes" placeholder="Enter notes here.."></textarea>
+								<!-- <button type="submit" id="saveButtonDivision"
+									class="btn btn-success" data-dismiss="modal"
+									 style="float: right;">Save</button> -->
+							</div>
+						</form>
+					</div>
+<div class="row" style="margin-bottom: 15px;">
+<div class="col-sm-offset-8 col-sm-4">
+<button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+            </div>
+</div>
+
+
+					<!-- <div class="row"> -->
+					<!-- <div class="col-sm-offset-4 col-sm-4 text-left"> -->
+					<!-- <h3>History</h3> -->
+					<div ng-repeat="note in notes">
+						<div class="row" style="margin-bottom: 15px;">
+							<textarea class="form-control" id="inputNote" rows="3"
+								style="resize: none;" readonly>{{note.notes}}
+								                   {{note.createdBy}}   {{note.createdDate}}  {{note.createdTime}}
+								</textarea>
+							<!-- <hr> -->
+						</div>
+					</div>
+					<!-- </div> -->
+					<!-- </div> -->
+				</div>
+        </div>
+        <div class="modal-footer">
+            
+        </div>

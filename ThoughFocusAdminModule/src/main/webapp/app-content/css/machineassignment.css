@@ -1,0 +1,99 @@
+@CHARSET "UTF-8";
+
+.heading {
+	font-size: 23px;
+	color: white;
+	font-weight: bold;
+	font-family: sans-serif;
+}
+
+#downloadButtonMachines {
+	font-size: 30px;
+	margin-top: 18px;
+	margin-left: 9px;
+}
+
+.edit {
+	font-size: 17px;
+	color: #333;
+	font-family: sans-serif;
+}
+
+.subheading {
+	font-size: 18px;
+	text-align: center;
+}
+
+.tableCenterAlignMachines{
+	text-align: center;
+	font-weight: bolder;
+	font-size: 16px;
+	font-family: serif;
+}
+
+.button-machine {
+	margin-top: -15px;
+}
+
+#ddlsearch {
+	width: 179px;
+	border-radius: 0px;
+	background-color: rgb(51, 122, 183);
+	color: white;
+	font-size: 18px;
+	padding-top: 5px;
+}
+
+#txtkey, #btn-search {
+	border-radius: 0px;
+}
+
+.ddl-title {
+	background-color: #5bc0de !important;
+	color: #fff !important;
+	font-style: italic;
+	font-size: 80%;
+}
+
+#infoRow {
+	margin-left: 80px;
+}
+
+#buttonColumnMain {
+	margin-left: 10px;
+	margin-top: 10px;
+}
+
+#buttonContainerMain {
+	margin-left: 364px;
+}
+
+#filterMachines {
+	font-size: 33px;
+	margin-left: 12px;
+}
+
+#searchFormMachines {
+	margin-left: 305px;
+}
+
+#searchButtonmachines {
+	margin-bottom: 3px;
+}
+
+#buttonRowMachine {
+	margin-left: -196px;
+	margin-top: 15px;
+}
+#availableDivisionMachines{
+	color: white;
+}
+
+.machine-search-button{
+	height: 34px;
+	width: 50%;
+}
+
+.machine-search{
+	background-color: #fff;
+}

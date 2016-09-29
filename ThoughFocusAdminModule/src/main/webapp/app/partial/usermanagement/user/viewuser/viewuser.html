@@ -1,0 +1,151 @@
+<div class="container-fluid">
+	<div class="row ">
+		<div class="col-sm-6">
+			<ul class="breadcrumb">
+				<li><a href="">Home</a></li>
+				<li>List of Users</li>
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<h3 style="margin-left:15px;color:#00BFFF">List of Users</h3><br>
+		</div>
+		<div class="col-sm-6">
+			<div class="col-sm-offset-6 col-sm-2">
+				<span>Result :<b>{{totalrows}}</b></span>
+			</div>
+			<div class="col-sm-2">
+				<div class="row">
+					<span title="Click to download customer report" ng-click="reportdata(registeredFrom,companySearchBox,registeredTo,nameInputBox)" style="cursor: pointer; pointer-events: all;"><i
+						class="fa fa-download fa-2x" aria-hidden="true"></i></span>
+				</div>
+				<div class="row">
+					<span>Download</span>
+				</div>
+			</div>
+			<div class="col-sm-2">
+				<div class="row">
+					<span title="Click to assign customer" ng-click="create()" style="cursor: pointer; pointer-events: all;"><i
+						class="fa fa-user-plus fa-2x" aria-hidden="true"></i></span>
+				</div>
+				<div class="row">
+					<span>Add User</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-11">
+			<hr class="hr1">
+		</div>
+		<div class="col-sm-1"><span class="fa fa-filter" id="filter" ng-click="toggle()" title="Filter"></span>
+			<i class="fa fa-minus"></i></div>
+	</div>
+	<div class="row">
+		<div class="col-lg-offset-0 col-sm-12">
+			<div class="row">
+				<div class="col-md-12">
+					<!-- filter starts -->
+					<div id="search" class="searchForm user-search-form" ng-show="isVisible">
+						<div class="row">
+							<div class="col-sm-3">
+								<div class="row">
+									<div class="col-sm-12">
+										<h5 class="label-bold">Divisions</h5>
+									</div>
+								</div>
+								<div class="row divisionDiv">
+									<div class="col-sm-12">
+										<p ng-repeat="divs in divisions">
+											<input type="checkbox" ng-init="divisions=true" ng-model="divisions" ng-click="getdiv(divs)" value="divs"> {{divs.organizationName}}
+
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<h5 class="label-bold">Status</h5>
+								<p ng-repeat='status in status'>
+									<input type="checkbox" ng-model="status.status" ng-click="getstatus(status)" value="status" checked> {{status.name}}
+
+								</p>
+							</div>
+							<div class="col-sm-2">
+								<div class="row">
+									<div class="col-sm-12">
+										<h5 class="label-bold">Roles</h5>
+									</div>
+								</div>
+								<div class="row divisionDiv">
+									<div class="col-sm-12">
+										<p ng-repeat='role in roleList'>
+											<input type="checkbox" ng-model="roleList" ng-click="getroles(role)" value="{{role.roleName}}"> {{role.roleName}}
+
+										</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div>
+									<h5 class="label-bold">Registered From</h5>
+									<p class="input-group">
+										<input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="registeredFrom" is-open="popup1.opened"
+											datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />										<span class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="open1()">
+									<i class="glyphicon glyphicon-calendar"></i>
+								</button>
+							</span>
+									</p>
+									<!--  <input type="date"
+							id="registeredFrom" ng-model="registeredFrom"> -->
+								</div>
+								<div>
+									<h5 class="label-bold">Company</h5> <input type="text" id="companySearchBox" ng-model="companySearchBox"><br>
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div>
+									<h5 class="label-bold">Registered To</h5>
+									<p class="input-group">
+										<input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="registeredTo" is-open="popup2.opened"
+											datepicker-options="dateOptions" ng-required="true" close-text="Close" /> <span class="input-group-btn">
+								<button type="button" class="btn btn-default" ng-click="open2()">
+									<i class="glyphicon glyphicon-calendar"></i>
+								</button>
+							</span>
+									</p>
+									<!-- <input type="date" id="registeredTo"
+							ng-model="registeredTo"> -->
+								</div>
+								<div>
+									<h5 class="label-bold">Name</h5> <input type="Text" id="nameInputBox" ng-model="nameInputBox">
+								</div>
+							</div>
+							<div class="col-sm-1">
+								<button class="btn-center" type="button" id="searchButtonViewUser" ng-click="doFilter(registeredFrom,companySearchBox,registeredTo,nameInputBox)">
+						<span class="glyphicon glyphicon-search"></span>
+					</button>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- filter ends -->
+				<div ng-controller="ViewUserController as showCase">
+					<div class="row" id="UserTable">
+						<div class="col-sm-12">
+							<div class="container-fluid">
+								<table datatable="" dt-columns="showCase.dtColumns" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs"
+									dt-instance="showCase.dtInstanceCallback" class="row-border hover">
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- table ends -->
+			</div>
+		</div>
+	</div>
+</div>

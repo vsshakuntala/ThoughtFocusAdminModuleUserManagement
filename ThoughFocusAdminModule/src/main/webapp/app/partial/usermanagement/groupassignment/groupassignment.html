@@ -1,0 +1,169 @@
+<div class="container-fluid">
+<div class="row ">
+
+		<div class="col-sm-6">
+			<ul class="breadcrumb">
+				<li><a href="">Home</a></li>
+				<li><a href="" ng-click="backToUserList()">List of Users</a></li>
+				<li><a href="" ng-click="backToDivision()">User Dashboard</a></li>
+				<li class="active">Group Management</li>
+
+			</ul>
+		</div>
+
+		<div class="col-sm-6 text-right" id="backToUserLink">
+		
+		
+					<span ng-click="backToUserList()"
+						style="cursor: pointer; pointer-events: all;"> <i
+						class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></span>				
+					<span style="float: right;margin-top: 5px;">User list</span>				
+			
+		</div>
+	</div>
+	<div class="row">
+
+		
+			<label style="margin-left:15px;color:#00BFFF">{{userNameSetLocal}}</label><br>			
+		</div>
+	<div class="row">
+	
+	<hr class="hr1">
+	
+
+</div>
+	<div class="row">
+		<div class="col-md-3 subheading divname">
+			<div class="info-box">
+				<span class="info-box-icon bg-aqua"><i class="fa fa-sitemap"></i></span>
+
+				<div class="info-box-content">
+					<span class="info-box-text">Division</span> <span
+						class="info-box-number">{{orgName}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="conatainer">
+		<div class="row" id="rowPrimaryGroup">
+			<div class=" col-sm-offset-3 col-sm-6">
+				<div id="panelMain" class="panel ">
+					
+					<div class="panel panel-body">
+						<div class="row" id="rowSecondary">
+							<div class="col-md-5" id="unAssignedGroup">
+								<label id="unAssignedRolesLabel">Unassigned Group(s)</label>
+								<div class="row">
+									<div class="col-md-12">
+
+										<div class="inner-addon right-addon">
+											<i class="glyphicon glyphicon-search"></i> <input type="text"
+												class="search form-control" placeholder="Search" ng-model="searchunassignedlist"/>
+										</div>
+									</div>
+								</div>
+								<select ng-change="toggleSelection()"
+								ng-model="toggleSeleted" size="3" >
+								<option value="check">Check All</option>
+								<option value="uncheck">Uncheck All</option>
+							</select>
+								<select multiple size="20" id="groupBox" ng-multiple="true"
+									ng-model="unassignedgroup"
+									ng-options="group as group.groupName for group in unassignedgrplist | filter : searchunassignedlist | orderBy : 'groupName'">
+								</select>
+							</div>
+							<div class="col-md-2">
+								<div class="row text-center" id="rowButtonGroup">
+									<div class="col-sm-12">
+									
+									
+									<div class="row" id="innerRowOne">
+										<div class="col-sm-12">
+											<input class="btn btnarrow btn-primary" id="addSingleButton" title="Add"
+												type="button" value=">"
+												ng-click="assignitem(unassignedgroup)" />
+										</div>
+										<!-- <div class="col-sm-6">
+											<input class="btn btnarrow btn-primary" id="addAllButton" title="Add All"
+												type="button" value=">>" ng-click="assignall()" />
+										</div> -->
+									</div>
+									<div class="row" id="innerRowTwo">
+										<div class="col-sm-12">
+											<input class="btn btnarrow btn-primary" title="Remove"
+												type="button" id="removeSingleButton" value="<"
+												ng-click="unassignitem(selectedgroup)" />
+										</div>
+										<!-- <div class="col-sm-6">
+											<input class="btn btnarrow btn-primary" title="Remove All"
+												type="button" id="removeAllButton" value="<<"
+												ng-click="unassignall()" />
+										</div> -->
+									</div>
+									
+									
+									
+										<!-- <input class="btn btnarrow btn-primary" title="AddS"
+											type="button" value=">"
+											 /> <input
+											class="btn btnarrow btn-primary" title="Add All"
+											type="button" value=">>"  /> <br>
+										<input class="btn btnarrow btn-primary" title="Remove"
+											type="button" id="removeSingleButton" value="<"
+											 /> <input
+											class="btn btnarrow btn-primary" title="Remove All"
+											type="button" id="removeAllButton" value="<<"
+											 /> -->
+											
+											
+											
+											
+									</div>
+								</div>
+							</div>
+							<div class="col-md-5" id="assignedGroupButton">
+								<label id="assignedRolesLabel">Assigned Group(s)</label>
+								<div class="row">
+									<div class="col-md-12">
+
+										<div class="inner-addon right-addon">
+											<i class="glyphicon glyphicon-search"></i> <input type="text"
+												class="form-control" placeholder="Search" ng-model="searchassignedlist"/>
+										</div>
+
+									</div>
+
+								</div>
+								
+							<select ng-change="toggleSelectedSelection()" ng-model="toggleSeletedSelection" size="3" style="">
+								<option value="check">Check All</option>
+								<option value="uncheck">Uncheck All</option>
+							</select>
+								<select multiple size="20" id="groupBox" ng-multiple="true"
+									ng-model="selectedgroup"
+									ng-options="group as group.groupName for group in assignedgrplist |filter : searchassignedlist | orderBy : 'groupName'"
+									size="7"></select>
+							</div>
+						</div>
+						<div class="row" id="rowTertiaryGroup">
+							<div class="col-xs-6 ">
+								<input type="submit" id="saveButtonGroupAssignment"
+									class="pull-right btn btn-success" title="save"
+									ng-click="savegroup()" value="Save" />
+							</div>
+							<div class="col-xs-6">
+
+								<input type="reset" ng-click="cancel()"
+									id="cancelButtonGroupAssignment"
+									class=" pull-left btn btn-danger" title="cancel" value="Cancel" />
+
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

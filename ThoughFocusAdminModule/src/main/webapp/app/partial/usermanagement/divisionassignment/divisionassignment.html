@@ -1,0 +1,584 @@
+<div class="container-fluid">
+	<div class="row ">
+
+		<div class="col-sm-6">
+			<!-- <label>User : {{userNameSetLocal}}</label> -->
+			<!-- <a
+						href="" ng-click="navigateToEditUser()" class="anchor"><span
+						class="glyphicon glyphicon-edit" title="Edit Profile"></span></a> -->
+<div style="width:300px;margin-left:15px;">
+			
+				<a href="">Home > </a>
+				<a href="" ng-click="backToUserList()">List of Users > </a>
+				User Dashboard
+
+			
+	</div>	</div>
+
+		<div class="col-sm-6 text-right" id="backToUserLink" >
+<div style="margin-right:20px;">
+
+			<span ng-click="backToUserList()"
+				style="cursor: pointer; pointer-events: all;"> <i
+				class="fa fa-chevron-left fa-2x " aria-hidden="true"></i></span>
+				 <span style="float: right;margin-top: 5px;margin-left:5px;">User
+				list</span>
+				</div>
+
+		</div>
+	</div>
+	<div class="row">
+
+		<div class="col-sm-6">
+			<span style="margin-left:15px;color:#00BFFF;font-size:20px;"> {{userNameSetLocal}}</span>
+		
+			<span style="padding-left:2em;"><b>Last Active Date:</b>
+				{{userDetails.lastLoginDate|date:"dd-MMM-yyyy"}}</span>
+		</div>
+		<div class="col-sm-6">
+			<div class="col-sm-5"></div>
+			<div class="col-sm-7">
+			<div class="col-sm-3" style="width:100px;">
+				<div class="row">
+					<span title="Click to add divisions" data-toggle="modal"
+						role="dialog" data-target="#unAssignedOrgModel"
+						ng-click="unassignedOrganization()"
+						style="cursor: pointer; pointer-events: all;margin-left:15px;"><i
+						class="fa fa-sitemap fa-2x"></i></span><i
+						class="fa fa-plus" style="float:right;margin-right: 45px;"></i>
+				</div>
+				<div class="row">
+					<span>Add Division</span>
+				</div>
+			</div>
+			<div class="col-sm-3" style="width:70px;">
+				<div class="row">
+					<span title="Click to view notes" data-toggle="modal"
+						data-target="#viewNotesModel" ng-click="getNotesList()"
+						style="cursor: pointer; pointer-events: all; margin-left:5px;"> <i
+						class="fa fa-file fa-2x"></i></span>
+				</div>
+				<div class="row">
+					<span>Notes</span>
+				</div>
+			</div>
+			<div class="col-sm-3" style="width:70px;">
+				<div class="row">
+					<span title="Click to edit user" data-toggle="modal"
+						ng-click="navigateToEditUser()"
+						style="cursor: pointer; pointer-events: all; margin-left:15px;"> <i
+						class="fa fa-user fa-2x"></i></span>
+				</div>
+				<div class="row">
+					<span>Edit Profile</span>
+				</div>
+			</div>
+			<div class="col-sm-3" style="margin-left:10px;">
+				<div class="row">
+					<span title="Click to reset password" data-toggle="modal"
+						ng-click="#"
+						style="cursor: pointer; pointer-events: all;margin-left:20px;"> <i
+						class="fa fa-refresh fa-2x" aria-hidden="true"></i><i
+						class="fa fa-key" aria-hidden="true"></i></span>
+				</div>
+				<div class="row">
+					<span>Reset Password</span>
+				</div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+
+	<div class="row margin-top-100">
+		<div class="col-sm-12">
+			<!-- <div class="row margin-bottom-10">
+				<div class="col-sm-12">
+					<div class="pull-right margin-left-10">
+						<button type="button" class="btn btn-primary" data-toggle="modal"
+							data-target="#viewNotesModel">
+							<i class="fa fa-sticky-note"></i>
+						</button>
+					</div>
+				</div>
+			</div> -->
+			<!-- <div class="row margin-bottom-10" id="rowInfo">
+				<div class="col-sm-12">
+				Info boxes
+				<div class="row">
+					<div class="col-md-3 col-sm-6 col-xs-12">
+						<div class="info-box">
+							<span class="info-box-icon bg-aqua"><i
+								class="fa fa-sitemap"></i></span>
+
+							<div class="info-box-content">
+								<span class="info-box-text">Assigned Divisions</span> <span
+									class="info-box-number">{{userDetails.count}}</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-6 col-xs-12">
+						<div class="info-box">
+							<span class="info-box-icon " id="boxRegistered"><i
+								class="fa fa-calendar" id="calendarRegisteredDate"></i></span>
+
+							<div class="info-box-content">
+								<span class="info-box-text">Registered Date</span> <span
+									class="info-box-number">{{userDetails.createdDate| date:"MM/dd/yyyy 'at' h:mma"}}</span>
+							</div>
+						</div>
+					</div>
+					<div class="clearfix visible-sm-block"></div>
+					<div class="col-md-3 col-sm-6 col-xs-12">
+						<div class="info-box">
+							<span class="info-box-icon bg-green"><i
+								class="fa fa-calendar"></i></span>
+							<div class="info-box-content">
+								<span class="info-box-text">Last Active Date</span> <span
+									class="info-box-number">{{userDetails.lastLoginDate|date:"MM/dd/yyyy 'at' h:mma"}}</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-6 col-xs-12">
+						<div class="info-box">
+							<div title="Click to view notes" data-toggle="modal" data-target="#viewNotesModel" ng-click="getNotesList()"
+								style="cursor: pointer; pointer-events: all;">
+								<span class="info-box-icon bg-yellow"><i
+									class="fa fa-sticky-note-o"></i></span>
+							</div>
+
+							<div class="info-box-content">
+								<span class="info-box-text">Notes</span> <span
+									class="info-box-number"></span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			</div> -->
+
+			<!-- <button class="btn btn-default pull-right" type="button" data-toggle="modal" role="dialog" data-target="#unAssignedOrgModel" ng-click="unassignedOrganization()" side="right">Add Division</button> -->
+
+			<div class="container-fluid">
+				<div class="row " id="tableRowDivision">
+					<div class="col-md-12">
+						<div id="no-more-tables">
+							<table class="row-border hover" cellspacing="0" width="100%"
+								 id="dataTable">
+								<thead>
+									<tr style="border-bottom:.5px solid black">
+										<th class="tableCenterAlign" class="numeric">Division</th>
+										<th class="tableCenterAlign">Registered Date</th>
+										<th class="tableCenterAlign">Role <span
+											style="color: #FF0000;">*</span></th>
+										<th class="tableCenterAlign">Default Address <span
+											style="color: #FF0000;">*</span></th>
+										<th class="tableCenterAlign">Customers <span
+											style="color: #FF0000;">*</span></th>
+										<th class="tableCenterAlign">Machines</th>
+										<th class="tableCenterAlign">Groups</th>
+										<th class="tableCenterAlign">Action</th>
+									</tr>
+								</thead>
+								
+								<tbody>
+									<tr ng-repeat="division in divisionList" style="border-bottom:.5px solid #808080">
+										<td class="tableCenterAlign divisionNameTable">{{division.organizationName}}</td>
+
+										<!--TODO don't delete the commented code for now  -->
+										<td class="tableCenterAlign" height="70">{{division.createdDate |date:"dd-MMM-yyyy"}}
+											<!-- <div ng-if="checkDivisionStatus(division)">
+												<div class="label-approved">{{division.status}}</div>
+											</div>
+											<div ng-if="!checkDivisionStatus(division)">
+												<div class="label-pending">{{division.status}}</div>
+											</div> -->
+
+										</td>
+
+										<td class="tableCenterAlign"
+											ng-if="!checkRoleResults(division)" class="clickable"
+											ng-click="navigateToRoles(division)" height="70"><span
+											class="custom custom-iconscustomer_role_access_add" style="font-size:35px;" title="Assign"></span></td>
+										<td class="tableCenterAlign"
+											ng-if="checkRoleResults(division)" class="clickable"
+											ng-click="navigateToRoles(division)" height="70"><span
+											class="custom custom-iconscustomer_role_access_add" style="font-size:35px;color:#03a9f5"
+											title="Modify" ></span><br> <span
+											>{{division.roleCount}}</span></td>
+
+
+										<td class="tableCenterAlign"
+											ng-if="!checkDefaultAddressResults(division)"
+											class="bodyPannelPara clickable"
+											ng-click="navigateToDefaultAddress(division)" height="70"><span
+											class="custom custom-iconsmap-pin_outline_add" style="font-size:35px;" title="Assign"></span></td>
+										<td class="tableCenterAlign"
+											ng-if="checkDefaultAddressResults(division)"
+											class="bodyPannelPara clickable"
+											ng-click="navigateToDefaultAddress(division)" height="70"><span
+											class="custom custom-iconsmap-pin_outline" style="font-size:35px;color:#03a9f5"
+											title="Modify" style="color:#03a9f5"></span> <br> <span
+											>{{division.defaultAddressCount}}</span></td>
+
+
+										<td class="tableCenterAlign"
+											ng-if="!checkCustomerResults(division)"
+											class="bodyPannelPara clickable"
+											ng-click="navigateToCustomers(division)" height="70"><span
+											class="custom custom-iconscustomer_tick_role_add"  style="font-size:35px;" title="Assign"></span></td>
+										<td class="tableCenterAlign"
+											ng-if="checkCustomerResults(division)"
+											class="bodyPannelPara clickable"
+											ng-click="navigateToCustomers(division)" height="70"><span
+											class="custom custom-iconscustomer_tick_role_add" style="font-size:35px;color:#03a9f5"
+											title="Modify"></span> <br> <span
+											>{{division.customerCount+division.customerGroupCount}}</span></td>
+
+
+
+										<td class="tableCenterAlign"
+											ng-if="!checkMachinesResults(division)"
+											class="bodyPannelPara clickable"
+											ng-click="navigateToMachines(division)" height="70"><span
+											class="custom custom-iconsadd_machines" style="font-size:35px;" title="Assign"></span></td>
+										<td class="tableCenterAlign"
+											ng-if="checkMachinesResults(division)"
+											class="bodyPannelPara clickable"
+											ng-click="navigateToMachines(division)" height="70"><span
+											class="custom custom-iconsadd_machines" style="font-size:35px;color:#03a9f5"
+											title="Modify"></span><br> <span
+											>{{division.catalogCount+division.catalogGroupCount}}</span>
+										</td>
+
+
+										<td class="tableCenterAlign"
+											ng-if="!checkGroupResults(division)"
+											class="bodyPannelPara clickable"
+											ng-click="navigateToGroups(division)" height="70"><span
+											class="custom custom-iconsgroup_add" title="Assign"  style="font-size:35px;"></span></td>
+										<td class="tableCenterAlign"
+											ng-if="checkGroupResults(division)"
+											class="bodyPannelPara clickable"
+											ng-click="navigateToGroups(division)" height="70"><span
+											class="custom custom-iconsgroup_add" title="Modify"  style="font-size:35px;color:#03a9f5"
+											title="Modify"></span><br> <span
+											>{{division.groupsCount}}</span></td>
+
+										<td class="tableCenterAlign" height="70">									
+										
+												<span class="fa fa-check" ng-click="open(division,1)" style="font-size:35px;color:#008000" title="Approve" ng-show="division.status=='Pending'"></span>
+												<span class="fa fa-trash" ng-click="open(division,0)" style="font-size:35px;color:#F08080;float:right;" title="Deassign"></span>
+										
+											
+											<!-- <button title="Approve" type="button" class="btn btn-success"
+												ng-click="assignDivisionToUser(division)"
+												ng-if="checkApproveDivisionUI(division)">
+												<i class="fa fa-check"></i>
+											</button>
+											 <button title="Deassign" type="button" class="btn btn-danger"
+												ng-click="deAssignDivisionToUser(division)"
+												ng-if="checkRemoveDivisionUI(division)">
+												<i class="fa fa-times"></i>
+											</button> -->
+
+
+										</td>
+									</tr>
+								</tbody>
+							</table>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+
+		<!--add notes Modal -->
+		<div class="col-sm-12">
+			<div class="modal" tabindex="-1" id="addNotesModel" role="dialog">
+				<div class="modal-dialog">
+
+					<!-- Modal content-->
+								<hr class="hr2">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+
+							<h4 class="modal-title">Add Notes</h4>
+						</div>
+						<div class="modal-body">
+							<form name="notesForm" role="form"
+								ng-submit="submitNoteOfUser(userNote)">
+								<div class="form-group">
+									<textarea class="form-control" id="inputNote" rows="3"
+										ng-model="userNote.note"></textarea>
+								</div>
+
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default"
+								data-dismiss="modal">Submit</button>
+
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--view notes modal  -->
+<div class="modal" tabindex="-1" id="viewNotesModel" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header" style="background-color:#A9A3A2;">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" style="color:white;">Notes</h4>
+			</div>
+			<div class="modal-body">
+
+				<div class="container-fluid">
+
+					<div class="row" style="margin-bottom: 15px;">
+						<form name="notesForm" role="form"
+							ng-submit="submitNotes(userNotesInput)" novalidate>
+							<div class="form-group">
+								<textarea class="form-control" id="inputNote" rows="3"
+									style="resize: none;" ng-model="userNotesInput.notes"></textarea>
+									<button type="submit" id="saveButtonDivision"
+								class="btn btn-success" data-dismiss="modal"
+								ng-click="submitNotes(userNotesInput)" style="float: right;">Save</button>
+							</div>
+						</form>
+					</div>
+					<!-- <div class="row"> -->
+					<!-- <div class="col-sm-offset-4 col-sm-4 text-left"> -->
+					<!-- <h3>History</h3> -->
+					<div ng-repeat="note in notes">
+						<div class="row" style="margin-bottom: 15px;">
+							<textarea class="form-control" id="inputNote" rows="3"
+								style="resize: none;" readonly>{{note.notes}}
+								                   {{note.createdBy}}   {{note.createdDate}}  {{note.createdTime}}
+								</textarea>
+							<!-- <hr> -->
+						</div>
+					</div>
+					<!-- </div> -->
+					<!-- </div> -->
+				</div>
+			</div>
+			<div class="modal-footer"></div>
+		</div>
+
+	</div>
+</div>
+<!-- Note model for approve and delete -->
+<div class="modal" tabindex="-1" id="viewNotesModelApprove" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header" style="background-color:#A9A3A2;">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" style="color:white;">De-assign of user</h4>
+			</div>
+			<div class="modal-body">
+
+				<div class="container-fluid">
+				<div class="row" style="margin-bottom: 15px;">
+				<label>Are you sure you want to de-Assign?</label>
+				</div>
+
+					<div class="row" style="margin-bottom: 15px;">
+						<form name="notesForm" role="form"
+							ng-submit="submitNotes(userNotesInput)" novalidate>
+							<div class="form-group">
+								<textarea class="form-control" id="inputNote" rows="3"
+									style="resize: none;" ng-model="userNotesInput.notes"></textarea>
+									<button type="submit" id="saveButtonDivision"
+								class="btn btn-success" data-dismiss="modal"
+								ng-click="submitNotes(userNotesInput)" style="float: right;">OK</button>
+							</div>
+						</form>
+					</div>
+
+
+					<!-- <div class="row"> -->
+					<!-- <div class="col-sm-offset-4 col-sm-4 text-left"> -->
+					<!-- <h3>History</h3> -->
+					<div ng-repeat="note in notes">
+						<div class="row" style="margin-bottom: 15px;">
+							<textarea class="form-control" id="inputNote" rows="3"
+								style="resize: none;" readonly>{{note.notes}}
+								                   {{note.createdBy}}   {{note.createdDate}}  {{note.createdTime}}
+								</textarea>
+							<!-- <hr> -->
+						</div>
+					</div>
+					<!-- </div> -->
+					<!-- </div> -->
+				</div>
+			</div>
+			<div class="modal-footer"></div>
+		</div>
+
+	</div>
+</div>
+
+<!--un assigned organizations model  -->
+<div class="modal" tabindex="-1" id="unAssignedOrgModel" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header" style="background-color:#00bfff;">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title" style="color:white;">Add Divisions</h4>
+			</div>
+			<div class="modal-body">
+			<div class="row">
+			<div class="col-sm-8">				
+			<div class=" col-sm-offset-1">
+				<div id="panelMain" class="panel ">
+					
+					<div class="panel panel-body">
+						<div class="row" id="rowSecondary">
+							<div class="col-sm-5" id="unAssignedGroup">
+								<label id="unAssignedRolesLabel">Unassigned Division(s)</label>
+								<div class="row">
+									<div class="col-sm-12">
+
+										<div class="inner-addon right-addon">
+											<i class="glyphicon glyphicon-search"></i> <input type="text"
+												class="search form-control" placeholder="Search" ng-model="searchunassignedlist"/>
+										</div>
+									</div>
+								</div>
+								<select multiple size="20" id="groupBox" ng-multiple="true"
+									ng-model="unassigneddivision"
+									ng-options="organization as organization.organizationName for organization in unassgList | filter : searchunassignedlist | orderBy : 'organizationName'">
+								</select>
+							</div>
+							<div class="col-sm-2">
+								<div class="row text-center" id="rowButtonGroup">
+									<div class="col-sm-12">
+									
+									
+									<div class="row" id="innerRowOne">
+										<div class="col-sm-12">
+											<input class="btn btnarrow btn-primary" id="addSingleButton" title="Add"
+												type="button" value=">"
+												ng-click="assigndivision(unassigneddivision)" />
+										</div>
+										<!-- <div class="col-sm-6">
+											<input class="btn btnarrow btn-primary" id="addAllButton" title="Add All"
+												type="button" value=">>" ng-click="assignall()" />
+										</div> -->
+									</div>
+									<div class="row" id="innerRowTwo">
+										<div class="col-sm-12">
+											<input class="btn btnarrow btn-primary" title="Remove"
+												type="button" id="removeSingleButton" value="<"
+												ng-click="unassigndivision(selecteddevision)" />
+										</div>
+										<!-- <div class="col-sm-6">
+											<input class="btn btnarrow btn-primary" title="Remove All"
+												type="button" id="removeAllButton" value="<<"
+												ng-click="unassignall()" />
+										</div> -->
+									</div>
+									
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-5" id="assignedGroupButton">
+								<label id="assignedRolesLabel">Assign Division(s)</label>
+								<div class="row">
+									<div class="col-sm-12">
+
+										<div class="inner-addon right-addon">
+											<i class="glyphicon glyphicon-search"></i> <input type="text"
+												class="form-control" placeholder="Search" ng-model="searchassignedlist"/>
+										</div>
+
+									</div>
+
+								</div>
+								<select multiple size="20" id="groupBox" ng-multiple="true"
+									ng-model="selecteddevision"
+									ng-options="organization as organization.organizationName for organization in assignedorglist |filter : searchassignedlist | orderBy : 'organizationName'"
+									size="7"></select>
+							</div>
+						</div>
+						<div class="row" id="rowTertiaryGroup">
+							<div class="col-sm-6 ">
+								<input type="submit" id="saveButtonGroupAssignment"
+									class="pull-right btn btn-success" title="save"
+									ng-click="addOrganization()" value="Save" />
+							</div>
+							<div class="col-sm-6">
+
+								<input type="reset" ng-click="cancel()"
+									id="cancelButtonGroupAssignment"
+									class=" pull-left btn btn-danger" title="cancel" value="Cancel" />
+
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>		
+			
+			</div>
+			<div class="col-sm-4">
+			<div class="panel panel-default">
+      <div class="panel-heading panel-heading-custom" style="background-color:#808080;color:white;">Notes</div>
+      <div class="panel-body"><div class="container-fluid">
+
+					<div class="row" style="margin-bottom: 15px;">
+						<form name="notesForm" role="form"  novalidate>
+							<div class="form-group">
+								<textarea class="form-control" id="inputNote" rows="3"
+									style="resize: none;" ng-model="notemsg"></textarea>
+									<!-- <button type="submit" id="saveButtonDivision"
+								class="btn btn-success" data-dismiss="modal"
+								ng-click="submitNotes(userNotesInput)" style="float: right;">Save</button> -->
+							</div>
+						</form>
+					</div>
+					<!-- <div class="row"> -->
+					<!-- <div class="col-sm-offset-4 col-sm-4 text-left"> -->
+					<!-- <h3>History</h3> -->
+					<div ng-repeat="note in notes">
+						<div class="row" style="margin-bottom: 15px;">
+							<textarea class="form-control" id="inputNote" rows="3"
+								style="resize: none;" readonly>{{note.notes}}
+								                   {{note.createdBy}}   {{note.createdDate}}  {{note.createdTime}}
+								</textarea>
+							<!-- <hr> -->
+						</div>
+					</div>
+					<!-- </div> -->
+					<!-- </div> -->
+				</div></div>
+    </div>
+			
+			</div>
+			</div>
+				
+				
+
+			</div>
+			<div class="modal-footer"></div>
+		</div>
+
+	</div>
+</div>
+

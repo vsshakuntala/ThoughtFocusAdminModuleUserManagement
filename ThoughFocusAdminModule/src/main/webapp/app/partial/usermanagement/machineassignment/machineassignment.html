@@ -1,0 +1,262 @@
+<div class="container-fluid">
+	<div class="row ">
+		<div class="col-sm-6">
+			<ul class="breadcrumb">
+				<li><a href="">Home</a></li>
+				<li><a href="" ng-click="backToUserList()">List of Users</a></li>
+				<li><a href="" ng-click="backToDivision()">User Dashboard</a></li>
+				<li class="active">Machine Management</li>
+			</ul>
+		</div>
+		<div class="col-sm-6 text-right" id="backToUserLink">
+			<span ng-click="backToUserList()" style="cursor: pointer; pointer-events: all;"> <i
+						class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></span>
+			<span style="float: right;margin-top: 5px;">User list</span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-6">
+			<label style="margin-left:15px;color:#00BFFF">{{userName}}</label><br>
+			<span style="margin-left:15px;"><b>{{orgName}}</b></span>
+			<span style="padding-left:2em;">Available : </span> <span><b>{{CatalogAvailableCount}}</b></span>
+			<span style="padding-left:2em;">Assigned : </span> <span><b>{{assignedMachineCount}}</b></span>
+		</div>
+
+		<div class="col-sm-6">
+			<div class="col-sm-2">
+				<span>Result :<b>{{totalrows}}</b></span>
+			</div>
+			<div class="col-sm-2">
+				<div class="row">
+					<span title="Click to download customer report" ng-click="downloadresult()" style="cursor: pointer; pointer-events: all;">
+					<i class="fa fa-download fa-2x" aria-hidden="true"></i></span>
+				</div>
+				<div class="row">
+					<span>Download</span>
+				</div>
+			</div>
+			<div class="col-sm-2">
+				<div class="row">
+					<span title="Click to assign customer" ng-click="assign()" style="cursor: pointer; pointer-events: all;"><i
+						class="fa fa-file-o fa-2x" aria-hidden="true"></i></span><i class="fa fa-check" style="float:right;margin-right: 92px;"></i>
+				</div>
+				<div class="row">
+					<span>Assign</span>
+				</div>
+			</div>
+			<div class="col-sm-2">
+				<div class="row">
+					<span title="Click to assign all customer" ng-click="assignall()" style="cursor: pointer; pointer-events: all;"> <i
+						class="fa fa-file-text-o fa-2x" aria-hidden="true"></i></span><i class="fa fa-check" style="float:right;margin-right: 92px;"></i>
+				</div>
+				<div class="row">
+					<span>Assign All</span>
+				</div>
+			</div>
+			<div class="col-sm-2">
+				<div class="row">
+					<span title="Click to remove customer" ng-click="remove()" style="cursor: pointer; pointer-events: all;"> <i
+						class="fa fa-file-o fa-2x" aria-hidden="true"></i></span><i class="fa fa-times" style="float:right;margin-right: 92px;"></i>
+				</div>
+				<div class="row">
+					<span>Remove</span>
+				</div>
+			</div>
+			<div class="col-sm-2">
+				<div class="row">
+					<span title="Click to remove all customer" ng-click="removeall()" style="cursor: pointer; pointer-events: all;"> <i
+						class="fa fa-file-text-o fa-2x" aria-hidden="true"></i></span><i class="fa fa-times" style="float:right;margin-right: 92px;"></i>
+				</div>
+				<div class="row">
+					<span>Remove All</span>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-sm-11">
+			<hr class="hr1">
+		</div>
+		<div class="col-sm-1"><span class="fa fa-filter" id="filter" ng-click="toggle()" title="Filter"></span>
+			<i class="fa fa-minus"></i></div>
+
+	</div>
+	<!--<div class="panel" id="panelStart">
+
+		<div class="panel-heading">
+
+			<div class="row">
+
+				<div class="col-sm-3 edit">
+
+					<label ng class="user" id="userLabel">User : <a ng-click="backToDivision()" style="cursor: pointer; pointer-events: all;" id="userName">{{userName}}</a></label>
+					<a href="" class="anchor" ng-click="navigateToEditUser()"><span class="glyphicon glyphicon-edit" ></span></a>
+
+				</div>
+
+				<div class="col-sm-6 ">
+
+					<div class="headingFont text-center ">Machine Management</div>
+
+				</div>
+
+				<div class="col-sm-3 text-right" id="backToUserLink">
+
+					<a ng-click="backToUserList()" style="cursor: pointer; pointer-events: all;" class="anchor">Back
+
+							to user list</a>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="row">
+
+		<div class="col-sm-offset-1 col-sm-10">
+
+			<div class="row">
+
+				<div class="col-sm-12 ">
+
+					<div id="infoRow" class="row">
+
+						<div class="col-md-4 col-sm-6 col-xs-12">
+
+							<div class="info-box">
+
+								<span class="info-box-icon bg-aqua"><i class="fa fa-sitemap"></i></span>
+
+
+
+								<div class="info-box-content">
+
+									<span class="info-box-text">Assigned Divisions</span> <span class="info-box-number">{{assignedDivisionsCount}}</span>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<div class="col-md-3 col-sm-6 col-xs-12">
+
+							<div class="info-box">
+
+								<span class="info-box-icon " id="boxRegistered"><i class="fa fa-list-ol" id="availableDivisionMachines"></i></span>
+
+
+
+								<div class="info-box-content">
+
+									<span class="info-box-text">Available</span> <span class="info-box-number">{{CatalogAvailableCount}}</span>
+
+								</div>
+
+							</div>
+
+						</div>
+
+						<div class="clearfix visible-sm-block"></div>
+
+						<div class="col-md-3 col-sm-6 col-xs-12">
+
+							<div class="info-box">
+
+								<span class="info-box-icon bg-green"><i class="fa fa-check"></i></span>
+
+								<div class="info-box-content">
+
+									<span class="info-box-text">Assigned</span> <span class="info-box-number">{{assignedMachineCount}}</span>
+
+								</div>
+
+							</div>
+
+						</div>
+
+
+
+					</div>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>-->
+	<div class="row ">
+		<div class="col-lg-offset-0 col-sm-12">
+			<div class="row ">
+				<div class="col-md-12">
+					<div id="search" class="searchForm machine-search" ng-show="isVisible">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="col-sm-3">
+								<div class="form-group">
+									<label>Serial #</label> <input type="text" name="catalog_id" ng-model="machine.catalog_id" class="form-control"
+										id="catalog_id"></div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>Model</label> <input type="text" class="form-control" name="model" ng-model="machine.model" id="model"></div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>Machine Reference</label> <input type="text" class="form-control" ng-model="machine.catalog_reference" id="catalog_reference"
+										name="catalog_reference"></div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>Customer Name</label> <input type="text" class="form-control" ng-model="machine.customer_name" id="customer_name"
+										name="customer_name"></div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>Group</label> <input type="text" class="form-control" name="group" ng-model="machine.group" id="group"></div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>Status</label> <select class="form-control" id="searchKey" name="status" ng-model="machine.status"><option value="">--Select--</option><option value="all">All</option><option value="assigned">Assigned</option><option value="notassigned">Not Assigned</option></select></div>
+							</div>
+							<div class="col-sm-3">
+								<div class="form-group">
+									<label>&nbsp;</label><br><button type="button" class="machine-search-button">
+							<span class="glyphicon glyphicon-search"></span></button>
+							</div>
+							</div>
+						</div>
+					</div>
+					<!--<div class="row text-center" id="buttonRowMachine" ng-controller="MachineAssignmentController as showCase">
+						<div class="col-sm-12">
+							<input class="btn btn1 btn-primary btn-space btn-md button-machine" type="button" value="Assign All" ng-click="assignall()"
+								ng-disabled="checkStatusAssign()"><input class="btn btn1 btn-primary btn-space btn-md button-machine" type="button"
+								value="Remove All" ng-click="removeall(machine)" ng-disabled="checkStatusRemove()"><input class="btn btn1 btn-primary btn-space btn-md button-machine"
+								type="button" value="Assign" ng-click="assign()" ng-disabled="checkStatusAssign()"><input class="btn btn1 btn-primary btn-space btn-md button-machine"
+								type="button" value="Remove" ng-click="remove()" ng-disabled="checkStatusRemove()"><label class="btn btn1 btn-primary btn-space btn-md button-machine">Result:
+						{{totalrows}}</label> <span ng-click="downloadresult()" class="fa fa-download" title="Download Results" id="downloadButtonMachines"> </span>
+							<span class="fa fa-filter" id="filterMachines" ng-click="toggle()" title="Filter"></span>
+						</div>
+					</div>-->
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12">
+			<div ng-controller="MachineAssignmentController as showCase">
+				<div class="row" id="MachineTable">
+					<div class="col-sm-12">
+						<div class="container-fluid">
+							<table datatable="" dt-instance="showCase.dtInstance" dt-columns="showCase.dtColumns" dt-options="showCase.dtOptions" dt-column-defs="showCase.dtColumnDefs"></table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

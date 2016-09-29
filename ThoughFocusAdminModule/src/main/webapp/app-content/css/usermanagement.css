@@ -1,0 +1,44 @@
+@CHARSET "UTF-8";
+
+.welcomeMsg {
+	padding-right: 15px;
+	padding-top: 13px;
+}
+
+.lgout {
+	margin-right: 15px;
+	padding-top: 16px
+}
+
+#moduleName {
+	text-align: center;
+}
+#welcomeUserName{
+	font-size: 20px;
+}
+
+#navbarMain {
+	/* background-color: #7f1a1a; */
+	background-color: #2ad4d2;
+}
+
+#logoSide {
+	/* background-color: #7f1a1a; */
+	background-color: #2ad4d2;
+}
+
+}
+.skin-blue .main-header .logo {
+	background-color: #7f1a1a;
+}
+
+#welcomeMessage {
+	color: white;
+	font-size: 18px;
+}
+
+#signoutButton {
+	color: white;
+	font-size: 30px;
+	padding-top: 10px;
+}

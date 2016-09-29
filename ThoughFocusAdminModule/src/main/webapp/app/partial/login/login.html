@@ -1,0 +1,104 @@
+<!-- Header Starts -->
+<header>
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="row">
+				<div id="loginHeader" class="navbar-header col-sm-10">
+					<img id="companyLogo" alt="ThoughtFocus"
+						src="{{APPCONSTANTS.LOGINPAGE.COMPANY_LOGO}}">
+				</div>
+			</div>
+		</div>
+	</nav>
+</header>
+<!-- Header Ends -->
+<!-- Body Starts -->
+<div class="container-fluid">
+	<div class="row" id="rowLogoBox">
+		<div class=" col-md-offset-2 col-md-8">
+			<div class="login-box ">
+				<div class="login-logo">
+					<a><b>{{APPCONSTANTS.LOGINPAGE.LOGIN_LOGO_NAME_BOLD}}</b>{{APPCONSTANTS.LOGINPAGE.LOGIN_LOGO_NAME_NORMAL}}</a>
+				</div>
+				<!-- /.login-logo-heading -->
+				<div class="login-box-body">
+					<p class="login-box-msg">{{APPCONSTANTS.LOGINPAGE.LOGIN_BOX_MESSAGE}}</p>
+					<form class="form-group has-feedback" name="loginForm" role="form"
+						ng-submit="loginForm.$valid && onLogin(user)" method="post"
+						novalidate>
+						<div class="form-group  ">
+							<input type="email" class="form-control" name="userid"
+								ng-model="user.email"
+								placeholder="{{APPCONSTANTS.LOGINPAGE.EMAIL_PLACEHOLDER}}"
+								id="email" required> <span
+								class=" form-control-feedback  has-error"></span>
+							<div ng-show="loginForm.$submitted">
+								<small class="error" ng-show="loginForm.userid.$error.required">{{APPCONSTANTS.COMMONMESSAGE.EMAIL_MANDATORY}}
+								</small> <small class="error" ng-show="loginForm.userid.$error.email">{{APPCONSTANTS.COMMONMESSAGE.NOT_VALID_EMAIL}}</small>
+							</div>
+						</div>
+						<div class="form-group ">
+							<!-- Start of password field -->
+							<!-- show password as type="password" -->
+							<div ng-if="!showPassword" class="form-group has-feedback">
+								<input type="password" ng-model="user.password"
+									class="form-control"
+									placeholder="{{APPCONSTANTS.LOGINPAGE.PASSWORD_PLACEHOLDER}}"
+									class="form-control" name="password" ng-model="user.password"
+									placeholder="Enter the password" id="pwd" required> <span
+									ng-if="user.password" ng-click="toggleShowPassword()"
+									class="fa fa-eye form-control-feedback"
+									style="cursor: pointer; pointer-events: all;"> </span>
+								<div ng-show="loginForm.$submitted">
+									<small class="error"
+										ng-show="loginForm.password.$error.required">{{APPCONSTANTS.SIGNUP.PASSWORD_REQUIRED}}</small>
+								</div>
+							</div>
+							<!-- show password as type="text" -->
+							<div ng-if="showPassword" class="form-group has-feedback">
+								<input type="text" ng-model="user.password" class="form-control"
+									placeholder="Password" class="form-control" name="password"
+									ng-model="user.password" placeholder="PASSWORD_PLACEHOLDER"
+									id="pwd" required> <span ng-if="user.password"
+									ng-click="toggleShowPassword()"
+									class="fa fa-eye-slash form-control-feedback"
+									style="cursor: pointer; pointer-events: all;"> </span>
+							</div>
+							<!-- End of password field -->
+						</div>
+						<div class="row">
+							<!-- Submit button starts -->
+							<div class="col-xs-12">
+								<button ng-click="onLogin(user)" type="submit" id="loginButton"
+									class="btn btn-primary btn-block btn-flat">{{APPCONSTANTS.LOGINPAGE.SIGN_IN_BUTTON_LABEL}}</button>
+							</div>
+							<!-- Submit button starts -->
+						</div>
+					</form>
+				</div>
+				<!-- /.login-box-body -->
+			</div>
+		</div>
+		<!-- <div class="col-md-4"></div> -->
+	</div>
+</div>
+<!-- /.login-box -->
+<!-- Body Ends -->
+<!-- Footer Starts -->
+<footer id="loginFooter" class="navbar  navbar-fixed-bottom">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="pull-left">
+					<strong>{{APPCONSTANTS.COMMONMESSAGE.FOOTER_CONTENT_COPYRIGHT}}
+						{{APPCONSTANTS.COMMONMESSAGE.FOOTER_CONTENT_COPYRIGHT_ICON}}
+						{{APPCONSTANTS.COMMONMESSAGE.FOOTER_CONTENT_COPYRIGHT_YEAR}} <a
+						href="">{{APPCONSTANTS.COMMONMESSAGE.FOOTER_CONTENT_COPYRIGHT_COMPANY_NAME}}</a>.
+					</strong> {{APPCONSTANTS.COMMONMESSAGE.FOOTER_CONTENT_COPYRIGHT_RIGHTS}}
+				</div>
+				<div class="pull-right">{{APPCONSTANTS.COMMONMESSAGE.VERSION}}</div>
+			</div>
+		</div>
+	</div>
+</footer>
+<!-- Footer Ends -->

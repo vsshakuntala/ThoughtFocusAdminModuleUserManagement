@@ -1,0 +1,43 @@
+.newuser  .input-group .form-control{
+    width: 265px;
+}
+.new-user-notes{
+    margin-bottom: 10px
+}
+textarea {
+    resize: none;
+}
+.phone {
+    width: 126%;
+}
+.panel-footer .button .btn{
+    align-content: right;
+}
+.error{
+    color: red;
+}
+.rk-btn{
+     width: 265px;
+}
+.rk-btn button:focus {
+	border-color: #3c8dbc;
+	box-shadow: none;
+	background-color: white;
+   
+}
+.rk-btn button:hover {
+	border-color: #d3d7cf;
+	background-color: white;
+}
+em {
+	color: red;
+}
+.notes-scroll{
+    height: 235px;
+	overflow: scroll;
+	overflow-x: hidden;
+}
+
+/*.updateTitle{
+        float: none !important;
+}*/

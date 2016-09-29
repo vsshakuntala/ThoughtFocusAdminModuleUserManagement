@@ -1,0 +1,183 @@
+<div class="container-fluid" dw-loading="users" dw-loading-options="{text: ''}">
+
+	<div class="panel " id="panelStart">
+		<div class="panel-heading ">
+			<div class="row ">
+				<div class="col-sm-3 edit">
+					<label ng class="user" id="userLabel">User : <a
+						id="userName" style="cursor: pointer; pointer-events: all;"
+						ng-click="backToDivision()"> {{userNameSetLocal}}</a>
+					</label> <a href="" ui-sref="usermgmt.user.updateuser" class="anchor"><span
+						class="glyphicon glyphicon-edit"></span></a>
+				</div>
+				<div class="col-sm-6 ">
+					<div class="headingFont text-center ">Default Address</div>
+				</div>
+				<div class="col-sm-3 text-right" id="backToUserLink">
+					<a ng-click="backToUserList()" class="anchor" style="cursor: pointer; pointer-events: all;">Back to user
+						list</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- DIVISION -->
+	<div class="row">
+		<div class="col-md-3 subheading divname">
+			<!-- <p>Division : DME-EU</p> -->
+			<div class="info-box">
+				<span class="info-box-icon bg-aqua"><i class="fa fa-sitemap"></i></span>
+				<div class="info-box-content">
+					<span class="info-box-text">Division</span> <span class="info-box-number">{{orgName}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2" ">
+			<div class="row ">
+				<div class="col-md-10 col-md-offset-1 " style="margin: 20px; ">
+
+					<!-- ADDRESS FORM -->
+					<form name="defaultAddressForm "
+						ng-submit="defaultAddressForm.$valid && submitAddressForm(address) "
+						role="form " novalidate>
+
+						<!-- Default Sales Org -->
+						<div class="form-group ">
+							<label for="divisions " class="control-label col-md-4 ">Default
+								Sales Org <em>*</em>
+							</label>
+							<div class="col-sm-8 ">
+								<div class="form-group ">
+									<select class="form-control typeahead " id="sales_org "
+										name="sales_org " ng-model="selectedSalesAreaId " required ng-disabled="!areaList.length " ng-change="getsalesAreaId(selectedSalesAreaId)"
+										 convert-to-number>
+										<option value="0" ng-selected="!areaList.length">-- Select Sales Organization --</option>
+										<option ng-repeat="area in areaList track by $index "
+											value="{{area.salesAreaId}} " ng-selected="area.salesAreaId===selectedSalesAreaId ">{{area.salesOrgName}}</option>
+									</select>
+								</div>
+								<div ng-show="defaultAddressForm.$submitted">
+									<small class="error "
+										ng-show="defaultAddressForm.sales_org.$error.required ">
+										Default sales organization is required </small>
+								</div>
+							</div>
+						</div>
+						
+						 <!-- Distribution channel -->
+						<div class="form-group ">
+							<label for="divisions " class="control-label col-md-4">Distribution channel name
+							</label>
+							<div class="col-sm-8 ">
+								<div class="form-group ">
+								<!-- <label placeholder="Distribution channel name">{{selectedChannel}}</label> -->
+								    <select class="form-control typeahead " id="sales_org "
+										name="sales_org " ng-model="selectedSalesAreaId " required ng-disabled="true"
+										 convert-to-number>
+										<option value="0" ng-selected="!areaList.length">-- Distribution channel Name--</option>
+										<option ng-repeat="area in areaList track by $index"
+											value="{{area.salesAreaId}} " ng-selected="area.salesAreaId===selectedSalesAreaId " ng-show="false">{{area.distributionChannelName}}</option>
+									    <!-- <label placeholder="Distribution channel name">{{area.distributionChannelName}}</label> -->
+									</select>
+									 
+								</div>
+								<div ng-show="defaultAddressForm.$submitted ">
+									<small class="error "
+										ng-show="defaultAddressForm.sales_org.$error.required ">
+										Default sales organization is required </small>
+								</div>
+							</div>
+						</div>
+
+						<!--  Customer -->
+						<div class="form-group ">
+							<label for="divisions " class="control-label col-md-4 ">Customer
+								<em>*</em>
+							</label>
+							<div class="col-sm-8 ">
+								<div class="form-group ">
+									<select class="form-control typeahead " id="customer "
+										name="customer " ng-model="selectedCustomerId " required
+										ng-change="getCustId(selectedCustomerId) " convert-to-number>
+										<option value="0" ng-selected="!custList.length">-- Select Customer --</option>
+										<option ng-repeat="cust in custList "
+											value="{{cust.customerId}} " ng-selected="selectedCustomerId===cust.customerId ">{{cust.customerName}}</option>
+									</select>
+								</div>
+								<div ng-show="defaultAddressForm.$submitted ">
+									<small class="error "
+										ng-show="defaultAddressForm.customer.$error.required ">
+										Customer is required </small>
+								</div>
+							</div>
+						</div>
+
+						<!-- Default Billing Address -->
+						<div class="form-group ">
+							<label for="divisions " class="control-label col-md-4 ">Default
+								Billing Address <em>*</em>
+							</label>
+							<div class="col-sm-8 ">
+								<div class="form-group ">
+									<select class="form-control typeahead " id="billing_address "
+										name="billing_address " ng-model="selectedBillToAddressId " required
+										ng-change="getBill(selectedBillToAddressId)" convert-to-number>
+										<option value="0" ng-selected="!billList.length">-- Select Billing Address --</option>
+										<option ng-repeat="bill in billList "
+											value="{{bill.addressId}} " ng-selected="bill.addressId === selectedBillToAddressId ">{{bill.addressName}}</option>
+									</select>
+								</div>
+								<div ng-show="defaultAddressForm.$submitted ">
+									<small class="error "
+										ng-show="defaultAddressForm.billing_address.$error.required ">
+										Billing address is required </small>
+								</div>
+							</div>
+						</div>
+
+						<!-- Default Shipping Address -->
+						<div class="form-group ">
+							<label for="divisions " class="control-label col-md-4 ">Default
+								Shipping Address <em>*</em>
+							</label>
+							<div class="col-sm-8 ">
+								<div class="form-group ">
+									<select class="form-control typeahead " id="shipping_address "
+										name="shipping_address " ng-model="selectedShipToId " required
+										ng-change="getShip(selectedShipToId) " convert-to-number>
+										<option value="0" ng-selected="!shipList.length">-- Select Shipping Address --</option>
+										<option ng-repeat="ship in shipList "
+											value="{{ship.addressId}} " ng-selected="ship.addressId===selectedShipToId ">{{ship.addressName}}</option>
+									</select>
+								</div>
+								
+								<div ng-show="defaultAddressForm.$submitted ">
+									<small class="error "
+										ng-show="defaultAddressForm.shipping_address.$error.required ">
+										Shipping address is required </small>
+								</div>
+							</div>
+						</div>
+
+						<!-- BUTTONS -->
+						<div class="regdPageBtnPosition ">
+						<div class="row">
+							<div class="col-sm-3 col-sm-offset-5" style="background-color: ;">
+							<input type="submit" class="btn defaultAddressPageButtons btn-success"  id="submit1" name="submit1" value="Save" ng-click="getAllId()">
+							      <!-- <input type="submit " class="btn newUserPageButtons btn-success "
+								id="submit " name="submit " ng-click="getAllId() " value="Save " /> -->
+							</div>	
+							<div class="col-sm-2 ">
+							<input type="submit" class="btn defaultAddressPageButtons btn-danger" id="cancel1" name="cancel1" value="Cancel" ng-click="cancel()">
+							      <!-- <input type="reset" class="btn newUserPageButtons btn-danger "
+								id="cancel " ng-click="cancel() " name="cancel " value="Cancel " /> -->
+								</div>
+								</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

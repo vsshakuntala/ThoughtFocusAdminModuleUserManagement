@@ -1,0 +1,98 @@
+<div class="container-fluid">
+	<div class="panel panel-primary" id="panelStart">
+		<div class="panel-heading panel-primary">
+			<div class="row ">
+				<div class="col-sm-3 edit">
+					<label ng class="user" id="userLabel">User : <a
+						ng-click="backToDivision()" id="userName">Avinash Dongre</a></label> <a
+						href="" ui-sref="usermgmt.user.updateuser" class="anchor"><span
+						class="glyphicon glyphicon-edit"></span></a>
+				</div>
+				<div class="col-sm-6 ">
+					<div class="headingFont text-center ">Role</div>
+				</div>
+				<div class="col-sm-3 text-right" id="backToUserLink">
+					<a ng-click="backToUserList()" class="anchor">Back to user list</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12" id="divisionRole">
+
+			<label><b>Division:</b></label>
+			<p>{{selectedOrg.organizationName}}</p>
+
+		</div>
+	</div>
+	<div class="row" id="rowPrimaryRole">
+		<div class="col-md-offset-2 col-md-10">
+			<div id="panelMain" class="panel panel-primary">
+				<div id="division""></div>
+				<div class="panel panel-body">
+					<div class="row" id="rowSecondary">
+						<div class="col-md-3" id="unassignedRoleColumn">
+							<label id="unAssignedRolesLabel">Unassigned Role(s)</label> <select
+								id="unassignedRolesBox" ng-click="changeinleft(unassignedrole)" multiple ng-model="unassignedrole" size="7"
+								ng-options="role as role.roleName for role in unassignedrolelist"></select>
+						</div>
+						<div class="col-md-6">
+							<div class="row text-center" id="rolesButtonRow">
+								<div class="col-sm-12">
+									<input class="btn btnarrow btn-primary" title="AddS"
+										type="button" value=">" ng-click="assignitem(unassignedrole)" />
+									<input class="btn btnarrow btn-primary" title="Add All"
+										type="button" value=">>" ng-click="assignall()" /> <br>
+									<input class="btn btnarrow btn-primary" title="Remove"
+										type="button" id="removeSingleButton" value="<"
+										ng-click="unassignitem(selectedrole)" /> 
+									<input
+										class="btn btnarrow btn-primary" title="Remove All"
+										type="button" id="removeAllButton" value="<<"
+										ng-click="unassignall()" />
+								</div>
+							</div>
+						</div>
+						<div class="col-md-3" id="assignedRoleBox">
+							<label id="assignedRolesLabel">Assigned Role(s)</label> <select
+								id="assignedRolesBox" multiple ng-model="selectedrole"
+								ng-options="role as role.roleName for role in assignedrolelist"
+								size="7"></select>
+						</div>
+
+					</div>
+					<div class="container">
+						<div class="row" id="rowTertiary">
+							<div class="col-md-6">
+								<input type="submit" id="saveButton" class="btn btn-primary"
+									title="save" value="Save"  ng-click="saverole()"/>
+							</div>
+							<div class="col-md-6">
+
+								<input type="reset" id="cancelButtonRole" class="btn btn-danger"
+									title="cancel" value="Cancel" />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+<div class="col-sm-12">
+		<div class="container">
+			<div class="row text-center">
+				<div class="col-md-offset-0 col-md-10">
+					<label id="permissionLabel">Permissions</label><br>
+					 <!-- <select
+						id="assignedRolesBox" multiple ng-model="selected"
+						ng-options="permission as permission.permissionName for permission in permissionslist"
+						size="7"></select> -->
+					<textarea id="permissionTextArea" rows="2" cols="10" readonly ng-repeat="permission in permissionslist">{{permission.permissionName}}
+	
+	</textarea> 
+				</div>
+			</div>
+		</div>
+</div>
+	</div>
+
+</div>

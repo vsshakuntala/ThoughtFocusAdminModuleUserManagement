@@ -1,0 +1,226 @@
+<div class="container-fluid"> 
+	<div class="row ">
+
+		<div class="col-sm-6">
+			<ul class="breadcrumb">
+				<li><a href="">Home</a></li>
+				<li><a href="" ng-click="backToUserList()">List of Users</a></li>
+				<li><a href="" ng-click="backToDivision()">User Dashboard</a></li>
+				<li class="active">Customer Management</li>
+
+			</ul>
+		</div>
+
+		<div class="col-sm-6 text-right" id="backToUserLink">
+		
+		
+					<span ng-click="backToUserList()"
+						style="cursor: pointer; pointer-events: all;"> <i
+						class="fa fa-chevron-left fa-2x" aria-hidden="true"></i></span>				
+					<span style="float: right;margin-top: 5px;">User list</span>				
+			
+		</div>
+	</div>
+		<div class="row">
+
+		<div class="col-sm-6">
+			<label style="margin-left:15px;color:#00BFFF">{{selectedUser}}</label><br>
+			<span style="margin-left:15px;"><b>{{orgName}}</b></span>		
+							
+											
+									<span style="padding-left:2em;">Available : </span> <span ><b>{{availableCustomerCount}}</b></span>							
+											
+									<span style="padding-left:2em;">Assigned : </span> <span><b>{{assignedCustomerCount}}</b></span>								
+		</div>
+		
+		<div class="col-sm-6">
+		<div class="col-sm-2">
+		<span>Result :<b>{{result}}</b></span>
+		</div>
+		<div class="col-sm-2">
+		
+		<div class="row">
+					<span title="Click to download customer report" 
+						ng-click="downloadresult()"
+						style="cursor: pointer; pointer-events: all;"><i
+						class="fa fa-download fa-2x" aria-hidden="true"></i></span>
+				</div>
+				<div class="row">
+					<span>Download</span>
+				</div>
+		</div>
+			<div class="col-sm-2">
+				<div class="row">
+					<span title="Click to assign customer" 
+						ng-click="assign()"
+						style="cursor: pointer; pointer-events: all;"><i
+						class="fa fa-file-o fa-2x" aria-hidden="true"></i></span><i
+						class="fa fa-check" style="float:right;margin-right: 92px;"></i>
+				</div>
+				<div class="row">
+					<span>Assign</span>
+				</div>
+			</div>
+			<div class="col-sm-2">
+				<div class="row">
+					<span title="Click to assign all customer"  ng-click="assignall()"
+						style="cursor: pointer; pointer-events: all;"> <i
+						class="fa fa-file-text-o fa-2x" aria-hidden="true"></i></span><i
+						class="fa fa-check" style="float:right;margin-right: 92px;"></i>
+				</div>
+				<div class="row">
+					<span>Assign All</span>
+				</div>
+			</div>
+			<div class="col-sm-2">
+				<div class="row">
+					<span title="Click to remove customer"
+						ng-click="remove()"
+						style="cursor: pointer; pointer-events: all;"> <i
+						class="fa fa-file-o fa-2x" aria-hidden="true"></i></span><i
+						class="fa fa-times" style="float:right;margin-right: 92px;"></i>
+				</div>
+				<div class="row">
+					<span>Remove</span>
+				</div>
+			</div>			
+			<div class="col-sm-2">
+				<div class="row">
+					<span title="Click to remove all customer" 
+						ng-click="removeall()"
+						style="cursor: pointer; pointer-events: all;"> <i
+						class="fa fa-file-text-o fa-2x" aria-hidden="true"></i></span><i
+						class="fa fa-times" style="float:right;margin-right: 92px;"></i>
+				</div>
+				<div class="row">
+					<span>Remove All</span>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+	
+	<div class="row">
+	<div class="col-sm-11">
+	<hr class="hr1">
+	</div>
+	<div class="col-sm-1"><span class="fa fa-filter" id="filter" ng-click="toggle()" title="Filter"></span>
+	<i class="fa fa-minus"></i></div>
+
+</div>
+	<div class="row">
+		<div class="col-lg-offset-0 col-sm-12">
+			<div class="row">
+		<div class="col-md-12">
+			<!-- filter starts -->
+			<div id="search" class="searchForm" ng-show="isVisible">
+				<div class="row">
+				<div class="col-sm-11">
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label>Customer Name</label> <input type="text"
+							name="customerName" ng-model="customer.customername"
+							class="form-control" id="cust_name" maxlength="200"
+							placeholder="Enter customer Name">
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label>Customer #</label> <input type="text" class="form-control"
+							ng-model="customer.customernum" id="cust_no" allow-pattern="\d"
+							maxlength="19" placeholder="Enter customer id">
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label>Bill To #</label> <input type="text" class="form-control"
+							ng-model="customer.billtonum" id="bill_to" allow-pattern="\d"
+							maxlength="19" placeholder="Enter Bill_to">
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label>Address 1</label> <input type="text" class="form-control"
+							ng-model="customer.addressone" id="add1" maxlength="200"
+							placeholder="Enter the address">
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label>City</label> <input type="text" class="form-control"
+							ng-model="customer.city" id="city" maxlength="255"
+							placeholder="Enter the city">
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label>State</label> <input type="text" class="form-control"
+							ng-model="customer.state" id="state" maxlength="50"
+							placeholder="enter the state">
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label>Postal Code</label> <input type="text" class="form-control"
+							ng-model="customer.postal" id="postal" maxlength="50"
+							placeholder="enter the Postal-code">
+					</div>
+				</div>
+				<div class="col-sm-3">
+					<div class="form-group">
+						<label>Status</label> <select class="form-control" id="searchKey"
+							name="customer.status" ng-model="customer.status" ng-init="customer.status='assigned'">
+							<!-- <option value="all">All</option> -->
+							<option value="assigned">Assigned</option>
+							<option value="notassigned">Not Assigned</option>
+						</select>
+					</div>
+				</div>
+				</div><div class="col-sm-1">				
+					<button id="searchButton" type="button" ng-click="searchByParams(customer)">
+						<i class="fa fa-search"  aria-hidden="true"></i> Search
+					</button>
+				
+				</div>
+				</div>
+				
+			</div>
+			<!-- filter ends -->
+			<!-- button row starts -->
+			<!-- <div class="row text-center" id="buttonRow">
+				<div class="col-sm-12">
+				<input
+					class="btn btn1 btn-primary btn-space btn-md customer-buttons"
+					type="button" value="Assign All" ng-click="assignall()" ng-disabled="checkStatusAssign()"> <input
+					class="btn btn1 btn-primary btn-space btn-md customer-buttons"
+					type="button" value="Remove All" ng-click="removeall()" ng-disabled="checkStatusRemove()"> <input
+					class="btn btn1 btn-primary btn-space btn-md customer-buttons"
+					type="button" value="Assign" ng-click=assign() ng-disabled="checkStatusAssign()"> <input
+					class="btn btn1 btn-primary btn-space btn-md customer-buttons"
+					type="button" value="Remove" ng-click="remove()" ng-disabled="checkStatusRemove()"> <input
+					class="btn btn1 btn-primary btn-space btn-md customer-buttons"
+					type="button" value="Results:{{result}}"> <span
+					ng-click="downloadresult()" class="fa fa-download"
+					title="Download Results" id="downloadButtonCustomer"></span><span
+					class="fa fa-filter" id="filter" ng-click="toggle()" title="Filter"></span>
+			</div>
+			</div> -->
+			<!-- button row ends -->
+			<!-- table starts -->
+			<div ng-controller="CustomerAssignmentController as showCase">
+				<div class="row" id="customerTable">
+					<div class="col-sm-12">
+					<div class="container-fluid">
+						<table datatable="" dt-columns="showCase.dtColumns"
+							dt-options="showCase.dtOptions" dt-instance="showCase.dtInstance">
+						</table>
+					</div>
+					</div>
+				</div>
+			</div>
+			<!-- table ends -->
+		</div>
+	</div>
+</div>
+	</div>
+</div>

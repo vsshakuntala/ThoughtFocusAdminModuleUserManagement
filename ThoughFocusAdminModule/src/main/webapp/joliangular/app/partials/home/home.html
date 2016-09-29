@@ -1,0 +1,68 @@
+<!-- START PAGE SIDEBAR -->
+<!--<div class="page-sidebar">
+     START X-NAVIGATION 
+    <ul class="x-navigation">
+        <li class="xn-logo">
+            <a href=""><span class="company-name">ThoughtFocus</span></a>
+            <span class="x-navigation-minimized"><li class="small-company-name"><a><b>T</b>F</a></li></span>
+        </li>
+        <li>
+            <a><span class="fa fa-users"></span><span class="xn-text">User Management</span></a>
+        </li>
+    </ul>
+     END X-NAVIGATION 
+</div>-->
+<!-- END PAGE SIDEBAR -->
+
+<!-- PAGE CONTENT -->
+<div class="page-content page-content-remove">
+
+    <!-- START X-NAVIGATION VERTICAL -->
+    <!--<ul class="x-navigation x-navigation-horizontal x-navigation-panel">
+         TOGGLE NAVIGATION 
+        <li class="xn-icon-button">
+            <a class="x-navigation-minimize cursor-links" id="myid"><span class="fa fa-dedent"></span></a>
+        </li>
+         END TOGGLE NAVIGATION 
+        <li class="module-heading">
+            <a class="custom-heading">
+                <h3 class="no-margin">User Management</h3>
+            </a>
+        </li>
+        <li class="xn-icon-button pull-right">
+            <a class="mb-control" data-box="#mb-signout"><span class="fa fa-sign-out"></span></a>
+        </li>
+    </ul>-->
+    <!-- END X-NAVIGATION VERTICAL -->
+    <!-- PAGE CONTENT -->
+    <div ui-view></div>
+    <!-- END PAGE CONTENT -->
+    <footer>
+        <div class="row">
+            <div class="col-sm-8"><p class="footer-p foot">Copyright &copy; 2016 <label class="footer-link">ThoughtFocus</label>. All rights reserved</p></div>
+            <div class="col-sm-4"><p class="pull-right footer-p foot"><label>Version</label> 1.0.0.0</p></div>
+        </div>
+    </footer>
+</div>
+<!-- END PAGE CONTENT -->
+
+
+<!-- MESSAGE BOX-->
+<div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
+    <div class="mb-container">
+        <div class="mb-middle">
+            <div class="mb-title"><span class="fa fa-sign-out"></span> Log <strong>Out</strong> ?</div>
+            <div class="mb-content">
+                <p>Are you sure you want to log out?</p>
+                <p>Press No if youwant to continue work. Press Yes to logout current user.</p>
+            </div>
+            <div class="mb-footer">
+                <div class="pull-right">
+                    <a ng-click="logout()" class="btn btn-success btn-lg">Yes</a>
+                    <button class="btn btn-default btn-lg mb-control-close">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MESSAGE BOX-->

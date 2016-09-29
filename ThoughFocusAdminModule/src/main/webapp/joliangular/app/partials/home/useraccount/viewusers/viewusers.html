@@ -1,0 +1,205 @@
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb">
+    <li><a href="#">Home</a></li>
+    <li>List Of Users</a>
+    </li>
+    <!--<li><a href="#">Tables</a></li>
+    <li class="active">Data </li>-->
+</ul>
+<!-- END BREADCRUMB -->
+
+<!-- PAGE TITLE -->
+<div class="page-title">
+    <div class="row">
+        <!--<div class="col-sm-6">
+            <h2> List Of Users</h2>
+        </div>-->
+        <div class=" col-sm-offset-6 col-sm-6">
+            <div class="row">
+                <div class="col-sm-offset-6 col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="row text-center">
+                                <div class="col-sm-12">
+                                    <span class="fa fa-2x">&nbsp;</span>
+                                </div>
+                                <div class="col-sm-12">
+                                    <span>Result: <b>{{totalrows}}</b></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="row text-center">
+                                <div class="col-sm-12">
+                                    <span title="Click to download report" ng-click="download()"><i class="fa fa-download fa-2x cursor-point" aria-hidden="true"></i></span>
+                                </div>
+                                <div class="col-sm-12">
+                                    <span>Download</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="row text-center">
+                                <div class="col-sm-12" data-toggle="modal" data-target="#modal_large">
+                                    <span title="Click to add user"><i class="fa fa-user-plus fa-2x cursor-point" aria-hidden="true"></i></span>
+                                </div>
+                                <div class="col-sm-12" data-toggle="modal" data-target="#modal_large">
+                                    <span>Add User</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="row text-center">
+                                <span title="Click to show / hide the filter" class="pull-right filter-icon"><i class="fa fa-filter fa-2x cursor-point" aria-hidden="true" id="open-filter"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE TITLE -->
+
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <!--START FILTER-->
+    <div class="row filter-font-style" id="search-panel" style="display:none;">
+        <div class="col-sm-12">
+            <div class="panel custom-panel">
+                <div class="panel-body">
+                    <div class="col-sm-11">
+                        <div class="row">
+                            <div class="col-sm-3 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <h5><b>Divisions</b></h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 scroll">
+                                        <label ng-repeat-start="division in divisions">
+                                            <input type="checkbox" checklist-model="filteredObjects.divisions" checklist-value="division.organizationId"> {{division.organizationName}}
+                                        </label>
+                                        <br ng-repeat-end>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <h5><b>Status</b></h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label ng-repeat-start="status in statuses">
+                                            <input type="checkbox" checklist-model="filteredObjects.status" checklist-value="status.status"> {{status.status}}
+                                        </label>
+                                        <br ng-repeat-end>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <h5><b>Roles</b></h5>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 scroll">
+                                        <label ng-repeat-start="role in roles | orderBy:'roleName'">
+                                            <input type="checkbox" checklist-model="filteredObjects.roles" checklist-value="role.roleId"> {{role.roleName}}
+                                        </label>
+                                        <br ng-repeat-end>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <h5><b>Registered from</b></h5>
+                                            <div class="input-group">
+                                                <input class="form-control" ng-click="open('fromDate')" placeholder="dd-mmm-yyyy" uib-datepicker-popup="{{format}}" ng-model="filteredObjects.from_date"
+                                                    is-open="fromDateopened" datepicker-options="dateOptions.fromDate">
+                                                <span ng-click="open('fromDate')" class="input-group-addon cursor-point"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <h5><b>Registered to</b></h5>
+                                            <div class="input-group">
+                                                <input class="form-control" ng-click="open('toDate')" placeholder="dd-mmm-yyyy" uib-datepicker-popup="{{format}}" datepicker-options="{minDate:filteredObjects.from_date}"
+                                                    ng-model="filteredObjects.to_date" is-open="toDateopened" datepicker-options="dateOptions.toDate">
+                                                <span ng-click="open('toDate')" class="input-group-addon cursor-point"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <h5><b>Company</b></h5>
+                                            <input type="text" class="form-control" ng-model="filteredObjects.companyName" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <h5><b>Name</b></h5>
+                                            <input type="text" class="form-control" ng-model="filteredObjects.name" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1 text-center machine-filter-searchbtn-padding">
+                        <button type="button" class="btn btn-primary btn-lg searchbtn" ng-click="drawDataTable()">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END FILTER-->
+
+    <div class="row">
+        <div class="col-sm-offset-9 col-sm-3 search-padding">
+            <div class="input-group">
+                <input type="text" class="form-control" ng-model="searchValue" placeholder="Search">
+                <span class="input-group-addon cursor-point" ng-click="drawCustomeFilteredDataTable()"><span class="fa fa-search"></span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- START DEFAULT DATATABLE -->
+            <div class="panel panel-default">
+                <!--<div class="panel-heading">
+                    <h3 class="panel-title">Default</h3>-->
+                <!--<ul class="panel-controls">
+                        <li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span></a></li>
+                        <li><a href="#" class="panel-refresh"><span class="fa fa-refresh"></span></a></li>
+                        <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                    </ul>-->
+                <!--</div>-->
+                <div class="panel-body">
+                    <table datatable="" dt-columns="dtColumns" dt-options="dtOptions" dt-instance="dtInstanceCallback" class="table datatable">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END DEFAULT DATATABLE -->
+    </div>
+</div>
+
+</div>
+<!-- PAGE CONTENT WRAPPER -->
+
+
+<div ng-include="'app/partials/home/useraccount/createuser/createuser.html'">
+</div>

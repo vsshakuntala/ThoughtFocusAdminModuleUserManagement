@@ -1,0 +1,17 @@
+@CHARSET "UTF-8";
+/*
+
+ Login Page Style Sheet
+
+ */
+#rowLogoBox {
+	margin-top: 120px;
+}
+
+#companyLogo {
+	margin-left: -15px;
+	margin-top: 1px;
+}
+#loginButton{
+	background-color: #4a7bc2 !important;
+}

@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+
+#panelStart {
+	margin-top: 10px;
+}
+
+#userLabel {
+	color: white;
+}
+
+#userName {
+	color: white;
+}
+
+#backToUserLink {
+	margin-top: 5px;
+}
+
+#headingNameDefault {
+	color: white;
+}
+

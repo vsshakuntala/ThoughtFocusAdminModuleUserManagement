@@ -1,0 +1,74 @@
+@font-face {
+  font-family: 'custom';
+  src:  url('fonts/custom.eot?ecko5z');
+  src:  url('fonts/custom.eot?ecko5z#iefix') format('embedded-opentype'),
+    url('fonts/custom.ttf?ecko5z') format('truetype'),
+    url('fonts/custom.woff?ecko5z') format('woff'),
+    url('fonts/custom.svg?ecko5z#custom') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="custom-"], [class*=" custom-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'custom' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.custom-Reset_password1:before {
+  content: "\e900";
+}
+.custom-Remove1:before {
+  content: "\e903";
+}
+.custom-Assign1:before {
+  content: "\e904";
+}
+.custom-Remove_all1:before {
+  content: "\e905";
+}
+.custom-Assign_all1:before {
+  content: "\e901";
+}
+.custom-organization_add1:before {
+  content: "\e902";
+}
+.custom-customer_role_access:before {
+  content: "\e92f";
+}
+.custom-customer_tick_role:before {
+  content: "\e930";
+}
+.custom-customer_role_access_add:before {
+  content: "\e907";
+}
+.custom-customer_tick_role_add:before {
+  content: "\e908";
+}
+.custom-group_add:before {
+  content: "\e909";
+}
+.custom-map-pin_outline_add:before {
+  content: "\e90a";
+}
+.custom-add_machines:before {
+  content: "\e90b";
+}
+.custom-group:before {
+  content: "\e90c";
+}
+.custom-machines:before {
+  content: "\e90d";
+}
+.custom-map-pin_outline:before {
+  content: "\e90e";
+}

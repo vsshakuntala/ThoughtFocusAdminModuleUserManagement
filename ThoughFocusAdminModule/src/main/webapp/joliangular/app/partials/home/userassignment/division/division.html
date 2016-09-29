@@ -1,0 +1,235 @@
+<!-- START BREADCRUMB -->
+<ul class="breadcrumb">
+    <li><a class="cursor-point">Home</a></li>
+    <li><a ui-sref="home.user.viewusers" ui-sref-opts="{reload:true}" class="cursor-point">List Of Users</a></li>
+    <li class="active">User Dashboard</li>
+</ul>
+<!-- END BREADCRUMB -->
+
+<!-- PAGE TITLE -->
+<!--<div class="page-title">
+    <div class="row">
+        <div class="col-sm-6">
+            <h2> User Dashboard</h2>
+        </div>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-9">
+                    <span class="fa fa-3x"></span>
+                </div>
+                <div class="col-sm-3">
+                    <div class="pull-right">
+                        <span class="fa fa-arrow-circle-o-left fa-3x return-to-user-list-icon cursor-point" ui-sref="home.user.viewusers"></span>
+                        <p class="return-to-user-list pull-right">User List</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+<!-- END PAGE TITLE -->
+
+<!-- PAGE TITLE -->
+<div class="page-title">
+    <div class="row">
+        <div class="col-sm-7">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="user-name">{{userDetails.userName}}</label><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-4">
+                    <span class="last-active-date">Last active date: {{userDetails.userLastActiveDate | date:'dd-MMM-yyyy'}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-5">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="row text-center" data-toggle="modal" data-target="#adddivision">
+                                <div class="col-sm-12">
+                                    <span title="Click to add divisions"><i class="custom custom-organization_add1 tf-icon tf-icon-3x cursor-point" aria-hidden="true"></i></span>
+                                </div>
+                                <div class="col-sm-12">
+                                    <span>Add Division</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="row text-center" data-toggle="modal" data-target="#note">
+                                <div class="col-sm-12">
+                                    <span title="Click to view notes"><i class="fa fa-file fa-3x cursor-point" aria-hidden="true"></i></span>
+                                </div>
+                                <div class="col-sm-12">
+                                    <span>Notes</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="row text-center" data-toggle="modal" data-target="#modal_large">
+                                <div class="col-sm-12">
+                                    <span title="Click to edit user"><i class="fa fa-user fa-3x cursor-point" aria-hidden="true"></i></span>
+                                </div>
+                                <div class="col-sm-12">
+                                    <span>Edit Profile</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="row text-center">
+                                <div class="col-sm-12">
+                                    <span title="Click to reset password" ng-click="resetPassword()"><i class="custom custom-Reset_password1 tf-icon tf-icon-3x cursor-point" aria-hidden="true"></i></span>
+                                </div>
+                                <div class="col-sm-12">
+                                    <span>Reset Password</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="horizontal-line">
+</div>
+<!-- END PAGE TITLE -->
+
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <!--START FILTER-->
+    <!--<div class="row" id="search-panel">
+        <div class="col-sm-12">
+            <div class="panel custom-panel">
+                <div class="panel-body">
+                    <div class="col-sm-11">
+                        <div class="row">
+                            <div class="col-sm-3 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <h4>Divisions</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 scroll">
+                                        <label ng-repeat-start="division in divisions">
+                                            <input type="checkbox" checklist-model="filteredObjects.divisions" checklist-value="division.organizationId"> {{division.organizationName}}
+                                        </label>
+                                        <br ng-repeat-end>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <h4>Status</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label ng-repeat-start="status in statuses">
+                                            <input type="checkbox" checklist-model="filteredObjects.status" checklist-value="status.status"> {{status.status}}
+                                        </label>
+                                        <br ng-repeat-end>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <h4>Roles</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 scroll">
+                                        <label ng-repeat-start="role in roles">
+                                            <input type="checkbox" checklist-model="filteredObjects.roles" checklist-value="role.roleId"> {{role.roleName}}
+                                        </label>
+                                        <br ng-repeat-end>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Registered from</label>
+                                            <div class="input-group">
+                                                <input class="form-control" ng-click="open('fromDate')" placeholder="yyyy-mm-dd" uib-datepicker-popup="{{format}}" ng-model="filteredObjects.from_date"
+                                                    is-open="fromDateopened" datepicker-options="dateOptions.fromDate">
+                                                <span ng-click="open('fromDate')" class="input-group-addon cursor-point"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Registered to</label>
+                                            <div class="input-group">
+                                                <input class="form-control" ng-click="open('toDate')" placeholder="yyyy-mm-dd" uib-datepicker-popup="{{format}}" ng-model="filteredObjects.to_date"
+                                                    is-open="toDateopened" datepicker-options="dateOptions.toDate">
+                                                <span ng-click="open('toDate')" class="input-group-addon cursor-point"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Comapany</label>
+                                            <input type="text" class="form-control" ng-model="filteredObjects.company" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Name</label>
+                                            <input type="text" class="form-control" ng-model="filteredObjects.name" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1 text-center machine-filter-searchbtn-padding">
+                        <button type="button" class="btn btn-primary btn-lg searchbtn" ng-click="drawDataTable()">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <!--END FILTER-->
+    <div class="row">
+        <div class="col-md-12">
+            <!-- START DEFAULT DATATABLE -->
+            <div class="panel panel-default">
+                <div class="">
+                    <h3 class=""></h3>
+                    <!--<ul class="panel-controls">
+                        <li><a href="#" class="panel-collapse"><span class="fa fa-angle-down"></span></a></li>
+                        <li><a href="#" class="panel-refresh"><span class="fa fa-refresh"></span></a></li>
+                        <li><a href="#" class="panel-remove"><span class="fa fa-times"></span></a></li>
+                    </ul>-->
+                </div>
+                <div class="panel-body">
+                    <table datatable="" dt-columns="dtColumns" dt-options="dtOptions" dt-instance="dtInstanceCallback" class="table datatable header-center">
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- END DEFAULT DATATABLE -->
+    </div>
+</div>
+
+<!-- PAGE CONTENT WRAPPER -->
+<div ng-include="'app/partials/home/useraccount/updateuser/updateuser.html'">
+</div>
+<div ng-include="'app/partials/home/userassignment/division/notes.html'">
+</div>
+<div ng-include="'app/partials/home/userassignment/division/adddivision.html'">
+</div>
+<div ng-include="'app/partials/home/userassignment/division/deletenotes.html'">
+</div>

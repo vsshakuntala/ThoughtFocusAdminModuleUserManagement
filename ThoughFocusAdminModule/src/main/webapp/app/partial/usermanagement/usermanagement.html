@@ -1,0 +1,77 @@
+
+	<header class="main-header">
+		<a href="" class="logo" id="logoSide"> <!-- mini logo for sidebar mini 50x50 pixels -->
+			<span class="logo-mini"><b>T</b>F</span> <!-- logo for regular state and mobile devices -->
+			<span class="logo-lg"><b>Thought</b>Focus</span>
+		</a>
+		<nav class="navbar navbar-fixed-top" id="navbarMain">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-sm-4">
+						<a href="" class="sidebar-toggle" data-toggle="offcanvas"
+							role="button"> <span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+							class="icon-bar"></span>
+						</a>
+					</div>
+					<div class="col-sm-4" id="moduleName">
+						<span style="font-size: 250%;" class="hidden-xs"><font
+							color="white"> User Management</font></span>
+					</div>
+					<div class="col-sm-4 ">
+						<div class="navbar-custom-menu ">
+							<ul class="nav navbar-nav">
+								<li class="user-name"><a> <span id="welcomeUserName"
+										style="cursor: pointer; pointer-events: all;">Welcome:
+											Admin</span>
+								</a></li>
+								<i ui-sref="login" class="fa fa-sign-out lgout pull-right"
+									id="signoutButton"
+									style="cursor: pointer; pointer-events: all;" title="Sign Out"></i>
+							</ul>
+						</div>
+					</div>
+				</div>
+		</nav>
+	</header>
+	<!-- Left side column. contains the sidebar -->
+	<aside class="main-sidebar ">
+		<!-- sidebar: style can be found in sidebar.less -->
+		<section class="sidebar ">
+			<!-- Sidebar user panel -->
+			<!-- sidebar menu: : style can be found in sidebar.less -->
+			<ul class="sidebar-menu fixed">
+				<li><a ui-sref="usermgmt.user.viewuser"
+					ui-sref-opts="{reload: false}"><i class="fa fa-users"></i> <span>User
+							Management</span></a></li>
+				<li><a href=""><i class="fa fa-book"></i> <span>Module
+							1</span></a></li>
+				<li><a href=""><i class="fa fa-book"></i> <span>Module
+							2</span></a></li>
+				<li><a href=""><i class="fa fa-book"></i> <span>Module
+							3</span></a></li>
+				<li><a href=""><i class="fa fa-book"></i> <span>Module
+							4</span></a></li>
+				<li><a href=""><i class="fa fa-book"></i> <span>Module
+							5</span></a></li>
+			</ul>
+		</section>
+		<!-- /.sidebar -->
+	</aside>
+	<!-- Content Wrapper. Contains page content -->
+	<div class="content-wrapper">
+		<div ui-view></div>
+	</div>
+	<span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner-1"></span>
+	<footer class="main-footer">
+		<!-- style="bottom: 0px;" -->
+		<div class="container-fluid">
+			<div class="pull-right hidden-xs">
+				<b>Version</b> 1.0.0.0
+			</div>
+			<strong>Copyright &copy; 2016 <a href="">ThoughtFocus</a>.
+			</strong> All rights reserved.
+		</div>
+	</footer>
+
+<!-- ./wrapper -->

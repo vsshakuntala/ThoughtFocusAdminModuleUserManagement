@@ -1,0 +1,328 @@
+<ul class="breadcrumb">
+    <li><a href="#">Home</a></li>
+    <li><a ui-sref="home.user.viewusers" ui-sref-opts="{reload:true}" class="cursor-point">List Of Users </a></li>
+    <li><a ui-sref="home.userassignment.division" ui-sref-opts="{reload:true}" class="cursor-point">User Dashboard</a></li>
+    <li class="active">Customer Management</li>
+</ul>
+<!-- END BREADCRUMB -->
+
+<!-- START PAGE TITLE AND BACK TO USER LIST-->
+<!--<div class="page-title">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row">
+                        <h3>Customer Management</h3>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-10">
+                            <span class="fa fa-3x"></span>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="">
+                                <span class="fa fa-arrow-circle-o-left fa-3x return-to-user-list-icon cursor-point" ui-sref="home.user.viewusers"></span>
+                                <p class="return-to-user-list pull-right">User List</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->
+
+<!-- END PAGE TITLE AND BACK TO USER LIST-->
+
+<!--START USER DATA-->
+<div class="page-title">
+    <!--<div class="row">
+        <div class="col-sm-12">-->
+    <div class="row">
+        <!-- START USER-DATA -->
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label class="user-name">{{userDetails.userName}}</label><br>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <label class="organization-name">{{orgName}}</label>
+                </div>
+                <div class="col-sm-3">
+                    <span class="available-catalog">Available: </span> <span><b>{{count.availableCustomerCount}}</b></span>
+                </div>
+                <div class="col-sm-3">
+                    <span class="assigned-catalog">Assigned: </span> <span><b>{{count.assignedCustomerCount}}</b></span>
+                </div>
+                <div class="col-sm-3">
+                    <span class="result-to-show">Result: </span> <span><b>{{totalrows}}</b></span>
+                </div>
+            </div>
+        </div>
+        <!-- END USER-DATA -->
+        <!--START ICONS-->
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="row text-center" ng-click="download()">
+                        <div class="col-sm-12">
+                            <span title="Click to download report"><i class="fa fa-download fa-2x download-report-icon cursor-point" aria-hidden="true"></i></span>
+                        </div>
+                        <div class="col-sm-12">
+                            <span>Download</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="row text-center mb-control" data-box="#assign-confirm">
+                        <div class="col-sm-12">
+                            <span title="Click to assign customer"><i class="custom custom-Assign1 tf-icon tf-icon-3x cursor-point" aria-hidden="true"></i></span>
+                        </div>
+                        <div class="col-sm-12">
+                            <span>Assign</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="row text-center mb-control" data-box="#assign-all-confirm">
+                        <div class="col-sm-12">
+                            <span title="Click to assign all customers"><i class="custom custom-Assign_all1 tf-icon tf-icon-3x cursor-point" aria-hidden="true"></i></span>
+                        </div>
+                        <div class="col-sm-12">
+                            <span>Assign All</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="row text-center mb-control" data-box="#remove-confirm">
+                        <div class="col-sm-12">
+                            <span title="Click to remove customer"><i class="custom custom-Remove1 tf-icon tf-icon-3x cursor-point" aria-hidden="true"></i></span>
+                        </div>
+                        <div class="col-sm-12">
+                            <span>Remove</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="row text-center mb-control" data-box="#remove-all-confirm">
+                        <div class="col-sm-12">
+                            <span title="Click to remove all customers"><i class="custom custom-Remove_all1 tf-icon tf-icon-3x cursor-point" aria-hidden="true"></i></span>
+                        </div>
+                        <div class="col-sm-12">
+                            <span>Remove All</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="row text-center">
+                        <div>
+                            <span title="Click to show / hide the filter" class="pull-right filter-icon"><i class="fa fa-filter fa-2x cursor-point" aria-hidden="true" id="open-filter"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--END ICONS-->
+    </div>
+    <!--</div>
+    </div>-->
+</div>
+<!--END USER DATA-->
+
+<!-- PAGE CONTENT WRAPPER -->
+<div class="page-content-wrap">
+    <!-- PASTE HERE-->
+    <!--START FILTER-->
+    <div class="row" id="search-panel" style="display:none;">
+        <div class="col-sm-12">
+            <div class="panel custom-panel">
+                <div class="panel-body">
+                    <div class="col-sm-11">
+                        <div class="row">
+                            <div class="col-sm-3 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Customer Name</label>
+                                            <input type="text" class="form-control" ng-model="filteredObjectsCustomer.customerName" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>City</label>
+                                            <input type="text" class="form-control" ng-model="filteredObjectsCustomer.cCity" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Customer #</label>
+                                            <input type="text" class="form-control" ng-model="filteredObjectsCustomer.customerNumber" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>State</label>
+                                            <input type="text" class="form-control" ng-model="filteredObjectsCustomer.cState" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Bill To #</label>
+                                            <input type="text" class="form-control" ng-model="filteredObjectsCustomer.cBill" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Postal Code</label>
+                                            <input type="text" class="form-control" ng-model="filteredObjectsCustomer.cPostal" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 verticalline">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Address 1</label>
+                                            <input type="text" class="form-control" ng-model="filteredObjectsCustomer.addressOne" />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <label>Status</label>
+                                            <select class="form-control" ng-model="filteredObjectsCustomer.status" ng-options="status.status as status.value for status in statuses"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1 text-center machine-filter-searchbtn-padding">
+                        <button type="button" class="btn btn-primary btn-lg searchbtn" ng-click="drawDataTable()">Search</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--END FILTER-->
+
+    <div class="row">
+        <div class="col-sm-offset-9 col-sm-3 search-padding">
+            <div class="input-group">
+                <input type="text" class="form-control" ng-model="searchValue" placeholder="Search">
+                <span class="input-group-addon cursor-point" ng-click="drawCustomeFilteredDataTable()"><span class="fa fa-search"></span></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <!-- START DEFAULT DATATABLE -->
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <table datatable="" dt-columns="dtColumns" dt-options="dtOptions" dt-instance="dtInstance" class="table datatable">
+                    </table>
+                </div>
+            </div>
+            <!-- END DEFAULT DATATABLE -->
+        </div>
+    </div>
+</div>
+
+<!-- PAGE CONTENT WRAPPER -->
+<!-- MESSAGE BOX-->
+<div class="message-box animated fadeIn" data-sound="alert" id="assign-confirm">
+    <div class="mb-container">
+        <div class="mb-middle">
+            <div class="mb-title"><span class="fa "></span> Assign?</div>
+            <div class="mb-content">
+                <p>Are you sure you want to assign selected?</p>
+                <p>Press No if you want to continue work. Press Yes to assign selected.</p>
+            </div>
+            <div class="mb-footer">
+                <div class="pull-right">
+                    <a class="btn btn-success btn-lg" ng-click="assign()">Yes</a>
+                    <button class="btn btn-default btn-lg mb-control-close" id="assign-close">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MESSAGE BOX-->
+
+<!-- MESSAGE BOX-->
+<div class="message-box animated fadeIn" data-sound="alert" id="assign-all-confirm">
+    <div class="mb-container">
+        <div class="mb-middle">
+            <div class="mb-title"><span class="fa"></span> Assign all ?</div>
+            <div class="mb-content">
+                <p>Are you sure you want to assign all?</p>
+                <p>Press No if you want to continue work. Press Yes to assign all.</p>
+            </div>
+            <div class="mb-footer">
+                <div class="pull-right">
+                    <a class="btn btn-success btn-lg" ng-click="assign('all')">Yes</a>
+                    <button class="btn btn-default btn-lg mb-control-close" id="assign-all-close">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MESSAGE BOX-->
+
+<!-- MESSAGE BOX-->
+<div class="message-box animated fadeIn" data-sound="alert" id="remove-confirm">
+    <div class="mb-container">
+        <div class="mb-middle">
+            <div class="mb-title"><span class="fa"></span> Remove ?</div>
+            <div class="mb-content">
+                <p>Are you sure you want to remove selected?</p>
+                <p>Press No if you want to continue work. Press Yes to remove selected.</p>
+            </div>
+            <div class="mb-footer">
+                <div class="pull-right">
+                    <a class="btn btn-success btn-lg" ng-click="remove()">Yes</a>
+                    <button class="btn btn-defmyTableault btn-lg mb-control-close" id="remove-close">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MESSAGE BOX-->
+
+
+<!-- MESSAGE BOX-->
+<div class="message-box animated fadeIn" data-sound="alert" id="remove-all-confirm">
+    <div class="mb-container">
+        <div class="mb-middle">
+            <div class="mb-title"><span class="fa "></span> Remove all ?</div>
+            <div class="mb-content">
+                <p>Are you sure you want to remove all?</p>
+                <p>Press No if you want to continue work. Press Yes to remove all.</p>
+            </div>
+            <div class="mb-footer">
+                <div class="pull-right">
+                    <a class="btn btn-success btn-lg" ng-click="remove('all')">Yes</a>
+                    <button class="btn btn-default btn-lg mb-control-close" id="remove-all-close">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MESSAGE BOX-->

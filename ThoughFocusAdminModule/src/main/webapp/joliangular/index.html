@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html ng-app="tf">
+
+<head>
+<!-- META SECTION -->
+<title>Thought Focus</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!--<link rel="icon" href="favicon.ico" type="image/x-icon" />-->
+<!-- END META SECTION -->
+<!-- CSS INCLUDE -->
+<link rel="stylesheet" type="text/css" id="theme"
+	href="app-content/css/theme-default.css" />
+<link rel="stylesheet" href="app-content/css/newuser.css">
+<!--<link href="app-content/css/dropdown.css" rel="stylesheet">-->
+<link href="app-content/css/intlTelInput.css" rel="stylesheet">
+<link href="app-content/css/address.css" rel="stylesheet">
+<!-- EOF CSS INCLUDE -->
+<!-- START OF CUSTOM CSS -->
+<link rel="stylesheet" type="text/css"
+	href="app-content/css/machinemanagement.css" />
+<link rel="stylesheet" type="text/css" href="app-content/css/role.css" />
+<link rel="stylesheet" type="text/css" href="app-content/css/treasure-overlay-spinner.min.css" />
+
+<link rel="stylesheet" type="text/css"
+	href="app-content/css/viewuser.css" />
+<link rel="stylesheet" type="text/css"
+	href="app-content/css/custom-icon/custom-style.css" />
+<link rel="stylesheet" type="text/css"
+	href="app-content/css/custom-icon-2/custom-icon-style.css" />
+<link rel="stylesheet" type="text/css"
+	href="app-content/css/select.css" />
+<link rel="stylesheet" type="text/css"
+	href="app-content/css/select2.css" />
+	<link rel="stylesheet" type="text/css"
+	href="app-content/css/selectize.default.css" />
+<link rel="stylesheet" type="text/css"
+	href="app-content/css/custom-icon-2/custom-icon-style.css" />
+<!-- END OF CUSTOM CSS -->
+</head>
+
+<body ng-class="{'spinnerrunning' : spinnerActive}">
+	<!-- START PAGE CONTAINER -->
+	<div class=" page-container ">
+		<div ui-view></div>
+		<span us-spinner="{radius:30, width:8, length: 16}"
+			spinner-key="spinner-1 "></span>
+	</div>
+	<!-- END PAGE CONTAINER -->
+
+	<!-- START PRELOADS -->
+	<audio id="audio-alert " src="app-content/audio/alert.mp3 "
+		preload="auto "></audio>
+	<audio id="audio-fail " src="app-content/audio/fail.mp3 "
+		preload="auto "></audio>
+	<!-- END PRELOADS -->
+
+	<!-- START SCRIPTS -->
+	<!-- START PLUGINS -->
+	<script type="text/javascript "
+		src="app-content/js/plugins/jquery/jquery.min.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/plugins/jquery/jquery-ui.min.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/plugins/bootstrap/bootstrap.min.js "></script>
+	<!--<script type="text/javascript " src="app-content/js/plugins/datatables/jquery.dataTables.min.js "></script>-->
+	<script type="text/javascript "
+		src="app-content/js/plugins/datatables/jquery.spring-friendly.js "></script>
+	<!-- END PLUGINS -->
+
+	<script src="../app-content/js/jquery.dataTables.js "></script>
+
+	<!-- START THIS PAGE PLUGINS-->
+	<script type='text/javascript'
+		src='app-content/js/plugins/icheck/icheck.min.js'></script>
+	<script type="text/javascript "
+		src="app-content/js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/plugins/scrolltotop/scrolltopcontrol.js "></script>
+
+	<script type="text/javascript "
+		src="app-content/js/plugins/morris/raphael-min.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/plugins/morris/morris.min.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/plugins/rickshaw/d3.v3.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/plugins/rickshaw/rickshaw.min.js "></script>
+	<script type='text/javascript'
+		src='app-content/js/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js'></script>
+	<script type='text/javascript'
+		src='app-content/js/plugins/jvectormap/jquery-jvectormap-world-mill-en.js'></script>
+	<script type='text/javascript'
+		src='app-content/js/plugins/bootstrap/bootstrap-datepicker.js'></script>
+	<script type="text/javascript "
+		src="app-content/js/plugins/owl/owl.carousel.min.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/plugins/knob/jquery.knob.min.js "></script>
+	<!--<script type="text/javascript " src="app-content/js/dropdown.js "></script>-->
+
+	<script type="text/javascript " src="app-content/js/lodash.js "></script>
+	<script type="text/javascript " src="app-content/js/spin.min.js "></script>
+
+	<script type="text/javascript "
+		src="app-content/js/plugins/moment.min.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/plugins/daterangepicker/daterangepicker.js "></script>
+	<script type="text/javascript " src="app-content/js/jquery.toaster.js "></script>
+	<!-- END THIS PAGE PLUGINS-->
+	<!-- START TEMPLATE -->
+	<script type="text/javascript " src="app-content/js/settings.js "></script>
+
+	<script type="text/javascript " src="app-content/js/plugins.js "></script>
+	<script type="text/javascript " src="app-content/js/actions.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/constants/constants.js "></script>
+	<!--<script type="text/javascript " src="app-content/js/demo_dashboard.js "></script>-->
+	<!-- END TEMPLATE -->
+	<!--START OF ANGULAR SOURCE FILES-->
+	<script type="text/javascript " src="app-content/js/angular.min.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/angular-ui-router.js "></script>
+	<!--<script src="app-content/js/plugins/datatables/angular-datatables.min.js "></script>-->
+
+	<script src="../app-content/js/angular-datatables.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/angular-sanitize.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/angular-spinner.js "></script>
+	<script type="text/javascript " src="app-content/js/select.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/angularjs-dropdown-multiselect.js "></script>
+	<script type="text/javascript " src="app-content/js/intlTelInput.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/ng-intl-tel-input.js "></script>
+	<script type="text/javascript " src="app-content/js/utils.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/ng-intl-tel-input.module.js "></script>
+		<script type="text/javascript "
+		src="app-content/js/ng-intl-tel-input.provider.js "></script>
+		<script type="text/javascript "
+		src="app-content/js/ng-intl-tel-input.directive.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/plugins/checklist/checklist.js "></script>
+	<script type="text/javascript "
+		src="app-content/js/plugins/uibootstrap/uibootstrap.js "></script> 
+		<!-- <script type="text/javascript "
+		src="http://hodgepodgers.github.io/ng-intl-tel-input/bower_components/intl-tel-input/build/js/intlTelInput.js"></script>
+		<script type="text/javascript "
+		src="http://hodgepodgers.github.io/ng-intl-tel-input/bower_components/intl-tel-input/lib/libphonenumber/build/utils.js"></script>
+		<script type="text/javascript "
+		src="http://hodgepodgers.github.io/ng-intl-tel-input/ng-intl-tel-input.module.js"></script>
+		<script type="text/javascript "
+		src="http://hodgepodgers.github.io/ng-intl-tel-input/ng-intl-tel-input.provider.js"></script>
+		<script type="text/javascript "
+		src="http://hodgepodgers.github.io/ng-intl-tel-input/ng-intl-tel-input.directive.js"></script> -->
+			
+	<!--END OF ANGULAR SOURCE FILES-->
+
+	<!--START OF ANGULAR MODULE FILES-->
+	<script type="text/javascript " src="app/app.js "></script>
+	<script type="text/javascript " src="app/storage.js "></script>
+	<script type="text/javascript " src="app/applicationutil.js "></script>
+	<script type="text/javascript " src="app/genericservice.js "></script>
+	<script type="text/javascript " src="app/partials/login/login.js "></script>
+	<script type="text/javascript " src="app/partials/home/home.js "></script>
+	<script type="text/javascript "
+		src="app/partials/home/dashboard/dashboard.js "></script>
+	<script type="text/javascript "
+		src="app/partials/home/useraccount/useraccount.js "></script>
+	<script type="text/javascript "
+		src="app/partials/home/useraccount/createuser/createuser.js "></script>
+	<script type="text/javascript "
+		src="app/partials/home/useraccount/viewusers/viewusers.js "></script>
+	<script type="text/javascript "
+		src="app/partials/home/useraccount/updateuser/updateuser.js "></script>
+
+	<script type="text/javascript "
+		src="app/partials/home/userassignment/userassignment.js "></script>
+	<script type="text/javascript "
+		src="app/partials/home/userassignment/address/address.js "></script>
+	<script type="text/javascript "
+		src="app/partials/home/userassignment/customer/customer.js "></script>
+	<script type="text/javascript "
+		src="app/partials/home/userassignment/division/division.js "></script>
+	<script type="text/javascript "
+		src="app/partials/home/userassignment/group/group.js "></script>
+	<script type="text/javascript "
+		src="app/partials/home/userassignment/machine/machine.js "></script>
+	<script type="text/javascript "
+		src="app/partials/home/userassignment/role/role.js "></script>
+		<script type="text/javascript "
+		src="app-content/js/treasure-overlay-spinner.min.js"></script>
+		
+	<!--START OF ANGULAR MODULE FILES-->
+	<!-- END SCRIPTS -->
+</body>
+
+</html>

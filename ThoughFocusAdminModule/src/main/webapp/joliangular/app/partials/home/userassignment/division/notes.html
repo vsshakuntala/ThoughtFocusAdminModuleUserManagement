@@ -1,0 +1,74 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="modal" id="note" tabindex="-1" role="dialog" aria-labelledby="largeModalHead" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <form name="noteUserForm" id="noteUserForm" ng-submit="noteUserForm.$valid && submitNoteOfUser()" class="form-horizontal"
+                        role="form" novalidate>
+                        <div class="panel panel-default">
+                            <div class="col-sm-12 ">
+                                <form name="notesForm" role="form">
+                                    <div class="panel-body">
+                                        <div class="form-group">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading ui-draggable-handle">
+                                                    <div class="row">
+                                                        <div class="col-sm-11">
+                                                            <div class="panel-title">
+                                                                <h3><span class="fa fa-book fa-1x r"></span> Notes</h3>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-1">
+                                                            <div class="pull-right">
+                                                                <button type="button" id="close-note-modal" class="close" data-dismiss="modal">&times;</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="messages messages-img">
+                                                        <div class="item in item-visible">
+                                                            <textarea ng-model="user.notes" name="notes" id="notes" class="form-control new-user-notes" rows="7" placeholder="Write your notes here (Max char 500)"
+                                                                class="form-control" maxlength="500" required></textarea>
+                                                            <div ng-show="noteUserForm.$submitted">
+                                                                <small class="error" ng-show="noteUserForm.notes.$error.required">
+										Notes is required </small>
+                                                                <small class="error" ng-show="noteUserForm.notes.$error.maxlength">Maximum
+														length is 500 Characters only </small>
+                                                            </div>
+                                                            <div class="button pull-right">
+                                                                <div class="row">
+                                                                    <input type="submit" class="btn btn-success" value="Save" />
+                                                                    <!--ng-click="submitNotes(userNotesInput)" -->
+                                                                    <!--<input type="button" data-dismiss="modal" class="btn btn-danger" id="cancel" name="cancel" value="Cancel" />-->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="item in item-visible notes-scroll">
+                                                            <div ng-repeat="note in notes">
+                                                                <div class="row" style="margin-bottom: 15px;">
+                                                                    <textarea class="form-control" id="inputNote" rows="3" style="resize: none;" readonly>{{note.notes}} 
+                                                                        {{note.userName}} , {{note.createdDate|date:'dd-MMM-yyyy , h:mma'}}
+                                                        </textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--START SAVE BUTTON -->
+
+                                                <!--END SAVE BUTTON -->
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

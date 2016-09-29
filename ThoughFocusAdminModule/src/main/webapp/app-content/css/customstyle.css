@@ -1,0 +1,57 @@
+@font-face {
+  font-family: 'custom';
+  src:  url('fonts/custom.eot?sa640k');
+  src:  url('fonts/custom.eot?sa640k#iefix') format('embedded-opentype'),
+    url('fonts/custom.ttf?sa640k') format('truetype'),
+    url('fonts/custom.woff?sa640k') format('woff'),
+    url('fonts/custom.svg?sa640k#custom') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="custom-icons"], [class*=" custom-icons"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'custom' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.custom-iconsgroup:before {
+  content: "\e900";
+}
+.custom-iconsgroup_add:before {
+  content: "\e901";
+}
+.custom-iconscustomer_role_access_add:before {
+  content: "\e902";
+}
+.custom-iconscustomer_tick_role_add:before {
+  content: "\e903";
+}
+.custom-iconsmap-pin_outline_add:before {
+  content: "\e904";
+}
+.custom-iconsadd_machines:before {
+  content: "\e905";
+}
+.custom-iconsmachines:before {
+  content: "\e906";
+}
+.custom-iconsmap-pin_outline:before {
+  content: "\e907";
+}
+.custom-iconscustomer_tick_role:before {
+  content: "\e908";
+}
+.custom-iconscustomer_role_access:before {
+  content: "\e909";
+}
+

@@ -1,0 +1,211 @@
+<div>
+    <!-- START BREADCRUMB -->
+    <ul class="breadcrumb">
+        <li><a href="#">Home</a></li>
+        <li><a ui-sref="home.user.viewusers" ui-sref-opts="{reload:true}" class="cursor-point">List Of Users</a></li>
+        <li><a ui-sref="home.userassignment.division" ui-sref-opts="{reload:true}" class="cursor-point">User Dashboard</a></li>
+        <li class="active">Default Address</li>
+    </ul>
+    <!-- END BREADCRUMB -->
+
+    <!-- PAGE TITLE -->
+    <!--<div class="page-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h2> Default Address</h2>
+            </div>
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-10">
+                        <span class="fa fa-3x"></span>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="">
+                            <span class="fa fa-arrow-circle-o-left fa-3x return-to-user-list-icon cursor-point" ui-sref="home.user.viewusers"></span>
+                            <p class="return-to-user-list pull-right">User List</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>-->
+    <!-- END PAGE TITLE -->
+
+    <!-- START USER DATA -->
+    <div class="page-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <label class="user-name">{{userDetails.userName}}</label><br>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="horizontal-line">
+    </div>
+    <!-- END PAGE TITLE -->
+
+    <!-- PAGE CONTENT WRAPPER -->
+    <div class="page-content-wrap">
+        <div class="row">
+            <!--<div class="col-sm-3">
+                <div class="widget widget-success widget-item-icon">
+                    <div class="widget-item-left">
+                        <span class="fa fa-sitemap"></span>
+                    </div>
+                    <div class="widget-data">
+                        <div class="widget-title custom-widget-title">Division</div>
+                        <div class="widget-title custom-widget-title">Organization-1</div>
+                    </div>
+                    <div class="widget-controls">
+                    </div>
+                </div>
+            </div>-->
+            <div class="col-sm-offset-2 col-sm-8">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2>Default Address</h2>
+                        <form name="addressForm" id="addressForm" ng-submit="addressForm.$valid && saveDefaultAddress()" class="form-horizontal"
+                        role="form" novalidate>
+                            <div class="row">
+                                <div class="address-form-group">
+                                    <label class="col-sm-3 add-control-label">Default Sales Org</label>
+                                    <div class="col-sm-8">
+                                        <!--<select class="form-control select" data-style="btn-success" id="sales_org " name="sales_org " ng-model="selectedObject.salesAreaId "
+                                        ng-disabled="!salesAreaList.length " ng-change="salesAreaSelected()" convert-to-number>
+										<option value="0" ng-selected="!salesAreaList.length">-- Select Sales Organization --</option>
+										<option ng-repeat="area in salesAreaList track by $index "
+											value="{{area.salesAreaId}} " ng-selected="area.salesAreaId===selectedObject.salesAreaId ">{{area.salesOrgName}}</option>
+									</select>-->
+                                        <ui-select ng-required="true" name="sales" ng-model="selectedObjectName.salesArea" id="sales" theme="select2" on-select="salesAreaSelected()" ng-disabled="disabled"
+                                            title="" uis-open-close="onOpenClose(isOpen,'sales')">
+                                            <ui-select-match placeholder="Salea Area">{{selectedObjectName.salesArea}}</ui-select-match>
+                                            <ui-select-choices repeat="area in salesAreaList track by $index">
+                                                <div ng-bind-html="area.salesOrgName"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <div ng-show="addressForm.$submitted">
+                                            <small class="error" ng-show="salesvalidationRequired && addressForm.sales.$error.required">
+										Sales area is required </small>
+                                        </div>
+                                        <!--<div>
+                                        <small class="error" ng-show="salesRequired">
+										User name is required </small>
+                                    </div>-->
+                                        <!--<div ng-show="defaultAddressForm.$submitted">
+                                        <small class="error " ng-show="defaultAddressForm.sales_org.$error.required ">
+										Default sales organization is required </small>
+                                    </div>-->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="address-form-group">
+                                    <label class="col-sm-3 add-control-label">Distribution channel name</label>
+                                    <div class="col-sm-8 add">
+                                        <select class="form-control typeahead " id="sales_org " name="sales_org " ng-model="selectedObject.salesAreaId " required
+                                            ng-disabled="true" convert-to-number>
+										<option value="0" ng-selected="!salesAreaList.length">-- Distribution channel Name--</option>
+										<option ng-repeat="area in salesAreaList track by $index"
+											value="{{area.salesAreaId}} " ng-selected="area.salesAreaId===selectedObject.salesAreaId " ng-show="false">{{area.distributionChannelName}}</option>
+									    <!-- <label placeholder="Distribution channel name">{{area.distributionChannelName}}</label> -->
+									</select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="address-form-group">
+                                    <label class="col-sm-3 add-control-label">Customer <em>*</em></label>
+                                    <div class="col-sm-8">
+                                        <!--<select class="form-control typeahead " id="customer " name="customer " ng-model="selectedObject.customerId " required ng-change="customerSelected() "
+                                        convert-to-number>
+										<option value="0" ng-selected="!customerList.length">-- Select Customer --</option>
+										<option ng-repeat="cust in customerList "
+											value="{{cust.customerId}} " ng-selected="selectedObject.customerId===cust.customerId ">{{cust.customerName}}</option>
+									</select>-->
+                                        <ui-select ng-required="true" name="customer" ng-model="selectedObjectName.customer" id="customer" theme="select2" on-select="customerSelected()" ng-disabled="disabled"
+                                            title="" uis-open-close="onOpenClose(isOpen,'customer')">
+                                            <ui-select-match placeholder="Customer List" >{{selectedObjectName.customer}}</ui-select-match>
+                                            <ui-select-choices repeat="cust in customerList track by $index">
+                                                <div ng-bind-html="cust.customerName"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <div ng-show="addressForm.$submitted">
+                                            <small class="error" ng-show="addressForm.customer.$error.required">
+										Customer is required </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="address-form-group">
+                                    <label class="col-sm-3 add-control-label">Default Billing Address <em>*</em></label>
+                                    <div class="col-sm-8">
+                                        <!--<select class="form-control typeahead " id="billing_address " name="billing_address " ng-model="selectedObject.billToAddressId "
+                                        required ng-change="billingAddressSelected()" convert-to-number>
+										<option value="0" ng-selected="!billingAddressList.length">-- Select Billing Address --</option>
+										<option ng-repeat="bill in billingAddressList "
+											value="{{bill.addressId}} " ng-selected="bill.addressId === selectedObject.billToAddressId ">{{bill.addressName}}</option>
+									</select>-->
+                                        <ui-select ng-required="true" name="billing" ng-model="selectedObjectName.billing" theme="select2" on-select="billingAddressSelected()" title="Choose a Billing Address">
+                                            <ui-select-match placeholder="Billing Address">{{selectedObjectName.billing.addressName}}</ui-select-match>
+                                            <ui-select-choices repeat="bill in billingAddressList | propsFilter: {addressName: $select.search}">
+                                                <div ng-bind-html="bill.addressName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                        <div ng-show="addressForm.$submitted">
+                                                <small class="error" ng-show="addressForm.billing.$error.required">
+                                            Billing address is required </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="address-form-group">
+                                    <label class="col-sm-3 add-control-label">Default Shipping Address <em>*</em></label>
+                                    <div class="col-sm-8">
+                                        <!--<select class="form-control typeahead " id="shipping_address " name="shipping_address " ng-model="selectedObject.shipToAddressId"
+                                        required ng-change="shippingAddressSelected() " convert-to-number>
+										<option value="0" ng-selected="!shippingAddressList.length">-- Select Shipping Address --</option>
+										<option ng-repeat="ship in shippingAddressList "
+											value="{{ship.addressId}} " ng-selected="ship.addressId===selectedObject.shipToAddressId ">{{ship.addressName}}</option>
+									</select>-->
+                                        <ui-select ng-required="true" name="shipping" ng-model="selectedObjectName.shipping" on-select="shippingAddressSelected()" theme="select2" title="Choose a Shipping Address">
+                                            <ui-select-match placeholder="Shipping Address">{{selectedObjectName.shipping.addressName}}</ui-select-match>
+                                            <ui-select-choices repeat="ship in shippingAddressList | propsFilter: {addressName: $select.search}">
+                                                <div ng-bind-html="ship.addressName | highlight: $select.search"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                       <div ng-show="addressForm.$submitted">
+                                                <small class="error" ng-show="addressForm.shipping.$error.required">
+                                            Shipping address is required </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="address-form-group ">
+                                <div class="button pull-right">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <button type="submit" class="btn btn-success" >Save</button>
+                                        </div>
+                                        <div class="col-sm-2 ">
+                                            <button type="button" class="btn btn-danger" ng-click="cancel()">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!-- PAGE CONTENT WRAPPER -->

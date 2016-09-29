@@ -1,0 +1,266 @@
+@font-face {
+  font-family: 'custom';
+  src: url('fonts/custom.eot?k5twkp');
+  src: url('fonts/custom.eot?k5twkp#iefix') format('embedded-opentype'), url('fonts/custom.ttf?k5twkp') format('truetype'), url('fonts/custom.woff?k5twkp') format('woff'), url('fonts/custom.svg?k5twkp#custom') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="custom-icons"],
+[class*=" custom-icons"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'custom' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.custom-iconsorganization_add2 .path1:before {
+  content: "\e900";
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsorganization_add2 .path2:before {
+  content: "\e901";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsorganization_add2 .path3:before {
+  content: "\e902";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsorganization_add2 .path4:before {
+  content: "\e903";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsorganization_add2 .path5:before {
+  content: "\e904";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsorganization_add2 .path6:before {
+  content: "\e905";
+  margin-left: -1em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsorganization_add2 .path7:before {
+  content: "\e906";
+  margin-left: -1em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsAssign_all .path1:before {
+  content: "\e90f";
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsAssign_all .path2:before {
+  content: "\e910";
+  margin-left: -1em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsAssign_all .path3:before {
+  content: "\e911";
+  margin-left: -1em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsAssign_all .path4:before {
+  content: "\e912";
+  margin-left: -1em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsAssign_all .path5:before {
+  content: "\e913";
+  margin-left: -1em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsAssign_all .path6:before {
+  content: "\e914";
+  margin-left: -1em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsRemove_all .path1:before {
+  content: "\e915";
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsRemove_all .path2:before {
+  content: "\e916";
+  margin-left: -1em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsRemove_all .path3:before {
+  content: "\e917";
+  margin-left: -1em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsRemove_all .path4:before {
+  content: "\e918";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsRemove_all .path5:before {
+  content: "\e919";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsRemove_all .path6:before {
+  content: "\e91a";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsAssign .path1:before {
+  content: "\e91b";
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsAssign .path2:before {
+  content: "\e91c";
+  margin-left: -1em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsAssign .path3:before {
+  content: "\e91d";
+  margin-left: -1em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsRemove .path1:before {
+  content: "\e91e";
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsRemove .path2:before {
+  content: "\e91f";
+  margin-left: -1em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsRemove .path3:before {
+  content: "\e920";
+  margin-left: -1em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsReset_password .path1:before {
+  content: "\e921";
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsReset_password .path2:before {
+  content: "\e922";
+  margin-left: -1.3330078125em;
+  color: rgb(0, 0, 0);
+}
+
+.custom-iconsReset_password .path3:before {
+  content: "\e923";
+  margin-left: -1.3330078125em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsReset_password .path4:before {
+  content: "\e924";
+  margin-left: -1.3330078125em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsReset_password .path5:before {
+  content: "\e925";
+  margin-left: -1.3330078125em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconsReset_password .path6:before {
+  content: "\e926";
+  margin-left: -1.3330078125em;
+  color: rgb(1, 1, 1);
+}
+
+.custom-iconscustomer_role_access:before {
+  content: "\e92f";
+}
+
+.custom-iconscustomer_tick_role:before {
+  content: "\e930";
+}
+
+.custom-iconscustomer_role_access_add:before {
+  content: "\e907";
+}
+
+.custom-iconscustomer_tick_role_add:before {
+  content: "\e908";
+}
+
+.custom-iconsgroup_add:before {
+  content: "\e909";
+}
+
+.custom-iconsmap-pin_outline_add:before {
+  content: "\e90a";
+}
+
+.custom-iconsadd_machines:before {
+  content: "\e90b";
+}
+
+.custom-iconsgroup:before {
+  content: "\e90c";
+}
+
+.custom-iconsmachines:before {
+  content: "\e90d";
+}
+
+.custom-iconsmap-pin_outline:before {
+  content: "\e90e";
+}
+
+.tf-icon {
+  display: inline-block;
+  font-style: normal;
+  /*font-weight: bold;*/
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+.tf-icon-2x {
+  font-size: 2em !important;
+}
+
+.tf-icon-3x {
+  font-size: 3em !important;
+}
+
+.tf-icon-4x {
+  font-size: 4em !important;
+}
+
+.icon-color{
+    color: #03a9f5;
+}

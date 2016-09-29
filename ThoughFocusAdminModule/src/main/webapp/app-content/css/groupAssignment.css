@@ -1,0 +1,97 @@
+@CHARSET "UTF-8";
+
+#rowDivisionGroup {
+	margin-left: 10px;
+}
+
+#rowPrimaryGroup {
+	margin-top: 5px;
+}
+
+#unAssignedGroup {
+	margin-top: 7px;
+}
+
+#groupBox {
+	height: 350px;
+}
+
+#innerRowOneGroup {
+	margin-top: 150px;
+}
+
+#rowButtonGroup {
+	margin-top: 120px;
+}
+
+#removeSingleButton {
+	margin-top: 3px;
+	/*margin-left: -3px;*/
+	font-weight: bolder;
+	font-size: 20px;
+	padding-top: 0px;
+}
+
+#rowTertiaryGroup {
+	margin-left: -22px;
+}
+
+#addSingleButton {
+	font-weight: bolder;
+	font-size: 20px;
+	padding-top: 0px;
+}
+
+#addAllButton  {
+	margin-left: -3px;
+	font-weight: bolder;
+	font-size: 20px;
+	padding-top: 0px;
+	padding-left: 9px;}
+
+#removeAllButton {
+	margin-top: 3px;
+	font-weight: bolder;
+	font-size: 20px;
+	padding-top: 0px;
+	padding-left: 9px;
+}
+
+#assignedGroupButton {
+	margin-top: 7px;
+}
+
+#saveButtonGroupAssignment {
+	width: 100px;
+	margin-top: 50px;
+}
+
+#cancelButtonGroupAssignment {
+	margin-top: 50px;
+	width: 100px;
+	/* margin-left: 14px; */
+}
+
+/* enable absolute positioning */
+.inner-addon {
+	position: relative;
+}
+
+/* style glyph */
+.inner-addon .glyphicon {
+	position: absolute;
+	padding: 10px;
+	pointer-events: none;
+}
+
+.right-addon .glyphicon {
+	right: 0px;
+}
+
+.right-addon input {
+	padding-right: 30px;
+}
+
+#headingMainGroup {
+	color: white;
+}
