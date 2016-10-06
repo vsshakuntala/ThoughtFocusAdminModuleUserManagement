@@ -6,6 +6,7 @@ import com.tf.usermanagement.dto.AdminOrgListDto;
 import com.tf.usermanagement.dto.LanguageDTO;
 import com.tf.usermanagement.dto.OrganizationsDTO;
 import com.tf.usermanagement.dto.UserDTO;
+import com.tf.usermanagement.dto.UserEmail;
 import com.tf.usermanagement.dto.UserOrgActiveDTO;
 
 /**
@@ -31,5 +32,8 @@ public interface UserManagementService {
 	public List<AdminOrgListDto> getOrganizationListOfAdmin(long adminId);
 
 	List<OrganizationsDTO> getAssignedOrganization(long adminId);
-
+	
+	void resetPassword(String email);
+	
+	public UserEmail getUserEmailByUserId(Long userId);
 }

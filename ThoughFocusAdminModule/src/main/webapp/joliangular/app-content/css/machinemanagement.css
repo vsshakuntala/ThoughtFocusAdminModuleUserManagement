@@ -74,3 +74,7 @@
     font-size: 15px;
 }
 /*END OF DIVISION SREEN CSS*/
+
+.modal.bootstrap-dialog.type-primary.fade.size-normal.in .modal-backdrop{
+    z-index: 0 !important;
+}

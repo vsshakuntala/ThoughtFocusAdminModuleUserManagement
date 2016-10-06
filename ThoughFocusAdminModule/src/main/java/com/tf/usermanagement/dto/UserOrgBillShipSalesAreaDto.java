@@ -14,6 +14,7 @@ public class UserOrgBillShipSalesAreaDto {
 	private Long shipToAddressId;
 	private Long customerId;
 	private Long salesAreaId;
+	
 
 	
 	public Long getAdminId() {

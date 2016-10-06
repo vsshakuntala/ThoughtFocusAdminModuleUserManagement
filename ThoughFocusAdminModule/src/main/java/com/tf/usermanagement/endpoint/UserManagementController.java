@@ -1,5 +1,6 @@
 package com.tf.usermanagement.endpoint;
 
+import java.security.Principal;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -21,6 +22,7 @@ import com.spaneos.dtssp.output.DataTablesOutput;
 import com.tf.usermanagement.dto.LanguageDTO;
 import com.tf.usermanagement.dto.OrganizationsDTO;
 import com.tf.usermanagement.dto.UserDTO;
+import com.tf.usermanagement.dto.UserEmail;
 import com.tf.usermanagement.dto.UserOrgActiveDTO;
 import com.tf.usermanagement.errorhandler.Message;
 import com.tf.usermanagement.report.UserFilterReport;
@@ -52,7 +54,9 @@ public class UserManagementController {
 	 */
 	@RequestMapping(value = { "/organizations" }, method = RequestMethod.GET)
 	public List<OrganizationsDTO> getDivisions() {
+	    LOGGER.debug("start of calling organizations api");
 		List<OrganizationsDTO> orgIdNameList = userManagementService.getDivisions();
+		 LOGGER.debug("end of calling organizations api");
 		return orgIdNameList;
 	}
 
@@ -61,7 +65,9 @@ public class UserManagementController {
 	 */
 	@RequestMapping(value = { "/languages" }, method = RequestMethod.GET)
 	public List<LanguageDTO> getLanguageName() {
+	    LOGGER.debug("start of calling languages api");
 		List<LanguageDTO> langNameList = userManagementService.getLanguages();
+		 LOGGER.debug("end of calling languages api");
 		return langNameList;
 
 	}
@@ -77,7 +83,9 @@ public class UserManagementController {
 	 * @return
 	 */
 	@RequestMapping(value = "/getAssignedOrganization/{adminId}", method = RequestMethod.GET)
-	public List<OrganizationsDTO> getAssignedOrganization(@PathVariable Long adminId){
+	public List<OrganizationsDTO> getAssignedOrganization(@PathVariable Long adminId,Principal principal){
+	    LOGGER.debug("start of calling getAssignedOrganization api");
+	    adminId=Long.parseLong(principal.getName());
 		return userManagementService.getAssignedOrganization(adminId);
 	}
 
@@ -89,7 +97,9 @@ public class UserManagementController {
 	 */
 	@RequestMapping(value = "/checkemailexistance", method = RequestMethod.GET)
 	public ResponseEntity<Message> checkEmailExistance(@RequestParam String email) {
+	    LOGGER.debug("start of calling checkemailexistance api");
 		if (userManagementService.checkEmail(email)) {
+		    LOGGER.debug("end of calling checkemailexistance api");
 			Message errorMessage = Message.statusCode(HttpStatus.INTERNAL_SERVER_ERROR).message("Email already exists")
 					.developerMsg("Email already exists in the database").exception("Email already exists").build();
 			return new ResponseEntity<Message>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -106,10 +116,13 @@ public class UserManagementController {
 	 * @param user
 	 */
 	@RequestMapping(value = { "/createuser" }, method = RequestMethod.POST)
-	public ResponseEntity<Message> saveUserData(@RequestBody UserDTO user) {
+	public ResponseEntity<Message> saveUserData(@RequestBody UserDTO user,Principal principal) {
+		user.setCurrentLoggedUserId(Long.parseLong(principal.getName()));
 		LOGGER.info("The user is added: { }", user.toString());
+		 LOGGER.debug("start of calling createuser api");
 		if (userManagementService.saveUser(user)) {
 			emailUtility.sendMailToUser(user.getEmail(), user.getPassword());
+			 LOGGER.debug("end of calling createuser api");
 			Message message = Message.statusCode(HttpStatus.OK).message("User is created successfully !!").build();
 			return new ResponseEntity<Message>(message, HttpStatus.OK);
 		} else {
@@ -127,6 +140,7 @@ public class UserManagementController {
 	 */
 	@RequestMapping(value = { "/getactiveuser/{userId}" }, method = RequestMethod.GET)
 	public List<UserOrgActiveDTO> getActivatedUser(@PathVariable long userId) {
+	    LOGGER.debug("start of calling getactiveuser api");
 		return userManagementService.getUserOrgActive(userId);
 	}
 
@@ -136,9 +150,24 @@ public class UserManagementController {
 	 * @param userId
 	 */
 	@RequestMapping(value = { "/getuser/{userId}/{adminId}" }, method = RequestMethod.GET)
-	public UserDTO getUser(@PathVariable long userId, @PathVariable long adminId) {
+	public UserDTO getUser(@PathVariable long userId, @PathVariable long adminId,Principal principal) {
+		adminId=Long.parseLong(principal.getName());
 		LOGGER.info("This userId is from controller" + userId + " And admin Id is :" + adminId);
+		LOGGER.debug("start of calling getuser api");
 		return userManagementService.getUserById(userId, adminId);
+
+	}
+	
+	/**
+	 * getUserEmailByUserId() will return email of user
+	 * 
+	 * @param userId
+	 */
+	@RequestMapping(value = { "/getuseremailbyid/{adminId}" }, method = RequestMethod.GET)
+	public UserEmail getUserEmailByUserId(@PathVariable long adminId,Principal principal) {
+		LOGGER.info("getUserEmailByUserId controller" + adminId );
+		adminId=Long.parseLong(principal.getName());
+		return userManagementService.getUserEmailByUserId(adminId);
 
 	}
 
@@ -148,9 +177,12 @@ public class UserManagementController {
 	 * @param user
 	 */
 	@RequestMapping(value = { "/updateuser" }, method = RequestMethod.PUT)
-	public ResponseEntity<Message> updateUserData(@RequestBody UserDTO user) {
+	public ResponseEntity<Message> updateUserData(@RequestBody UserDTO user,Principal principal) {
 		LOGGER.info("The user is updated : {}", user.toString());
+		LOGGER.debug("start of calling updateuser api");
+		user.setCurrentLoggedUserId(Long.parseLong(principal.getName()));
 		if (userManagementService.updateUser(user)) {
+		    LOGGER.debug("end of calling updateuser api");
 			Message message = Message.statusCode(HttpStatus.OK).message("User is updated successfully !!").build();
 			return new ResponseEntity<Message>(message, HttpStatus.OK);
 		} else {
@@ -164,7 +196,9 @@ public class UserManagementController {
 	@RequestMapping(value = "/getfiltereduserlist", method = RequestMethod.GET)
 	public DataTablesOutput getFiltereduser(UserFilterReport.UserFilterReportDtInput filterData) {
 		LOGGER.info("User report input :{}", filterData.getRoles());
+		 LOGGER.debug("start of calling getfiltereduserlist api");
 		DataTablesOutput obj = userFilterReport.fetchData(filterData);
+		 LOGGER.debug("end of calling getfiltereduserlist api");
 		return obj;
 	}
 
@@ -172,7 +206,9 @@ public class UserManagementController {
 	public ResponseEntity<Message> resetPassword(@RequestParam String userEmail) {
 		Message message=null;
 		try {
-			emailUtility.sendRestPasswordToUser(userEmail);
+		    LOGGER.debug("start of calling resetpassword api");
+			userManagementService.resetPassword(userEmail);
+			 LOGGER.debug("end of calling resetpassword api");
 			message=Message.statusCode(HttpStatus.OK).message("Reset Password Sent successfully !!").build();
 			return new ResponseEntity<Message>(message, HttpStatus.OK);
 		} catch (Exception e) {

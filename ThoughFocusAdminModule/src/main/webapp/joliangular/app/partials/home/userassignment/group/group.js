@@ -56,7 +56,8 @@ groupmodule.controller('GroupController',
                 }
             }
 
-            
+            $scope.unAssignedCountForSaveGroup = 0;
+            $scope.assignedCountForSaveGroup = 0;
 
             //check for organization object
             if (angular.isDefined($stateParams.organization) && $stateParams.organization !== null) {
@@ -77,10 +78,10 @@ groupmodule.controller('GroupController',
             //$scope.userDetails.userId=155;
             //$scope.organization.organizationId=1;
 
-            
+
             $scope.getAllGroup = function () {
-                 genericService.getObjects($rootScope.baseUrl + 'groupassignment/getgroup/' + $scope.userDetails.userId + '/' + $scope.organization.organizationId + '/' + $rootScope.adminId).then(function (data) {
-                //genericService.getObjects($rootScope.baseUrl + 'groupassignment/getgroup/' + 155 + '/' + 1 + '/' + 2).then(function (data) {
+                genericService.getObjects($rootScope.baseUrl + 'groupassignment/getgroup/' + $scope.userDetails.userId + '/' + $scope.organization.organizationId + '/' + $rootScope.adminId).then(function (data) {
+                    //genericService.getObjects($rootScope.baseUrl + 'groupassignment/getgroup/' + 155 + '/' + 1 + '/' + 2).then(function (data) {
                     $scope.groupList = data;
                     $scope.oldassignedgrouplist = angular.copy(data.assigned);
                     $scope.assignedgrplist = angular.copy(data.assigned);
@@ -123,7 +124,7 @@ groupmodule.controller('GroupController',
                 }
             }
 
-            
+
             //use to assign all group from unassign group
             $scope.assignall = function () {
                 $log.debug('assignall clicked ');
@@ -145,7 +146,7 @@ groupmodule.controller('GroupController',
                 $scope.assignedgrplist = [];
                 $scope.assignedSelectedGroup = [];
                 $scope.assignedCheck = 'uncheck';
-                 $scope.unAssignedCheck = 'uncheck';
+                $scope.unAssignedCheck = 'uncheck';
                 //console.log("$scope.assignedgrplist " + angular.toJson($scope.assignedgrplist));
             };
 
@@ -179,7 +180,7 @@ groupmodule.controller('GroupController',
                     }
                     $scope.assignedCheck = 'uncheck';
                 }
-                    
+                $scope.assignedCountForSaveGroup = assignedSelectedGroup.length
             };
 
             //use to assign group from selected unassign group
@@ -187,7 +188,7 @@ groupmodule.controller('GroupController',
                 $log.debug('assignitem clicked ');
                 //console.log("unassignedgroup " + unassignedgroup);
                 if (angular.isUndefined(unassignedSelectedGroup) || !unassignedSelectedGroup.length) {
-                     $.toaster({ priority: 'warning', message: "Please select atleast one group to assign " });
+                    $.toaster({ priority: 'warning', message: "Please select atleast one group to assign " });
                     return;
                 }
                 var i;
@@ -209,32 +210,42 @@ groupmodule.controller('GroupController',
                     }
                     $scope.unAssignedCheck = 'uncheck';
                 }
+                $scope.unAssignedCountForSaveGroup = unassignedSelectedGroup.length
             };
 
             $scope.savegroup = function () {
-                //console.log("new final list " + angular.toJson($scope.assignedgrplist));
-                //console.log("old list " + angular.toJson($scope.oldassignedgrouplist));
-                var jsonData = JSON.stringify({
-                    params: {
-                        assigned: $scope.oldassignedgrouplist,
-                        unAssigned: $scope.assignedgrplist
-                    }
-                });
-                var url = $rootScope.baseUrl + 'groupassignment/updategroup/' + $scope.userDetails.userId + '/' + $scope.organization.organizationId + '/' + $rootScope.adminId;
-                $rootScope.startSpin();
-                genericService.addObject(url, jsonData).then(function (data) {
-                    $.toaster({ priority: 'success', message: 'Group is successfully updated' });
-                    $rootScope.stopSpin();
-                    $scope.getAllGroup();
-                }, function (data) {
-                    $rootScope.stopSpin();
-                    $log.error('getDivisionAssignments failed : ' + angular.toJson(data));
-                    $.toaster({ priority: 'danger', message: 'Updation Failed' });
-                });
+                if ((angular.isUndefined($scope.unAssignedCountForSaveGroup) || !$scope.unAssignedCountForSaveGroup) && (angular.isUndefined($scope.assignedCountForSaveGroup) || !$scope.assignedCountForSaveGroup)) {
+                    $.toaster({ priority: 'warning', message: 'Select atleast One Group to Assign or unassign' });
+                    return;
+                }
+                else {
+                    //console.log("old list " + angular.toJson($scope.oldassignedgrouplist));
+                    var jsonData = JSON.stringify({
+                        params: {
+                            assigned: $scope.oldassignedgrouplist,
+                            unAssigned: $scope.assignedgrplist
+                        }
+                    });
 
-            };
+                    var url = $rootScope.baseUrl + 'groupassignment/updategroup/' + $scope.userDetails.userId + '/' + $scope.organization.organizationId + '/' + $rootScope.adminId;
+                    $rootScope.startSpin();
+                    genericService.addObject(url, jsonData).then(function (data) {
+                        $.toaster({ priority: 'success', message: 'Group is successfully updated' });
+                        $rootScope.stopSpin();
+                        $scope.getAllGroup();
+                        $scope.unAssignedCountForSaveGroup = 0;
+                        $scope.assignedCountForSaveGroup = 0;
+                        $state.go('home.userassignment.division', { userDetails: $scope.userDetails, organization: $scope.orgobj }, { reolad: true });
+                    }, function (data) {
+                        $rootScope.stopSpin();
+                        $log.error('getDivisionAssignments failed : ' + angular.toJson(data));
+                        $.toaster({ priority: 'danger', message: 'Updation Failed' });
+                    });
 
-            onresize();
+                };
+
+                onresize();
+            }
         }
     ]);
 

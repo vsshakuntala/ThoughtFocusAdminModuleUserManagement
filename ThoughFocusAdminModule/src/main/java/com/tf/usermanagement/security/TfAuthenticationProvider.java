@@ -34,16 +34,15 @@ public class TfAuthenticationProvider implements AuthenticationProvider{
 	@Value("${originUrl}")
 	private String ORIGIN_URL;
 	
-	
 	@Autowired
 	private RolesManagementService roleManagementService;
 	
     public static final Logger LOGGER = LoggerFactory.getLogger(TfAuthenticationProvider.class);
     @Override
     public Authentication authenticate(Authentication a) throws AuthenticationException {
-        TfAuthRequestToken tfVlidation = (TfAuthRequestToken)a;
-        String adminId=tfVlidation.getAdminId();
-        String originUrl=tfVlidation.getOriginUrl();
+        TfAuthRequestToken authToken = (TfAuthRequestToken)a;
+        String adminId=authToken.getAdminId();
+        String originUrl=authToken.getOriginUrl();
         
         //If url is not null, validate the origin
         validateOriginUrl(originUrl);
@@ -78,7 +77,7 @@ public class TfAuthenticationProvider implements AuthenticationProvider{
 				if(!ORIGIN_URL.contains(decodeUrl))
 					throw new TfAuthenticationException("\n\nOrigin URL does not match, expected url "+ORIGIN_URL);
 			} catch (UnsupportedEncodingException e) {
-				LOGGER.error("Error while validating source URL ", e);
+				e.printStackTrace();
 			}
 			
 		return true;

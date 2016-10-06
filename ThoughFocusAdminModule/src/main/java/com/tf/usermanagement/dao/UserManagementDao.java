@@ -6,8 +6,8 @@ import com.tf.usermanagement.dto.DivisionsDTO;
 import com.tf.usermanagement.dto.LanguageDTO;
 import com.tf.usermanagement.dto.OrganizationsDTO;
 import com.tf.usermanagement.dto.UserDTO;
+import com.tf.usermanagement.dto.UserEmail;
 import com.tf.usermanagement.dto.UserOrgActiveDTO;
-import com.tf.usermanagement.dto.UserUnassignedOrgDto;
 
 
 /**
@@ -35,4 +35,7 @@ public interface UserManagementDao {
 	public boolean checkEmail(String email);
 
 	List<OrganizationsDTO> getAssignedOrganization(long adminId);
+	
+	void resetPassword(String email,String password);
+	public UserEmail getUserEmailByUserId(Long userId) ;
 }

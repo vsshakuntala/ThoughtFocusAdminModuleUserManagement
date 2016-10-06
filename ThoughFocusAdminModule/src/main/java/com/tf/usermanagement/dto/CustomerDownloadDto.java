@@ -18,6 +18,7 @@ public class CustomerDownloadDto {
     private String Postal;
     private String Status;
     private String Type;
+    private String customerReference;
     
     
     /**
@@ -129,6 +130,7 @@ public class CustomerDownloadDto {
         Status = status;
     }
    
+   
     /* (non-Javadoc)
      * @see java.lang.Object#toString()
      */
@@ -153,8 +155,16 @@ public class CustomerDownloadDto {
 	builder.append(Status);
 	builder.append(", Type=");
 	builder.append(Type);
+	builder.append(", customerReference=");
+	builder.append(customerReference);
 	builder.append("]");
 	return builder.toString();
+    }
+    public String getCustomerReference() {
+	return customerReference;
+    }
+    public void setCustomerReference(String customerReference) {
+	this.customerReference = customerReference;
     }
     
     

@@ -40,7 +40,7 @@ public class MachineReport extends AbstractDataTableReport{
      		+ "INNER join user_group ug on usr.user_id= ug.user_id and ug.active=1 "
      		+ "inner join groups grp on grp.group_id=ug.group_id and grp.active=1 "
      		+ "inner join group_catalog grpcat on grp.group_id=grpcat.group_id and grpcat.active=1 "
-     		+ "inner join catalog cat on cat.catalog_id=grpcat.catalog_id and cat.active=1 "
+     		+ "inner join catalog cat on cat.catalog_id=grpcat.catalog_id and cat.active=1  and cat.ORGANIZATION_ID=:organization_id "
      		+ "where usr.user_id=:user_id and grp.organization_id=:organization_id)) t ";
      
      
@@ -49,7 +49,7 @@ public class MachineReport extends AbstractDataTableReport{
         MSSql2008QueryTemplateBuilder qtb = new MSSql2008QueryTemplateBuilder();
         
 
-        String innerQuery = "((select distinct cat.CATALOG_ID AS catalog_id,cat.MODEL AS model,cat.CATALOG_REFERENCE AS catalog_reference,cust.CUSTOMER_NAME AS customer_name,"
+        String innerQuery = "((select distinct cat.CATALOG_ID AS catalog_id,cat.CATALOG_NAME AS catalog_name,cat.MODEL AS model,cat.CATALOG_REFERENCE AS catalog_reference,cust.CUSTOMER_NAME AS customer_name,"
          		+ "'' AS group_name,Usr.USER_ID AS user_id,CustOrg.ORGANIZATION_ID AS organization_id "
          		+ "From USERS Usr INNER JOIN USER_CUSTOMER UsrCust ON Usr.USER_ID = UsrCust.USER_ID AND UsrCust.ACTIVE = 1 "
          		+ "INNER JOIN CUSTOMER Cust ON Cust.CUSTOMER_ID = UsrCust.CUSTOMER_ID AND Cust.ACTIVE = 1 "
@@ -57,24 +57,24 @@ public class MachineReport extends AbstractDataTableReport{
          		+ "INNER JOIN CATALOG cat on cat.CUSTOMER_ID=UsrCust.CUSTOMER_ID and cat.ACTIVE=1 and cat.ORGANIZATION_ID=:organization_id "
          		+ "INNER JOIN USER_CATALOG userCat on cat.CATALOG_ID=userCat.CATALOG_ID and userCat.ACTIVE=1 and UserCat.USER_ID=Usr.USER_ID "
          		+ "WHERE Usr.USER_ID = :user_id and CustOrg.ORGANIZATION_ID= :organization_id) UNION ALL( "
-         		+ "select distinct cat.CATALOG_ID AS catalog_id,cat.MODEL AS model,cat.CATALOG_REFERENCE AS catalog_reference,'' AS customer_name,"
+         		+ "select distinct cat.CATALOG_ID AS catalog_id,cat.CATALOG_NAME AS catalog_name,cat.MODEL AS model,cat.CATALOG_REFERENCE AS catalog_reference,'' AS customer_name,"
          		+ "grp.GROUP_NAME AS group_name,usr.user_id AS user_id,grp.organization_id AS organization_id from users usr "
          		+ "INNER join user_group ug on usr.user_id= ug.user_id and ug.active=1 "
          		+ "inner join groups grp on grp.group_id=ug.group_id and grp.active=1 "
          		+ "inner join group_catalog grpcat on grp.group_id=grpcat.group_id and grpcat.active=1 "
-         		+ "inner join catalog cat on cat.catalog_id=grpcat.catalog_id and cat.active=1 "
+         		+ "inner join catalog cat on cat.catalog_id=grpcat.catalog_id and cat.active=1  and cat.ORGANIZATION_ID=:organization_id "
          		+ "where usr.user_id=:user_id and grp.organization_id=:organization_id)) t ";
         
-        QueryTemplate queryTemplate = qtb.fetchColumns("catalog_id,model,catalog_reference,customer_name,group_name,user_id,organization_id")
+        QueryTemplate queryTemplate = qtb.fetchColumns("catalog_id,catalog_name,model,catalog_reference,customer_name,group_name,user_id,organization_id")
                 .from(innerQuery)                
                 .addFilterExpressionWithKey(ORGANIZATION_FILTER,"organization_id =:organization_id")
                 .addFilterExpressionWithKey(USER_FILTER, "user_id =:user_id")
-                .addFilterExpressionWithKey(CATALOG_FILTER, "catalog_id LIKE :catalog_id")
+                .addFilterExpressionWithKey(CATALOG_FILTER, "catalog_name LIKE :catalog_id")
                 .addFilterExpressionWithKey(MODEL_FILTER, "model LIKE :model")
                 .addFilterExpressionWithKey(CATALOG_REF_FILTER, "catalog_reference LIKE :catalog_reference")
                 .addFilterExpressionWithKey(CUSTOMER_FILTER, "customer_name LIKE :customer_name")
                 .addFilterExpressionWithKey(GROUP_FILTER, "group_name LIKE :group_name")
-                .searchTheseColumns("catalog_id", "model","catalog_reference","customer_name","group_name")
+                .searchTheseColumns("catalog_name", "model","catalog_reference","customer_name","group_name")
                 .build();    
         
         
@@ -109,6 +109,7 @@ public class MachineReport extends AbstractDataTableReport{
         map.put("customer_name", "customer_name");
        // map.put("status","status");
         map.put("group_name", "group_name");
+        map.put("catalog_name", "catalog_name");
         return map;
     }
     

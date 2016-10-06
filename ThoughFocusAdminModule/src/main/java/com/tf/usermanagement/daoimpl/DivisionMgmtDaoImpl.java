@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.tf.usermanagement.dao.DivisionMgmtDao;
+import com.tf.usermanagement.domain.Organization;
 import com.tf.usermanagement.domain.User;
 import com.tf.usermanagement.domain.UserNotes;
 import com.tf.usermanagement.domain.UserOrgSalesAreaMap;
@@ -42,6 +43,7 @@ import com.tf.usermanagement.dto.OrganizationDTO;
 import com.tf.usermanagement.dto.OrganizationRoleCountDto;
 import com.tf.usermanagement.dto.UserNotesDto;
 import com.tf.usermanagement.dto.UserUnassignedOrgDto;
+import com.tf.usermanagement.exception.GenericQueryException;
 
 @Repository
 public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
@@ -475,7 +477,7 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 						    +" LEFT JOIN USER_ORG_MAP userOrgMap on  users.USER_ID = userOrgMap.USER_ID AND	userOrgMap.ACTIVE = 1"
 						    +" INNER JOIN ORGANIZATION org on org.ORGANIZATION_ID=userOrgMap.ORGANIZATION_ID"
 						    +" LEFT JOIN USER_ORG_BILL_SHIP_MAP  userOrgBillShipMap on  userOrgBillShipMap.USER_ORG_ID=userOrgMap.USER_ORG_ID AND userOrgBillShipMap.ACTIVE=1"
-						    +" LEFT JOIN ADDRESS address on userOrgBillShipMap.BILL_TO_ADDRESS_ID=address.ADDRESS_ID AND (address.ADDRESS_TYPE_ID=1 or address.ADDRESS_TYPE_ID=2)"
+						    +" LEFT JOIN ADDRESS address on userOrgBillShipMap.BILL_TO_ADDRESS_ID=address.ADDRESS_ID AND (address.ADDRESS_TYPE_ID IN(1,2,3))"
 							+" WHERE users.USER_ID = :userId" 
 						    +" Group By users.USER_ID,org.ORGANIZATION_NAME,userOrgMap.ORGANIZATION_ID,userOrgMap.APPROVAL_STATUS"
 						    +" Order By users.USER_ID,org.ORGANIZATION_NAME")
@@ -513,16 +515,13 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 	 * assigned to user based on the organization 
 	 */
 	@Override
-	public boolean deAssignCatalogsOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
+	public boolean deAssignCatalogsOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session) {
 		LOGGER.info("Input for De-assigning user from Org (for catalog's) " + deAssignUserToOrgInputDto.toString());
-		Session session = null;
-		Transaction tx = null;
+		
 		SQLQuery query = null;
 		int count=0;
 		boolean result=false;
 		try{
-			session = sessionFactory.openSession();
-			tx = session.beginTransaction();
 			query=session.createSQLQuery("UPDATE USER_CATALOG SET ACTIVE = 0,MODIFIED_BY=:modifiedById ,MODIFIED_DATE=GETDATE() WHERE CATALOG_ID IN "
 										 +" ("
 										 +" select userCat.CATALOG_ID AS CatalogId"
@@ -543,34 +542,25 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 			
 			
 			count=	query.executeUpdate();
-			tx.commit();
+			
 			if(count>=0){
 				LOGGER.info("No,of rows updated while de-assigning catalog for user :"+count);
 				result=true;
 			}
 					
 		}catch (HibernateException e) {
-		    if (tx != null) {
-
-			if (tx != null) {
-
-		tx.rollback();
-	    }
-		    }
+		   
 			result=false;
-			LOGGER.error("Exception in deAssignCatalogsOfOrganization " + e.getMessage());
+			LOGGER.error("Exception in deAssignCatalogsOfOrganization " + e);
 			
 		} catch (Exception e) {
-			if (tx != null) {
-
-		tx.rollback();
-	    }
+			
 			result=false;
-			LOGGER.error("Exception in deAssignCatalogsOfOrganization " + e.getMessage());
+			LOGGER.error("Exception in deAssignCatalogsOfOrganization " + e);
 			
 		} finally {
 			if (session != null) {
-				session.close();
+				LOGGER.info("We will not close the session since it is closed in service layer");
 			}
 		}
 		
@@ -582,16 +572,13 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 	 * assigned to user based on the organization 
 	 */
 	@Override
-	public boolean deAssignCustomerOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
+	public boolean deAssignCustomerOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session) {
 		LOGGER.info("Input for De-assigning user from Org (for Customers) " + deAssignUserToOrgInputDto.toString());
-		Session session = null;
-		Transaction tx = null;
+		
 		SQLQuery query = null;
 		int count=0;
 		boolean result=false;
 		try{
-			session = sessionFactory.openSession();
-			tx = session.beginTransaction();
 			query=session.createSQLQuery("UPDATE USER_CUSTOMER SET ACTIVE = 0,MODIFIED_BY=:modifiedById ,MODIFIED_DATE=GETDATE() WHERE CUSTOMER_ID IN "
 										 +" ("
 										 +" select userCust.CUSTOMER_ID AS CustID"
@@ -610,31 +597,23 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 			
 			
 			count=	query.executeUpdate();
-			tx.commit();
+			
 			if(count>=0){
 				LOGGER.info("No,of rows updated while de-assigning customer for user :"+count);
 				result=true;
 			}
 					
 		}catch (HibernateException e) {
-			if (tx != null) {
-
-		tx.rollback();
-	    }
 			result=false;
-			LOGGER.error("Exception in deAssignCustomerOfOrganization " + e.getMessage());
+			LOGGER.error("Exception in deAssignCustomerOfOrganization " + e);
 			
 		} catch (Exception e) {
-			if (tx != null) {
-
-		tx.rollback();
-	    }
 			result=false;
-			LOGGER.error("Exception in deAssignCustomerOfOrganization " + e.getMessage());
+			LOGGER.error("Exception in deAssignCustomerOfOrganization " + e);
 			
 		} finally {
 			if (session != null) {
-				session.close();
+				LOGGER.info("We will not close the session since it is closed in service layer");
 			}
 		}
 		
@@ -645,16 +624,14 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 	 * 
 	 */
 	@Override
-	public boolean deAssignGroupOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
+	public boolean deAssignGroupOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session) {
 		LOGGER.info("Input for De-assigning user from Org (for Groups) " + deAssignUserToOrgInputDto.toString());
-		Session session = null;
-		Transaction tx = null;
+		
+		
 		SQLQuery query = null;
 		int count=0;
 		boolean result=false;
 		try{
-			session = sessionFactory.openSession();
-			tx = session.beginTransaction();
 			query=session.createSQLQuery("UPDATE USER_GROUP SET ACTIVE = 0,MODIFIED_BY=:modifiedById ,MODIFIED_DATE=GETDATE() WHERE GROUP_ID IN "
 										 +" ("
 										 +" select UsrGrp.GROUP_ID AS groupID"
@@ -673,31 +650,23 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 			
 			
 			count=	query.executeUpdate();
-			tx.commit();
+			
 			if(count>=0){
 				LOGGER.info("No,of rows updated while de-assigning Groups for user :"+count);
 				result=true;
 			}
 					
 		}catch (HibernateException e) {
-			if (tx != null) {
-
-		tx.rollback();
-	    }
 			result=false;
 			LOGGER.error("Exception in deAssignGroupOfOrganization " + e.getMessage());
 			
 		} catch (Exception e) {
-			if (tx != null) {
-
-		tx.rollback();
-	    }
 			result=false;
 			LOGGER.error("Exception in deAssignGroupOfOrganization " + e.getMessage());
 			
 		} finally {
 			if (session != null) {
-				session.close();
+				LOGGER.info("We will not close the session since it is closed in service layer");
 			}
 		}
 		
@@ -709,16 +678,12 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 	 * 
 	 */
 	@Override
-	public boolean deAssignRoleOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
+	public boolean deAssignRoleOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session) {
 		LOGGER.info("Input for De-assigning user from Org (for Role) " + deAssignUserToOrgInputDto.toString());
-		Session session = null;
-		Transaction tx = null;
 		SQLQuery query = null;
 		int count=0;
 		boolean result=false;
 		try{
-			session = sessionFactory.openSession();
-			tx = session.beginTransaction();
 			query=session.createSQLQuery("UPDATE USER_ORGANIZATION_ROLE SET ACTIVE = 0,MODIFIED_BY=:modifiedById ,MODIFIED_DATE=GETDATE() WHERE ROLE_ID IN "
 										 +" ("
 										 +" select userOrgRole.ROLE_ID"
@@ -737,52 +702,103 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 			
 			
 			count=	query.executeUpdate();
-			tx.commit();
+			
 			if(count>=0){
 				LOGGER.info("No,of rows updated while de-assigning Role for user :"+count);
 				result=true;
 			}
 					
 		}catch (HibernateException e) {
-			if (tx != null) {
-
-		tx.rollback();
-	    }
 			result=false;
 			LOGGER.error("Exception in deAssignRoleOfOrganization " + e.getMessage());
 			
 		} catch (Exception e) {
-			if (tx != null) {
-
-		tx.rollback();
-	    }
 			result=false;
 			LOGGER.error("Exception in deAssignRoleOfOrganization " + e.getMessage());
 			
 		} finally {
 			if (session != null) {
-				session.close();
+				LOGGER.info("We will not close the session since it is closed in service layer");
 			}
 		}
 		
 		return result;
 	}
 	
+	@Override
+	public boolean deAssignDefaultAddress(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session) {
+		LOGGER.info("Input for De-assigning user from Org (for Default address) " + deAssignUserToOrgInputDto.toString());
+		SQLQuery userOrgIdQuery = null;
+		SQLQuery deAssignUserOrgBillShipMapQuery=null; 
+		SQLQuery deAssignUserOrgSalesAreaMapQuery=null;
+		int count=0;
+		int countSalesArea=0;
+		long userOrgIdResult=0;
+		boolean result=false;
+		try{
+			userOrgIdQuery=session.createSQLQuery("select USER_ORG_ID as userOrgId from USER_ORG_MAP where USER_ID=:userId and ORGANIZATION_ID=:organizationId")
+			.addScalar("userOrgId", StandardBasicTypes.LONG);
+					
+			
+			userOrgIdQuery.setLong("userId", deAssignUserToOrgInputDto.getUserId());
+			userOrgIdQuery.setLong("organizationId", deAssignUserToOrgInputDto.getOrganizationId());
+			
+			
+			
+			//List<Object[]> userOrgMapArray = userOrgIdQuery.list();
+			userOrgIdResult=(long) userOrgIdQuery.uniqueResult();
+			/*for (Object[] userOrgMap : userOrgMapArray) {
+				userOrgIdResult=(long) userOrgMap[0];
+			}*/
+			
+			
+			deAssignUserOrgSalesAreaMapQuery=session.createSQLQuery
+					("UPDATE USER_ORG_SALES_AREA_MAP SET ACTIVE = 0,MODIFIED_BY=:modifiedById ,MODIFIED_DATE=GETDATE() WHERE USER_ORG_ID=:userOrgId");
+			deAssignUserOrgSalesAreaMapQuery.setLong("modifiedById",deAssignUserToOrgInputDto.getModifiedById());
+			deAssignUserOrgSalesAreaMapQuery.setLong("userOrgId", userOrgIdResult);
+			countSalesArea=	deAssignUserOrgSalesAreaMapQuery.executeUpdate();
+			
+			System.out.println("CHECK for default :"+userOrgIdResult);
+			deAssignUserOrgBillShipMapQuery=session.createSQLQuery("UPDATE USER_ORG_BILL_SHIP_MAP SET ACTIVE = 0,MODIFIED_BY=:modifiedById ,MODIFIED_DATE=GETDATE() WHERE USER_ORG_ID=:userOrgId");
+			deAssignUserOrgBillShipMapQuery.setLong("modifiedById",deAssignUserToOrgInputDto.getModifiedById());
+			deAssignUserOrgBillShipMapQuery.setLong("userOrgId", userOrgIdResult);
+			
+			count=	deAssignUserOrgBillShipMapQuery.executeUpdate();
+			
+			if(count>=0 && countSalesArea>=0){
+				LOGGER.info("No,of rows updated while de-assigning Address for user :"+count);
+				
+			}
+			
+			result=true;			
+		}catch (HibernateException e) {
+			result=false;
+			LOGGER.error("Exception in deAssignDefaultAddress " , e);
+			
+		} catch (Exception e) {
+			result=false;
+			LOGGER.error("Exception in deAssignDefaultAddress " , e);
+			
+		} finally {
+			if (session != null) {
+				LOGGER.info("We will not close the session since it is closed in service layer");
+			}
+		}
+		
+		return result;
+	}	
+	
 	/**
 	 * while de-assigning user from organization we need to check if there are any active organizations
 	 * for user if not we need to de-activate user in users table.
 	 */
 	@Override
-	public boolean deAssignUserFromOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
+	public boolean deAssignUserFromOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session) {
 		LOGGER.info("Input for De-assigning user from Org (for Organization) " + deAssignUserToOrgInputDto.toString());
-		Session session = null;
-		Transaction tx = null;
 		SQLQuery query = null;
 		int count=0;
 		boolean result=false;
 		try{
-			session = sessionFactory.openSession();
-			tx = session.beginTransaction();
 			query=session.createSQLQuery("UPDATE USER_ORG_MAP"
 										+" SET ACTIVE=0,APPROVAL_STATUS=0,MODIFIED_DATE=GETDATE(),MODIFIED_BY=:modifiedById"
 										+" where USER_ID=:userId and ORGANIZATION_ID= :organizationId");
@@ -798,26 +814,18 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 				LOGGER.info("No,of rows updated while de-assigning Organization for user :"+count);
 				result=true;
 			}
-			tx.commit();
+			
 		}catch (HibernateException e) {
-			if (tx != null) {
-
-		tx.rollback();
-	    }
 			result=false;
 			LOGGER.error("Exception in deAssignUserFromOrganization " + e.getMessage());
 			
 		} catch (Exception e) {
-			if (tx != null) {
-
-		tx.rollback();
-	    }
 			result=false;
 			LOGGER.error("Exception in deAssignRoleOfOrganization " + e.getMessage());
 			
 		} finally {
 			if (session != null) {
-				session.close();
+				LOGGER.info("We will not close the session since it is closed in service layer");
 			}
 		}
 		
@@ -832,19 +840,15 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public boolean deActivateUser(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
-		Session session = null;
+	public boolean deActivateUser(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session) {
 		SQLQuery query = null;
-		Transaction tx = null;
 		boolean result=false;
 		int count=0;
 		try {
-			session = sessionFactory.openSession();
-			tx=session.beginTransaction();
 			query = session
-					.createSQLQuery("select * from USER_ORG_MAP where USER_ID= :userId and ACTIVE=1")
-					.addScalar("ORGANIZATION_ID", StandardBasicTypes.BIG_INTEGER)
-					.addScalar("ORGANIZATION_NAME", StandardBasicTypes.STRING);
+					.createSQLQuery("select * from USER_ORG_MAP where USER_ID= :userId and ACTIVE=1");
+					
+					
 			
 			query.addEntity(UserOrganizationMap.class);
 			query.setParameter("userId",deAssignUserToOrgInputDto.getUserId());
@@ -866,19 +870,18 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 			else{
 				LOGGER.info("In deActivateUser User DAO :"+ "User is assigned to :"+userOrgList.size()+" Organiations So user is not deactivated ");
 			}
-			tx.commit();
 			result=true;
 		} catch (HibernateException e) {
-			result=true;
-			LOGGER.error("Exception in getAllOrganizations " + e.getMessage());
+			result=false;
+			LOGGER.error("Exception in deActivateUser " + e.getMessage());
 			
 		} catch (Exception e) {
-			result=true;
-			LOGGER.error("Exception in getAllOrganizations " + e.getMessage());
+			result=false;
+			LOGGER.error("Exception in deActivateUser " + e.getMessage());
 			
 		} finally {
 			if (session != null) {
-				session.close();
+				LOGGER.info("We will not close the session since it is closed in service layer");
 			}
 		}
 		return result;
@@ -1230,6 +1233,47 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 		return result;
 		
 	}
+	
+	@Override
+	public boolean addNotesToUserForDeassignmentOfOrg(UserNotesDto userNotesDto,Session session) {
+		LOGGER.info("addNotesToUserForDeassignmentOfOrg() " + userNotesDto.toString());
+		
+		
+		boolean result=false;
+		try{
+			UserNotes notes=new UserNotes();
+			User user=(User) session.get(User.class, userNotesDto.getUserId());
+			
+			notes.setUser(user);
+			notes.setNotes(userNotesDto.getNotes());
+			notes.setCreatedBy(userNotesDto.getCreatedBy());
+			notes.setCreatedDate(new Date());
+			
+			session.save(notes);
+			result=true;
+			
+			
+			}
+			
+		catch (HibernateException e) {
+			LOGGER.error("Exception in addNotesToUserForDeassignmentOfOrg " + e);
+			result=false;
+			
+			
+		} catch (Exception e) {
+			LOGGER.error("Exception in addNotesToUserForDeassignmentOfOrg " + e);
+			result=false;
+						
+		}
+		finally {
+			if (session != null) {
+				LOGGER.info("We will not close the session since it is closed in service layer");
+			}
+		}
+		System.out.println("Before returning to service in addNotesToUserForDeassignmentOfOrg()");
+		return result;
+		
+	}
 
 	/**
 	 * this method is used to get the default address that is assigned to
@@ -1248,12 +1292,13 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 		try {
 			session = sessionFactory.openSession();
 
-			String salesAreaQuery = "select sa.SALES_AREA_ID as salesArea, sa.SALES_ORG_NAME as salesOrgName,sa.DISTRIBUTION_CHANNEL_NAME as disChannel FROM USER_ORG_SALES_AREA_MAP uosam inner join SALES_AREA sa on uosam.SALES_AREA_ID=sa.SALES_AREA_ID and sa.ACTIVE=1" 
+			String salesAreaQuery = "select sa.SALES_AREA_ID as salesArea, sa.SALES_ORG_NAME as salesOrgName,sa.DISTRIBUTION_CHANNEL_NAME as disChannel,uosam.USER_ORG_SALES_AREA_MAP_ID as userOrgSalesAreaId FROM USER_ORG_SALES_AREA_MAP uosam inner join SALES_AREA sa on uosam.SALES_AREA_ID=sa.SALES_AREA_ID and sa.ACTIVE=1" 
 									+" WHERE uosam.USER_ORG_ID = :userOrgId and uosam.active=1";
 			query = session.createSQLQuery(salesAreaQuery)
 					.addScalar("salesArea", StandardBasicTypes.LONG)
 					.addScalar("salesOrgName", StandardBasicTypes.STRING)
-					.addScalar("salesArea", StandardBasicTypes.STRING);
+					.addScalar("disChannel", StandardBasicTypes.STRING)
+					.addScalar("userOrgSalesAreaId",StandardBasicTypes.LONG);
 			query.setParameter("userOrgId", userOrgId);
 			List<Object[]> salesAreaIdList = query.list();
 
@@ -1261,29 +1306,42 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 				Object[] object=salesAreaIdList.get(0);
 				defaultAddressCheckObj.setSalesAreaId((long)object[0]);
 				defaultAddressCheckObj.setSalesAreaName((String)object[1]);
+				defaultAddressCheckObj.setUserOrgSalesAreaId((long)object[3]);
 			}
 
 			sqlBillToQuery = session
 					.createSQLQuery(
-							"select userOrgBillShipMap.CUSTOMER_ID customerId,userOrgBillShipMap.BILL_TO_ADDRESS_ID billToAddressID,cu.CUSTOMER_NAME customerName"
+							"select userOrgBillShipMap.CUSTOMER_ID customerId,userOrgBillShipMap.BILL_TO_ADDRESS_ID billToAddressID,cu.CUSTOMER_NAME customerName,userOrgBillShipMap.USER_BILL_SHIP_ID as userOrgBillShipId"
 									+ " FROM USER_ORG_BILL_SHIP_MAP userOrgBillShipMap"
 									+ " INNER JOIN CUSTOMER cu on userOrgBillShipMap.CUSTOMER_ID=cu.CUSTOMER_ID and cu.ACTIVE=1"
 									+ " INNER JOIN ADDRESS address on address.ADDRESS_ID=userOrgBillShipMap.BILL_TO_ADDRESS_ID and address.ADDRESS_TYPE_ID=1"
 									+ " WHERE userOrgBillShipMap.USER_ORG_ID= :userOrgId and userOrgBillShipMap.ACTIVE=1")
 					.addScalar("customerId", StandardBasicTypes.BIG_INTEGER)
 					.addScalar("billToAddressID", StandardBasicTypes.BIG_INTEGER)
-					.addScalar("customerName", StandardBasicTypes.STRING);
+					.addScalar("customerName", StandardBasicTypes.STRING)
+			        .addScalar("userOrgBillShipId",StandardBasicTypes.BIG_INTEGER);
 
 			sqlBillToQuery.setLong("userOrgId", userOrgId);
 
 			List<Object[]> objectBillToArray = sqlBillToQuery.list();
-			for (Object[] object : objectBillToArray) {
+			
+			
+			if (objectBillToArray.isEmpty() == false && objectBillToArray != null) {
+				Object[] object=objectBillToArray.get(0);
 				defaultAddressCheckObj.setCustomerId(((BigInteger) object[0]).longValue());
 				defaultAddressCheckObj.setBillToAddressId(((BigInteger) object[1]).longValue());
 				defaultAddressCheckObj.setCustomerName((String)object[2]);
+				defaultAddressCheckObj.setUserOrgBillShipId(((BigInteger) object[3]).longValue());
+			}
+			
+			/*for (Object[] object : objectBillToArray) {
+				defaultAddressCheckObj.setCustomerId(((BigInteger) object[0]).longValue());
+				defaultAddressCheckObj.setBillToAddressId(((BigInteger) object[1]).longValue());
+				defaultAddressCheckObj.setCustomerName((String)object[2]);
+				defaultAddressCheckObj.setUserOrgBillShipId(((BigInteger) object[3]).longValue());
 
 			}
-
+*/
 			sqlShipToQuery = session
 					.createSQLQuery(
 							"select userOrgBillShipMap.CUSTOMER_ID customerId,userOrgBillShipMap.SHIP_TO_ADDRESS_ID shipToAddressID"
@@ -1296,11 +1354,18 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 			sqlShipToQuery.setLong("userOrgId", userOrgId);
 
 			List<Object[]> objectShipToArray = sqlShipToQuery.list();
-			for (Object[] object : objectShipToArray) {
+			
+			if (objectShipToArray.isEmpty() == false && objectShipToArray != null) {
+				Object[] object=objectShipToArray.get(0);
+				defaultAddressCheckObj.setCustomerId(((BigInteger) object[0]).longValue());
+				defaultAddressCheckObj.setShipToAddressId(((BigInteger) object[1]).longValue());
+			}
+			
+			/*for (Object[] object : objectShipToArray) {
 				defaultAddressCheckObj.setCustomerId(((BigInteger) object[0]).longValue());
 				defaultAddressCheckObj.setShipToAddressId(((BigInteger) object[1]).longValue());
 
-			}
+			}*/
 
 		} catch (HibernateException e) {
 			LOGGER.error("Exception in getDefaultAddressForUserOrg " + e.getMessage());
@@ -1315,6 +1380,24 @@ public class DivisionMgmtDaoImpl implements DivisionMgmtDao {
 				session.close();
 			}
 		}
+		defaultAddressCheckObj.setUserOrgId(userOrgId);
 		return defaultAddressCheckObj;
-	}	
+	}
+
+	@Override
+	public Organization getOrganizationById(long orgId){
+		Session session=null;
+		try{
+			session=sessionFactory.openSession();
+			return (Organization) session.get(Organization.class, (int)orgId);
+		}catch(HibernateException e){
+			LOGGER.error("Error while fetching Organization ", e);
+			throw new GenericQueryException();
+		}finally{
+			if(session!=null)
+				session.close();
+		}
+	}
+
+	
 }

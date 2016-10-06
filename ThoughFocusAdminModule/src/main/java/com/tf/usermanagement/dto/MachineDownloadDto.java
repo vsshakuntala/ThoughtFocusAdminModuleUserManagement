@@ -8,6 +8,7 @@ public class MachineDownloadDto {
 	private String customer_name;
 	private String status;
 	private String group_name;
+	private String catalog_name;
 	
 	
 	public MachineDownloadDto() {
@@ -88,23 +89,41 @@ public class MachineDownloadDto {
 	}
 
 
+	
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("MachineDownloadDto [catalog_id=");
-		builder.append(catalog_id);
-		builder.append(", model=");
-		builder.append(model);
-		builder.append(", catalog_reference=");
-		builder.append(catalog_reference);
-		builder.append(", customer_name=");
-		builder.append(customer_name);
-		builder.append(", status=");
-		builder.append(status);
-		builder.append(", group_name=");
-		builder.append(group_name);
-		builder.append("]");
-		return builder.toString();
+	    StringBuilder builder = new StringBuilder();
+	    builder.append("MachineDownloadDto [catalog_id=");
+	    builder.append(catalog_id);
+	    builder.append(", model=");
+	    builder.append(model);
+	    builder.append(", catalog_reference=");
+	    builder.append(catalog_reference);
+	    builder.append(", customer_name=");
+	    builder.append(customer_name);
+	    builder.append(", status=");
+	    builder.append(status);
+	    builder.append(", group_name=");
+	    builder.append(group_name);
+	    builder.append(", catalog_name=");
+	    builder.append(catalog_name);
+	    builder.append("]");
+	    return builder.toString();
+	}
+
+
+	public String getCatalog_name() {
+	    return catalog_name;
+	}
+
+
+	public void setCatalog_name(String catalog_name) {
+	    this.catalog_name = catalog_name;
 	}
 
 

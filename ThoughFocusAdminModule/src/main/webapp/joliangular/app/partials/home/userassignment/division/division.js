@@ -86,7 +86,7 @@ divisionmodule.controller('DivisionController',
             }
 
             $scope.goToAddress = function () {
-                url = $rootScope.baseUrl + 'addassgn/allcustomerlist/' + $scope.userDetails.userId;
+                url = $rootScope.baseUrl + 'addassgn/allcustomerlist/' + $scope.userDetails.userId + '/' + $scope.orgobj.organizationId;
                 var obj = prepareApiObject(1, 10, null);
                 genericService.addObject(url, obj).then(function (data) {
                     if (data.data.length) {
@@ -110,7 +110,12 @@ divisionmodule.controller('DivisionController',
                 // } else {
                 //     $.toaster({ priority: 'danger', message: 'you dont have access' });
                 // }
+            	
+            	if($scope.selectedObj.roleCount>0){
                 $state.go('home.userassignment.customer', { userDetails: $scope.userDetails, organization: $scope.orgobj }, { reolad: true });
+            	}else{
+            		 $.toaster({ priority: 'danger', message: 'Please assign role before assigning customer' });
+            	}
             }
 
             $scope.goToMachine = function () {
@@ -171,7 +176,14 @@ divisionmodule.controller('DivisionController',
                 console.log('to do :' + toDo);
                 console.log('checking :' + $scope.orgName);
                 $scope.isDelete = toDo;
-                $('#deletenote').modal('show');
+                if (toDo) {
+                    $('#deletenote').modal('show');
+                    $(document).on('hidden.bs.modal', '#deletenote', function () {
+                        $state.reload();
+                    });
+                } else {
+                    $('#assignnote').modal('show');
+                }
             }
 
             $scope.drawDataTable = function () {
@@ -182,6 +194,7 @@ divisionmodule.controller('DivisionController',
                     .withOption('info', false)
                     .withOption('paging', false)
                     .withPaginationType('full_numbers')
+                    .withOption('oLanguage', {sEmptyTable: "No matching results found for this search criteria" })
                     .withOption('bFilter', true)
                     .withOption('rowCallback', rowCallback)
                     .withOption('createdRow', function (row, data, dataIndex) {
@@ -190,6 +203,12 @@ divisionmodule.controller('DivisionController',
 
                 function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                     $scope.totalrows = this.fnSettings().fnRecordsTotal();
+                    $(nRow).mouseover(function (e) {
+                        $(nRow).addClass('highlight');
+                    })
+                    $(nRow).mouseout(function (e) {
+                        $(nRow).removeClass('highlight');
+                    })
                     $('td', nRow).unbind('click');
                     $('td', nRow).bind('click', function () {
                         var cell = $(this).closest('td');
@@ -197,16 +216,16 @@ divisionmodule.controller('DivisionController',
                         $scope.$apply(function () {
                             $scope.orgobj = {
                                 organizationId: aData.organizationId,
-                                organizationName: aData.organizationName
+                                organizationName: aData.organizationName,
+      
                             }
+                            $scope.selectedObj=aData;
                             $scope.adminAccess = aData.adminAccess;
                             goToAssignment(cellIndex);
                         });
                     });
                     return nRow;
                 }
-
-                console.log('here is the name: ', $scope.orgobj.organizationName)
 
                 $scope.dtColumns = [
                     DTColumnBuilder.newColumn('organizationName').withTitle('Division').withOption('sortable', false).withOption('name', 'organizationName').withOption('width', '204px').renderWith(function (data, type, full) {
@@ -260,16 +279,19 @@ divisionmodule.controller('DivisionController',
                         $scope.users[full.customerCount] = full;
                         $scope.orgName = full.organizationName
                         console.log('In action: ' + full.organizationName);
-                        if (full.roleCount && full.defaultAddressCount && full.customerCount && angular.equals(full.status, 'Pending')) {
+                        if (full.roleCount && full.defaultAddressCount && full.totalCustomerCount && angular.equals(full.status, 'Pending')) {
                             //True for unassign and false for assign
-                            return '<button class="btn assign-class" ng-click="updateStatus(true)" title="Click to unassign organization">' +
-                                '   <i class="fa fa-trash-o tf-icon-2x delete-user-icon"></i>' +
-                                '</button>&nbsp;' +
-                                '<button class="btn assign-class" ng-click="updateStatus(false)" title="Click to assign organization">' +
+                            return '<button class="btn assign-class" ng-click="updateStatus(false)" title="Click to assign organization">' +
                                 '   <i class="fa fa-check tf-icon-2x assign-user-icon"></i>' +
+                                '</button>&nbsp;' +
+                                '<button class="btn assign-class" ng-click="updateStatus(true)" title="Click to unassign organization">' +
+                                '   <i class="fa fa-trash-o tf-icon-2x delete-user-icon"></i>' +
                                 '</button>';
                         } else {
-                            return '<button class="btn assign-class" ng-click="updateStatus(true)" title="Click to unassign organization">' +
+                            return '<button class="btn assign-class button-visibility">' +
+                                '   <i class="fa fa-check tf-icon-2x assign-user-icon"></i>' +
+                                '</button>&nbsp;' +
+                                '<button class="btn assign-class" ng-click="updateStatus(true)" title="Click to unassign organization">' +
                                 '   <i class="fa fa-trash-o tf-icon-2x delete-user-icon "></i>' +
                                 '</button>';
                         }
@@ -309,41 +331,64 @@ divisionmodule.controller('DivisionController',
                     $scope.user.modifiedById = $rootScope.adminId;
                     $scope.user.note = angular.copy($scope.user.notes);
                     delete $scope.user['notes'];
+                    $log.debug('before addOrAssignUserToOrg');
+                    $rootScope.startSpin();
                     genericService.addObject($rootScope.baseUrl + 'divisionAssignment/addOrAssignUserToOrg', $scope.user).then(function (data) {
                         $.toaster({ priority: 'success', message: ApproveUserStatusSuccess });
                         $scope.user = {};
+                        $log.debug('after addOrAssignUserToOrg');
+                        $rootScope.stopSpin();
+                        $state.reload();
                         $('#close-note-modal').trigger('click');
                     }, function (data) {
+                        $log.debug('failed deAssignAllUserAllocations');
                         $.toaster({ priority: 'danger', message: ApproveUserStatusFailed });
                         $scope.user = {};
+                        $rootScope.stopSpin();
+                        $state.reload();
                         $('#close-note-modal').trigger('click');
                     });
                 } else if ($scope.neddToUpdateStatus && $scope.isDelete) {
                     $scope.user.userId = $scope.userDetails.userId;
                     $scope.user.modifiedById = $rootScope.adminId;
                     $scope.user.organizationId = $scope.orgobj.organizationId;
+                    $log.debug('before deAssignAllUserAllocations');
+                    $rootScope.startSpin();
                     genericService.addObject($rootScope.baseUrl + 'divisionAssignment/deAssignAllUserAllocations', $scope.user).then(function (data) {
                         $.toaster({ priority: 'success', message: DeleteUserStatusSuccess });
+                        $log.debug('after deAssignAllUserAllocations');
                         $scope.user = {};
+                        $rootScope.stopSpin();
+                        $state.reload();
                         $('#close-note-modal').trigger('click');
                     }, function (data) {
+                        $log.debug('failed deAssignAllUserAllocations');
                         $.toaster({ priority: 'danger', message: DeleteUserStatusFailed });
                         $scope.user = {};
+                        $rootScope.stopSpin();
+                        $state.reload();
                         $('#close-note-modal').trigger('click');
                     });
                 } else {
                     $scope.user.createdBy = $rootScope.adminId;
                     $scope.user.userId = $scope.userDetails.userId;
+                    $rootScope.startSpin();
                     genericService.addObject($rootScope.baseUrl + 'divisionAssignment/addNotesForUser', $scope.user).then(function (data) {
                         $.toaster({ priority: 'success', message: notesAddedSuccessfully });
                         $scope.user = {};
+                        $rootScope.stopSpin();
+                        $state.reload();
                         $('#close-note-modal').trigger('click');
                     }, function (data) {
+                        $log.debug('failed addNotesForUser');
                         $.toaster({ priority: 'danger', message: notesNotAdded });
                         $scope.user = {};
+                        $rootScope.stopSpin();
+                        $state.reload();
                         $('#close-note-modal').trigger('click');
                     });
                 }
+
             }
 
             $(document).on('hidden.bs.modal', '#modal_large', function () {
@@ -357,10 +402,16 @@ divisionmodule.controller('DivisionController',
             $(document).on('hidden.bs.modal', '#note', function () {
                 $state.reload();
             });
-            
+
             $(document).on('hidden.bs.modal', '#deletenote', function () {
                 $state.reload();
             });
+
+            $(document).on('hidden.bs.modal', '#assignnote', function () {
+                $log.info('assignnote hidden ');
+                $state.reload();
+            });
+
 
             var getUnAssignedDivisionsForUser = function () {
                 $log.debug('calling getUnAssignedDivisionsForUser');
@@ -465,27 +516,37 @@ divisionmodule.controller('DivisionController',
             }
 
             $scope.updateDivisionAssignment = function () {
-                $('#confirm-close').trigger('click');
-                var obj = {};
-                obj.userId = $scope.userDetails.userId;
-                obj.organizationIds = $scope.assignedDivision;
-                obj.modifiedById = $rootScope.adminId;
-                obj.addUserToOrg = true;
-                if (!angular.isUndefined($scope.notes)) {
-                    obj.note = $scope.user.notes;
-                } else {
-                    obj.note = '';
-                }
-                if (obj.organizationIds.length) {
-                    genericService.addObject($rootScope.baseUrl + 'divisionAssignment/addOrAssignUserToOrg/', obj).then(function (data) {
-                        $.toaster({ priority: 'success', message: divisionAddedSuccessfully });
-                        $state.reload();
-                        $('#adddivision').trigger('click');
-                    }, function (data) {
-                    });
-                } else {
-                    $.toaster({ priority: 'warning', message: atleatOneDivisionAssign });
-                }
+                BootstrapDialog.confirm({
+                    title: 'Confirm',
+                    message: 'Are you sure you want to Save?', callback: function (result) {
+                        if (result) {
+                            var obj = {};
+                            obj.userId = $scope.userDetails.userId;
+                            obj.organizationIds = $scope.assignedDivision;
+                            obj.modifiedById = $rootScope.adminId;
+                            obj.addUserToOrg = true;
+                            if (!angular.isUndefined($scope.notes)) {
+                                obj.note = $scope.user.notes;
+                            } else {
+                                obj.note = '';
+                            }
+                            if (obj.organizationIds.length) {
+                                genericService.addObject($rootScope.baseUrl + 'divisionAssignment/addOrAssignUserToOrg/', obj).then(function (data) {
+                                    $.toaster({ priority: 'success', message: divisionAddedSuccessfully });
+                                    $state.reload();
+                                    $('#adddivision').trigger('click');
+                                }, function (data) {
+                                });
+                            } else {
+                                $.toaster({ priority: 'warning', message: atleatOneDivisionAssign });
+                            }
+                        }
+                        else {
+                            $rootScope.stopSpin();
+
+                        }
+                    }
+                });
             }
         }
     ]);

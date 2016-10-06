@@ -30,7 +30,9 @@ public class RoleManagementController {
 	public List<RolesDto> getAssignedRolesList(@PathVariable("userId") long userId,
 			@PathVariable("orgId") long orgId) {
 		List<RolesDto> rolesList = null;
+		 LOGGER.debug("start of calling /rolemgnt/roleAssignedlist/ api");
 		rolesList = roleManagementService.getAssignedRoles(userId, orgId);
+		 LOGGER.debug("end of calling /rolemgnt/roleAssignedlist/ api");
 		return rolesList;
 	}
 
@@ -38,7 +40,9 @@ public class RoleManagementController {
 	public List<RolesDto> getUnAssignedRolesList(@PathVariable("userId") long userId,
 			@PathVariable("orgId") long orgId) {
 		List<RolesDto> rolesList = null;
+		 LOGGER.debug("start of calling /rolemgnt/roleUnAssignedlist/ api");
 		rolesList = roleManagementService.getUnAssignedRoles(userId, orgId);
+		 LOGGER.debug("end of calling /rolemgnt/roleUnAssignedlist/ api");
 		return rolesList;
 	}
 
@@ -46,7 +50,9 @@ public class RoleManagementController {
 	public ResponseEntity<List<PermissionsDto>> getRolePermissions(@PathVariable long roleId) {
 		List<PermissionsDto> rolespermissionsList = null;
 		try {
+		    LOGGER.debug("start of calling rolemgnt/rolePermissions api");
 			rolespermissionsList = roleManagementService.getRolePermissions(roleId);
+			 LOGGER.debug("end of calling rolemgnt/rolePermissions api");
 			return new ResponseEntity<List<PermissionsDto>>(rolespermissionsList, HttpStatus.OK);
 		} catch (EmptyListException e) {
 			LOGGER.debug(e.getMessage());
@@ -60,7 +66,9 @@ public class RoleManagementController {
 	@RequestMapping(value = "/rolemgnt/updaterole/{userId}/{orgId}", method = RequestMethod.POST)
 	public ResponseEntity<Message> updateGroup(@PathVariable("userId") long userId, @PathVariable("orgId") long orgId,
 			@RequestBody String roleDtoList1) {
+	    LOGGER.debug("start of calling rolemgnt/updaterole api");
 		if (roleManagementService.updateRole(roleDtoList1, userId, orgId)) {
+		    LOGGER.debug("end of calling rolemgnt/updaterole api");
 			Message message = Message.statusCode(HttpStatus.OK).message("Updated successfully!").build();
 			return new ResponseEntity<Message>(message, HttpStatus.OK);
 		} else {

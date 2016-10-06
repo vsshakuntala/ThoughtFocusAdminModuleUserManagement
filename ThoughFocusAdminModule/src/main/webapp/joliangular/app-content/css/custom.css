@@ -73,7 +73,7 @@ button.dropdown-toggle.ng-binding.btn.btn-default {
 
 footer {
     background-color: #e8e8e8;
-    position: absolute;
+    position: fixed;
     left: 0;
     bottom: 0;
     height: 30px;
@@ -114,4 +114,7 @@ footer {
 
 .search-padding{
     margin-bottom: 15px;
+}
+button.btn.assign-class.button-visibility{
+    opacity: 0;
 }

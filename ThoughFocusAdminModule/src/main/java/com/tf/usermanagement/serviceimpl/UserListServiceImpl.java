@@ -43,11 +43,11 @@ public class UserListServiceImpl implements UserListService {
 		try {
 			if (searhfilter != null) {
 				UserListFilterDTO custDto = gson.fromJson(searhfilter, UserListFilterDTO.class);
-				LOGGER.info("filterDto:" + custDto);
+				LOGGER.info("filterDto:" + custDto.toString());
 				if (custDto != null) {
 					String query = UserListQueryBuilderForDownload.getUserListQuery(custDto.getDivisions(),
 							custDto.getRoles(), custDto.getStatus(), custDto.getFrom_date(), custDto.getTo_date(),
-							custDto.getCompany(), custDto.getName());
+							custDto.getCompanyName(), custDto.getName());
 					LOGGER.info("query builder in service:" + query);
 
 					if (query != null) {
@@ -86,6 +86,20 @@ public class UserListServiceImpl implements UserListService {
 		font.setBoldweight((short) 1);
 		font.setFontHeightInPoints((short) 12);
 		cellStyle.setFont(font);
+		
+		
+		//filter criteria
+		CellStyle filterStyle = sheet.getWorkbook().createCellStyle();
+		Font fonts = sheet.getWorkbook().createFont();
+		fonts.setBoldweight((short) 6);
+		fonts.setFontHeightInPoints((short) 15);
+		filterStyle.setFont(fonts);
+		Row firstrow = sheet.createRow(rownum++);
+
+		Cell FilterCell = firstrow.createCell(0);
+		FilterCell.setCellStyle(filterStyle);
+		FilterCell.setCellValue("Filter Criteria");
+		//end of filter criteria
 
 		// Start of create the search header criteria
 		Row row = sheet.createRow(rownum++);
@@ -112,17 +126,19 @@ public class UserListServiceImpl implements UserListService {
 
 		Cell CompanyCell = row.createCell(5);
 		CompanyCell.setCellStyle(cellStyle);
-		CompanyCell.setCellValue("Company name Like");
+		CompanyCell.setCellValue("Company name");
 
 		Cell FirstNameCell = row.createCell(6);
 		FirstNameCell.setCellStyle(cellStyle);
-		FirstNameCell.setCellValue("First Name like");
+		FirstNameCell.setCellValue("First Name");
 
 		// END of create the search header criteria
-
+		
+		
+		
 		// Start of create the search data
 		Row nextRow = sheet.createRow(rownum++);
-
+		
 		if (custDto.getDivisions() != null) {
 			Cell cell1 = nextRow.createCell(0);
 			List<Integer> list = new ArrayList<Integer>();
@@ -167,9 +183,9 @@ public class UserListServiceImpl implements UserListService {
 			cell1.setCellValue(custDto.getTo_date());
 		}
 
-		if (custDto.getCompany() != null && custDto.getCompany().trim().length() > 0) {
+		if (custDto.getCompanyName() != null && custDto.getCompanyName().trim().length() > 0) {
 			Cell cell1 = nextRow.createCell(5);
-			cell1.setCellValue(custDto.getCompany());
+			cell1.setCellValue(custDto.getCompanyName());
 		}
 
 		if (custDto.getName() != null && custDto.getName().trim().length() > 0) {
@@ -178,38 +194,47 @@ public class UserListServiceImpl implements UserListService {
 		}
 
 		// End of create the search data
-
+		//Filter Result
+		Row secondrow = sheet.createRow(rownum++);
+		Cell FilterDataCell = secondrow.createCell(0);
+		FilterDataCell.setCellStyle(filterStyle);
+		FilterDataCell.setCellValue("Filter Result");
+		//end of filter result
 		// Start of create the Header of table
 		Row nextNewRow = sheet.createRow(rownum++);
 		Cell UserIdCellData = nextNewRow.createCell(0);
 		UserIdCellData.setCellStyle(cellStyle);
 		UserIdCellData.setCellValue("User Name ");
 
-		Cell UserNameCellData = nextNewRow.createCell(1);
-		UserNameCellData.setCellStyle(cellStyle);
-		UserNameCellData.setCellValue("Name ");
+		Cell firstNameCellData = nextNewRow.createCell(1);
+		firstNameCellData.setCellStyle(cellStyle);
+		firstNameCellData.setCellValue("First Name ");
+		
+		Cell lastNameCellData = nextNewRow.createCell(2);
+		lastNameCellData.setCellStyle(cellStyle);
+		lastNameCellData.setCellValue("Last Name ");
 
-		Cell FirstNameCellData = nextNewRow.createCell(2);
+		Cell FirstNameCellData = nextNewRow.createCell(3);
 		FirstNameCellData.setCellStyle(cellStyle);
 		FirstNameCellData.setCellValue("Registered Date");
 
-		Cell LastNameCellData = nextNewRow.createCell(3);
+		Cell LastNameCellData = nextNewRow.createCell(4);
 		LastNameCellData.setCellStyle(cellStyle);
 		LastNameCellData.setCellValue("Phone");
 
-		Cell EmailCellData = nextNewRow.createCell(4);
+		Cell EmailCellData = nextNewRow.createCell(5);
 		EmailCellData.setCellStyle(cellStyle);
 		EmailCellData.setCellValue("Company Name");
 
-		Cell RegisteredDateCellData = nextNewRow.createCell(5);
+		Cell RegisteredDateCellData = nextNewRow.createCell(6);
 		RegisteredDateCellData.setCellStyle(cellStyle);
 		RegisteredDateCellData.setCellValue("Status");
 
-		Cell PhoneCellData = nextNewRow.createCell(6);
+		Cell PhoneCellData = nextNewRow.createCell(7);
 		PhoneCellData.setCellStyle(cellStyle);
 		PhoneCellData.setCellValue("Approve");
 
-		Cell CompanyCellData = nextNewRow.createCell(7);
+		Cell CompanyCellData = nextNewRow.createCell(8);
 		CompanyCellData.setCellStyle(cellStyle);
 		CompanyCellData.setCellValue("Pending");
 
@@ -233,28 +258,33 @@ public class UserListServiceImpl implements UserListService {
 				Row row1 = sheet.createRow(rownum++);
 
 				Cell UserIdCellData1 = row1.createCell(0);
-				if (custDtoObj.getEmail() != null)
-					UserIdCellData1.setCellValue(custDtoObj.getEmail());
+				if (custDtoObj.getUserName() != null)
+					UserIdCellData1.setCellValue(custDtoObj.getUserName());
 
-				Cell UserNameCellData1 = row1.createCell(1);
+				Cell firstNameCellData1 = row1.createCell(1);
 				if (custDtoObj.getFirstName() != null)
-					UserNameCellData1.setCellValue(custDtoObj.getFirstName() + " " + custDtoObj.getLastName());
+				    firstNameCellData1.setCellValue(custDtoObj.getFirstName());
 
-				Cell FirstNameCellData1 = row1.createCell(2);
+				Cell lastNameCellData1 = row1.createCell(2);
+				if (custDtoObj.getLastName() != null)
+				    lastNameCellData1.setCellValue(custDtoObj.getLastName());
+
+				
+				Cell FirstNameCellData1 = row1.createCell(3);
 				if (custDtoObj.getCreatedDate() != null) {
 					SimpleDateFormat dateFormat = new SimpleDateFormat("dd MMM YYYY");
 					FirstNameCellData1.setCellValue(dateFormat.format(custDtoObj.getCreatedDate()));
 				}
 
-				Cell LastNameCellData1 = row1.createCell(3);
+				Cell LastNameCellData1 = row1.createCell(4);
 				if (custDtoObj.getPhone() != null)
 					LastNameCellData1.setCellValue(custDtoObj.getPhone());
 
-				Cell EmailCellData1 = row1.createCell(4);
+				Cell EmailCellData1 = row1.createCell(5);
 				if (custDtoObj.getCompanyName() != null)
 					EmailCellData1.setCellValue(custDtoObj.getCompanyName());
 
-				Cell RegisteredDateCellData1 = row1.createCell(5);
+				Cell RegisteredDateCellData1 = row1.createCell(6);
 				// if(custDtoObj.getCreatedDate()!=null)
 				String status = null;
 				if (custDtoObj.getApproved() == 0 && custDtoObj.getPending() == 0) {
@@ -266,11 +296,11 @@ public class UserListServiceImpl implements UserListService {
 				}
 				RegisteredDateCellData1.setCellValue(status);
 
-				Cell PhoneCellData1 = row1.createCell(6);
+				Cell PhoneCellData1 = row1.createCell(7);
 				if (custDtoObj.getApproved() != null)
 					PhoneCellData1.setCellValue(custDtoObj.getApproved());
 
-				Cell CompanyCellData1 = row1.createCell(7);
+				Cell CompanyCellData1 = row1.createCell(8);
 				if (custDtoObj.getPending() != null)
 					CompanyCellData1.setCellValue(custDtoObj.getPending());
 

@@ -10,7 +10,14 @@ public class MachineAssignmentQueryBuilder {
 	 
     
     
-	private final String ASSIGNEDQUERY="select  Cat.CATALOG_ID as catalogId from USERS Usr inner join USER_ORG_MAP UsrOrg on Usr.USER_ID = UsrOrg.USER_ID AND  UsrOrg.ACTIVE = 1 inner join ORGANIZATION Org on Org.ORGANIZATION_ID = UsrOrg.ORGANIZATION_ID inner join CUSTOMER_ORGANIZATION_MAP CustOrg on UsrOrg.ORGANIZATION_ID =CustOrg.ORGANIZATION_ID AND CustOrg.ACTIVE = 1 inner join CUSTOMER Cust on Cust.CUSTOMER_ID = CustOrg.CUSTOMER_ID AND Cust.ACTIVE = 1 inner join USER_CUSTOMER UsrCust on CustOrg.CUSTOMER_ID = UsrCust.CUSTOMER_ID AND UsrCust.ACTIVE = 1 AND Usr.USER_ID = UsrCust.USER_ID LEFT join CATALOG Cat on UsrCust.CUSTOMER_ID = Cat.CUSTOMER_ID AND Cat.ORGANIZATION_ID = CustOrg.ORGANIZATION_ID AND Cat.ACTIVE = 1 INNER JOIN USER_CATALOG UsrCat on Usr.USER_ID = UsrCat.USER_ID AND Cat.CATALOG_ID=UsrCat.CATALOG_ID and UsrCat.ACTIVE=1 where Usr.USER_ID = ";
+	private final String ASSIGNEDQUERY="select  Cat.CATALOG_ID as catalogId from USERS Usr "
+		+ "inner join USER_ORG_MAP UsrOrg on Usr.USER_ID = UsrOrg.USER_ID AND  UsrOrg.ACTIVE = 1 "
+		+ "inner join ORGANIZATION Org on Org.ORGANIZATION_ID = UsrOrg.ORGANIZATION_ID "
+		+ "inner join CUSTOMER_ORGANIZATION_MAP CustOrg on UsrOrg.ORGANIZATION_ID =CustOrg.ORGANIZATION_ID AND CustOrg.ACTIVE = 1 "
+		+ "inner join CUSTOMER Cust on Cust.CUSTOMER_ID = CustOrg.CUSTOMER_ID AND Cust.ACTIVE = 1 "
+		+ "inner join USER_CUSTOMER UsrCust on CustOrg.CUSTOMER_ID = UsrCust.CUSTOMER_ID AND UsrCust.ACTIVE = 1 AND Usr.USER_ID = UsrCust.USER_ID "
+		+ "LEFT join CATALOG Cat on UsrCust.CUSTOMER_ID = Cat.CUSTOMER_ID AND Cat.ORGANIZATION_ID = CustOrg.ORGANIZATION_ID AND Cat.ACTIVE = 1 "
+		+ "INNER JOIN USER_CATALOG UsrCat on Usr.USER_ID = UsrCat.USER_ID AND Cat.CATALOG_ID=UsrCat.CATALOG_ID and UsrCat.ACTIVE=1 where Usr.USER_ID = ";
     	   
     /**
      * This is used to get the query for customer which has assigned based on filter criteria
@@ -45,7 +52,7 @@ public class MachineAssignmentQueryBuilder {
 	
 	if(catId != null && catId< 1){
 	   
-	       builder.append(" AND cat.CATALOG_ID LIKE '").append(catId).append("'");
+	       builder.append(" AND cat.CATALOG_NAME LIKE '").append(catId).append("'");
 	   
 	}
 	
@@ -86,7 +93,7 @@ public class MachineAssignmentQueryBuilder {
     	
     	if(catId != null && catId< 1){
     	   
-    	       builder.append(" AND cat.CATALOG_ID LIKE '").append(catId).append("'");
+    	       builder.append(" AND cat.CATALOG_NAME LIKE '").append(catId).append("'");
     	   
     	}
     	

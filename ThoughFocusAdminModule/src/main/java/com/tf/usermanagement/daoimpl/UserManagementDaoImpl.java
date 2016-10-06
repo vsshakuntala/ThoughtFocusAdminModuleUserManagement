@@ -37,6 +37,7 @@ import com.tf.usermanagement.dto.DivisionsDTO;
 import com.tf.usermanagement.dto.LanguageDTO;
 import com.tf.usermanagement.dto.OrganizationsDTO;
 import com.tf.usermanagement.dto.UserDTO;
+import com.tf.usermanagement.dto.UserEmail;
 import com.tf.usermanagement.dto.UserOrgActiveDTO;
 import com.tf.usermanagement.dto.UserUnassignedOrgDto;
 /**
@@ -187,6 +188,7 @@ public class UserManagementDaoImpl implements UserManagementDao{
 							up.setTermsCondition(true);
 							up.setApprovalStatus(false);
 							up.setCreatedDate(currentTimestamp);
+							up.setCreatedBy(user.getCurrentLoggedUserId());
 							session.save(up);
 							map.add(up);
 							newUser.setUserOrganizationMap(map);
@@ -488,6 +490,60 @@ public class UserManagementDaoImpl implements UserManagementDao{
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public void resetPassword(String email,String password) {
+		Session session = null;
+
+		SQLQuery query = null;
+		LOGGER.debug("Email from UI: " + email);
+		try {
+			session = sessionFactroy.openSession();
+			query = session.createSQLQuery("update users set PASSWORD= :password where EMAIL= :email");
+			query.setString("email", email);
+			query.setString("password", password);
+
+			query.executeUpdate();
+
+		} catch (Exception e) {
+			LOGGER.error("Exception : ", e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+	}
+
+	@Override
+	public UserEmail getUserEmailByUserId(Long userId) {
+		Session session = null;
+
+		SQLQuery query = null;
+		List<UserEmail> userEmailList=new ArrayList<>();
+		UserEmail userEmail=null;
+		
+		try {
+			session = sessionFactroy.openSession();
+
+			query = session.createSQLQuery("select EMAIL from USERS where USER_ID = :userId").addScalar("email",StandardBasicTypes.STRING);
+			query.setLong("userId", userId);
+			userEmailList = query.setResultTransformer( Transformers.aliasToBean(UserEmail.class)).list();
+			if (!userEmailList.isEmpty()) {
+				
+				userEmail=new UserEmail(userEmailList.get(0).getEmailId());
+				LOGGER.debug("Email from db: " + userEmail);
+			} 
+			
+
+		} catch (Exception e) {
+			LOGGER.error("Exception : ", e.getMessage());
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+		return userEmail;
 	}
 
 	

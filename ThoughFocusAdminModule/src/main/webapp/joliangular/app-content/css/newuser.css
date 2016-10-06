@@ -37,6 +37,11 @@ em {
 	overflow: scroll;
 	overflow-x: hidden;
 }
+.notes-textarea{
+    height: 50px;  
+    overflow: scroll;
+    overflow-x: hidden;  
+}
 
 /*.updateTitle{
         float: none !important;

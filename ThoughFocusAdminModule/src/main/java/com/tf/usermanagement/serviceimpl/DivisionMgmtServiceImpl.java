@@ -5,11 +5,18 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.tf.usermanagement.dao.DivisionMgmtDao;
+import com.tf.usermanagement.daoimpl.DivisionMgmtDaoImpl;
+import com.tf.usermanagement.domain.Organization;
 import com.tf.usermanagement.domain.User;
 import com.tf.usermanagement.domain.UserOrganizationMap;
 import com.tf.usermanagement.dto.AdminOrgListDto;
@@ -38,12 +45,17 @@ public class DivisionMgmtServiceImpl implements DivisionMgmtService {
 	@Autowired
 	private DivisionMgmtDao divisionMgmtDao;
 	
+	@Autowired
+	private SessionFactory sessionFactory;
+	
 	@Value("${default.associate.note.message}")
 	private String ASSOCIATE_DEFAULT_NOTE_MESSAGE;
 	
 	@Value("${default.disassociate.note.message}")
 	private String DISASSOCIATE_DEFAULT_NOTE_MESSAGE;
 
+	private static final Logger LOGGER = Logger.getLogger(DivisionMgmtServiceImpl.class);
+	
 	@Override
 	public List<GroupCustomerCountDto> getCustomerCountForGroupsByOrganization(long userId) {
 		return divisionMgmtDao.getCustomerCountForGroupsByOrganization(userId);
@@ -91,6 +103,7 @@ public class DivisionMgmtServiceImpl implements DivisionMgmtService {
 
 	@Override
 	public List<DivisionAssignmentDto> getAllDivisionAssignment(long userId, long adminId) {
+				
 		//get total customer count
 		List<CustomerTotalCountDto> customerTotalCountList=getTotalCustomerCount(userId);
 		//get total catalog count
@@ -171,96 +184,84 @@ public class DivisionMgmtServiceImpl implements DivisionMgmtService {
 	}
 
 	/**
-	 * this method is used to De-assign all the catalog's that are individually
-	 * assigned to user based on the organization
-	 */
-	@Override
-	public boolean deAssignCatalogsOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
-		return divisionMgmtDao.deAssignCatalogsOfOrganization(deAssignUserToOrgInputDto);
-	}
-
-	/**
-	 * this method is used to De-assign all the customers's that are
-	 * individually assigned to user based on the organization
-	 */
-	@Override
-	public boolean deAssignCustomerOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
-		return divisionMgmtDao.deAssignCustomerOfOrganization(deAssignUserToOrgInputDto);
-	}
-
-	/**
-	 * 
-	 */
-	@Override
-	public boolean deAssignGroupOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
-		return divisionMgmtDao.deAssignGroupOfOrganization(deAssignUserToOrgInputDto);
-	}
-
-	/**
-	 * 
-	 */
-	@Override
-	public boolean deAssignRoleOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
-		return divisionMgmtDao.deAssignRoleOfOrganization(deAssignUserToOrgInputDto);
-	}
-
-	/**
-	 * this method is used to De-Assign the user for the organization selected
-	 * by the logged in admin
-	 */
-	@Override
-	public boolean deAssignUserFromOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
-
-		return divisionMgmtDao.deAssignUserFromOrganization(deAssignUserToOrgInputDto);
-	}
-
-	/**
 	 * all de-assignments for user order of de-assignment to be followed as
 	 * mentioned in method impl
 	 */
 	@Override
 	public boolean deAssignAllAllocationsForUserByOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
-
-		boolean resultForCatalog = deAssignCatalogsOfOrganization(deAssignUserToOrgInputDto);
-
-		boolean resultForCustomer = deAssignCustomerOfOrganization(deAssignUserToOrgInputDto);
-
-		boolean resultForGroup = deAssignGroupOfOrganization(deAssignUserToOrgInputDto);
-
-		boolean resultForRole = deAssignRoleOfOrganization(deAssignUserToOrgInputDto);
-
-		boolean resultForOrg = deAssignUserFromOrganization(deAssignUserToOrgInputDto);
-
-		boolean resultForDeActivateUser=deActivateUser(deAssignUserToOrgInputDto);
+		//TODO
 		
-		if (resultForCatalog && resultForCustomer && resultForGroup && resultForRole && resultForOrg && resultForDeActivateUser) {
-			//Sending note
-			UserNotesDto userNotesDto =new UserNotesDto();
-			if(deAssignUserToOrgInputDto.getNotes()==null || deAssignUserToOrgInputDto.getNotes().length()==0){
-				userNotesDto.setNotes(DISASSOCIATE_DEFAULT_NOTE_MESSAGE+" : "+deAssignUserToOrgInputDto.getOrganizationId());
-			}else{
-				userNotesDto.setNotes(deAssignUserToOrgInputDto.getNotes()+System.lineSeparator()+DISASSOCIATE_DEFAULT_NOTE_MESSAGE+" : "+deAssignUserToOrgInputDto.getOrganizationId());
+		
+		Session session = null;
+		Transaction tx = null;
+		boolean result=false;
+		
+		try{
+			
+			
+			Organization organization=divisionMgmtDao.getOrganizationById(deAssignUserToOrgInputDto.getOrganizationId());
+			
+			session = sessionFactory.openSession();
+			tx = session.beginTransaction();
+			
+			boolean resultForCatalog = divisionMgmtDao.deAssignCatalogsOfOrganization(deAssignUserToOrgInputDto,session);
+
+			boolean resultForCustomer = divisionMgmtDao.deAssignCustomerOfOrganization(deAssignUserToOrgInputDto,session);
+
+			boolean resultForGroup = divisionMgmtDao.deAssignGroupOfOrganization(deAssignUserToOrgInputDto,session);
+
+			boolean resultForRole = divisionMgmtDao.deAssignRoleOfOrganization(deAssignUserToOrgInputDto,session);
+
+			boolean resultForOrg = divisionMgmtDao.deAssignUserFromOrganization(deAssignUserToOrgInputDto,session);
+			
+			boolean resultForAddress=divisionMgmtDao.deAssignDefaultAddress(deAssignUserToOrgInputDto,session);
+			
+			boolean resultForDeActivateUser=divisionMgmtDao.deActivateUser(deAssignUserToOrgInputDto,session);
+			
+			if (resultForCatalog && resultForCustomer && resultForGroup && resultForRole && resultForOrg && resultForAddress && resultForDeActivateUser) {
+				//Sending note
+				UserNotesDto userNotesDto =new UserNotesDto();
+				if(deAssignUserToOrgInputDto.getNotes()==null || deAssignUserToOrgInputDto.getNotes().length()==0){
+					userNotesDto.setNotes(DISASSOCIATE_DEFAULT_NOTE_MESSAGE+" : "+organization.getOrganizationName());
+				}else{
+					userNotesDto.setNotes(deAssignUserToOrgInputDto.getNotes()+System.lineSeparator()+DISASSOCIATE_DEFAULT_NOTE_MESSAGE+" : "+organization.getOrganizationName());
+				}
+				userNotesDto.setUserId(deAssignUserToOrgInputDto.getUserId());
+				userNotesDto.setCreatedBy(deAssignUserToOrgInputDto.getModifiedById());
+				if(divisionMgmtDao.addNotesToUserForDeassignmentOfOrg(userNotesDto, session)){
+					tx.commit();
+					result= true;	
+				}else{
+					tx.rollback();
+					result= false;
+					LOGGER.error("unable to add notes to user while de-assigning organization" );
+				}
+				
+				System.out.println("All deassociations were successfull in Service Impl");
+			} else {
+				tx.rollback();
+				result= false;
 			}
-			userNotesDto.setUserId(deAssignUserToOrgInputDto.getUserId());
-			userNotesDto.setCreatedBy(deAssignUserToOrgInputDto.getModifiedById());
-			addNotesToUser(userNotesDto);
-			return true;
-		} else {
-			return false;
+			
+			
+		}catch (HibernateException e) {
+			result= false;
+			tx.rollback();
+			LOGGER.error("Exception in deAssignAllAllocationsForUserByOrganization " + e);
+		} catch (Exception e) {
+			result= false;
+			tx.rollback();
+			LOGGER.error("Exception in deAssignAllAllocationsForUserByOrganization " + e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
 		}
-
+		return result;
 	}
 	
 	
-	/**
-	 * this method is used de-activate user from USERS tables 
-	 * if there are no organizations assigned to user.
-	 */
-	@Override
-	public boolean deActivateUser(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
-		
-		return divisionMgmtDao.deActivateUser(deAssignUserToOrgInputDto);
-	}
+	
 
 	/**
 	 * this method is used to get the list of organizations that admin related

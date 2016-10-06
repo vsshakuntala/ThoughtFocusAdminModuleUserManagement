@@ -53,7 +53,7 @@ public class CustomerUnAssignmentReport extends AbstractDataTableReport{
 		+ "LEFT JOIN GROUPS Grp ON Grp.GROUP_ID = UsrGrp.GROUP_ID AND Grp.ACTIVE = 1 "
 		+ "WHERE Usr.USER_ID = 110 AND CustOrg.ORGANIZATION_ID = 4)) t where t.active=1 AND t.customerName like '%cust%'";
 	
-	String newIq="(select com.CUSTOMER_ID AS customerNumber,"
+	String newIq="(select c.CUSTOMER_REFERENCE AS customerNumber,c.CUSTOMER_ID AS customerId,"
 		+ "(Select CUSTOMER_NAME FROM CUSTOMER WHERE CUSTOMER_ID = com.CUSTOMER_ID) AS customerName,"
 		+ "(SELECT TOP 1 ADDRESS1 FROM ADDRESS WHERE CUSTOMER_ID = com.CUSTOMER_ID AND ADDRESS_TYPE_ID = 1 AND ACTIVE=1) AS addressOne,"
 		+ "(SELECT TOP 1 CITY FROM ADDRESS WHERE CUSTOMER_ID = com.CUSTOMER_ID AND ADDRESS_TYPE_ID = 1 AND ACTIVE=1) AS city,"
@@ -67,11 +67,11 @@ public class CustomerUnAssignmentReport extends AbstractDataTableReport{
 		+ "(SELECT distinct UsrCust.CUSTOMER_ID AS ASSIGNEDID_CUSTID FROM USERS Usr "
 		+ "INNER JOIN USER_CUSTOMER UsrCust ON Usr.USER_ID = UsrCust.USER_ID AND UsrCust.ACTIVE = 1 "
 		+ "INNER JOIN CUSTOMER Cust ON Cust.CUSTOMER_ID = UsrCust.CUSTOMER_ID AND Cust.ACTIVE = 1 "
-		+ "LEFT JOIN CUSTOMER_ORGANIZATION_MAP CustOrg ON UsrCust.CUSTOMER_ID = CustOrg.CUSTOMER_ID AND CustOrg.ACTIVE = 1 "		
+		+ "INNER JOIN CUSTOMER_ORGANIZATION_MAP CustOrg ON UsrCust.CUSTOMER_ID = CustOrg.CUSTOMER_ID AND CustOrg.ACTIVE = 1 " 	
 		+ "where CustOrg.ORGANIZATION_ID = :orgId AND Usr.USER_ID =:userId)) t ";
 	
 	
-	QueryTemplate queryTemplate = qtb.fetchColumns("customerNumber,customerName,addressOne,city,state,postal,country,billto,Status,Type,active,orgId")
+	QueryTemplate queryTemplate = qtb.fetchColumns("customerNumber,customerId,customerName,addressOne,city,state,postal,country,billto,Status,Type,active,orgId")
 		.from(newIq)	
 		
 		.addFilterExpressionWithKey(ORGID_FILTER,"t.orgId=:orgId")		
@@ -98,6 +98,7 @@ public class CustomerUnAssignmentReport extends AbstractDataTableReport{
 	map.put("state", "state");
 	map.put("postal", "postal");
 	map.put("Type", "Type");
+	map.put("customerId", "customerId");
 	
 	return map;
     }

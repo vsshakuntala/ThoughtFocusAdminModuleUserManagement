@@ -51,12 +51,13 @@ public class ThoughtFocusAdminModuleConfig {
 		basicDataSource.setUsername(DATABASE_USERNAME);
 		basicDataSource.setPassword(DATABASE_PASSWORD);
 		//For Production config
-		//basicDataSource.setMaxTotal(5);
+		basicDataSource.setMaxTotal(-1);
 		
 		//Testing config.
-		basicDataSource.setMaxTotal(10);
-		basicDataSource.setMinIdle(0);
-		basicDataSource.setMaxIdle(3);
+		//basicDataSource.setMaxTotal(10);
+		//basicDataSource.setMinIdle(0);
+		//basicDataSource.setMaxIdle(3);
+		
 		//basicDataSource.setMinEvictableIdleTimeMillis(1000*60*20);
 		//basicDataSource.setSoftMinEvictableIdleTimeMillis(1000*60*35);
 		

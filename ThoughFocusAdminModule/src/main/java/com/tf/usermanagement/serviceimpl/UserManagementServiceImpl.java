@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -22,9 +23,11 @@ import com.tf.usermanagement.dto.DivisionsDTO;
 import com.tf.usermanagement.dto.LanguageDTO;
 import com.tf.usermanagement.dto.OrganizationsDTO;
 import com.tf.usermanagement.dto.UserDTO;
+import com.tf.usermanagement.dto.UserEmail;
 import com.tf.usermanagement.dto.UserNotesDto;
 import com.tf.usermanagement.dto.UserOrgActiveDTO;
 import com.tf.usermanagement.service.UserManagementService;
+import com.tf.usermanagement.utils.EmailUtility;
 import com.tf.usermanagement.utils.PostToServer;
 
 /**
@@ -40,6 +43,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Autowired
 	private DivisionMgmtDaoImpl divisionMgmtDaoImpl;
 	
+	@Autowired
+	private EmailUtility emailUtility;
+	
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserManagementServiceImpl.class);
 	
@@ -51,6 +57,8 @@ public class UserManagementServiceImpl implements UserManagementService {
 	private boolean OAUTH_IS_CALLABLE;
 	@Value("${authenticationTokenForUserApproval}")
 	private String OAUTH_TOKEN;
+	@Value("${default.password}")
+	private String DEFAULT_PASSWORD;
 
 	@Override
 	public List<OrganizationsDTO> getDivisions() {
@@ -190,6 +198,20 @@ public class UserManagementServiceImpl implements UserManagementService {
 	@Override
 	public List<AdminOrgListDto> getOrganizationListOfAdmin(long adminId) {
 		return divisionMgmtDaoImpl.getOrganizationListOfAdmin(adminId);
+	}
+
+	@Override
+	public void resetPassword(String email) {
+		StandardPasswordEncoder passwordEncoder=new StandardPasswordEncoder();
+		String encodedPassword=passwordEncoder.encode(DEFAULT_PASSWORD);
+		userManagementDao.resetPassword(email, encodedPassword);
+		emailUtility.sendRestPasswordToUser(email,DEFAULT_PASSWORD);
+	}
+
+	@Override
+	public UserEmail getUserEmailByUserId(Long userId) {
+		
+		return userManagementDao.getUserEmailByUserId(userId);
 	}
 
 	

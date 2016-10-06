@@ -40,35 +40,42 @@
                                                                 <div class="row">
                                                                     <input type="submit" class="btn btn-success" value="Save" />
                                                                     <!--ng-click="submitNotes(userNotesInput)" -->
-                                                                    <!--<input type="button" data-dismiss="modal" class="btn btn-danger" id="cancel" name="cancel" value="Cancel" />-->
+                                                                    <input type="button" data-dismiss="modal" class="btn btn-danger" id="cancel" name="cancel" value="Cancel" />
                                                                 </div>
                                                             </div>
                                                         </div>
 
                                                         <div class="item in item-visible notes-scroll">
                                                             <div ng-repeat="note in notes">
-                                                                <div class="row" style="margin-bottom: 15px;">
+                                                                <!--<div class="row" style="margin-bottom: 15px;">
                                                                     <textarea class="form-control" id="inputNote" rows="3" style="resize: none;" readonly>{{note.notes}} 
                                                                         {{note.userName}} , {{note.createdDate|date:'dd-MMM-yyyy , h:mma'}}
                                                         </textarea>
+                                                                </div>-->
+                                                                <div class="form-control notes-textarea" style="margin-bottom: 15px;">
+                                                                    <div class="row" id="inputNote" style="resize: none;" readonly>
+                                                                        <span>{{note.notes}}</span>
+                                                                    </div>
+                                                                    <div class="row" id="inputNote" style="resize: none;" readonly>
+                                                                        <span class="pull-right">{{note.userName}} , {{note.createdDate|date:'dd-MMM-yyyy , h:mma'}}</span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <!--START SAVE BUTTON -->
+
+                                                    <!--END SAVE BUTTON -->
+
                                                 </div>
-                                                <!--START SAVE BUTTON -->
-
-                                                <!--END SAVE BUTTON -->
-
                                             </div>
                                         </div>
-                                    </div>
                                 </form>
+                                </div>
                             </div>
-                        </div>
                     </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>

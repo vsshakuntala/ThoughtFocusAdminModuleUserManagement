@@ -38,7 +38,7 @@ public class MachineUnAssignmentReport extends AbstractDataTableReport{
 	@Override
 	protected QueryTemplate attachQueryTemplate() {
 		MSSql2008QueryTemplateBuilder qtb = new MSSql2008QueryTemplateBuilder();
-		 String UNASSSIGNEDQUERY1="(select cat.CATALOG_ID AS catalog_id,cat.MODEL as model,cat.CATALOG_REFERENCE as catalog_reference,"
+		 String UNASSSIGNEDQUERY1="(select cat.CATALOG_ID AS catalog_id,cat.CATALOG_NAME AS catalog_name,cat.MODEL as model,cat.CATALOG_REFERENCE as catalog_reference,"
 		 		+ "cust.CUSTOMER_NAME AS customer_name,'' AS group_name, cat.ORGANIZATION_ID AS organization_id,Usr.USER_ID AS user_id "
 		 		+ "From USERS Usr INNER JOIN USER_CUSTOMER UsrCust ON Usr.USER_ID = UsrCust.USER_ID AND UsrCust.ACTIVE = 1 "
 		 		+ "INNER JOIN CUSTOMER Cust ON Cust.CUSTOMER_ID = UsrCust.CUSTOMER_ID AND Cust.ACTIVE = 1 "
@@ -53,16 +53,16 @@ public class MachineUnAssignmentReport extends AbstractDataTableReport{
 		 		+ "INNER JOIN USER_CATALOG userCat on cat.CATALOG_ID=userCat.CATALOG_ID and userCat.ACTIVE=1 and UserCat.USER_ID=Usr.USER_ID "
 		 		+ "WHERE Usr.USER_ID =:user_id and CustOrg.ORGANIZATION_ID =:organization_id )) t";
 		
-		QueryTemplate queryTemplate = qtb.fetchColumns("catalog_id,model,catalog_reference,customer_name,group_name,organization_id,user_id")
+		QueryTemplate queryTemplate = qtb.fetchColumns("catalog_id,catalog_name,model,catalog_reference,customer_name,group_name,organization_id,user_id")
 				.from(UNASSSIGNEDQUERY1)
 				.addFilterExpressionWithKey(ORGANIZATION_FILTER, "organization_id =:organization_id")
 				.addFilterExpressionWithKey(USER_FILTER,"user_id =:user_id")
-				.addFilterExpressionWithKey(CATALOG_FILTER, "catalog_id LIKE :catalog_id")
+				.addFilterExpressionWithKey(CATALOG_FILTER, "catalog_name LIKE :catalog_id")
 				.addFilterExpressionWithKey(MODEL_FILTER, "model LIKE :model")
 				.addFilterExpressionWithKey(CATALOG_REF_FILTER, "catalog_reference LIKE :catalog_reference")
 				.addFilterExpressionWithKey(CUSTOMER_FILTER, "customer_name LIKE :customer_name")
 				.addFilterExpressionWithKey(GROUP_FILTER, "group_name LIKE :group_name")
-				.searchTheseColumns("catalog_id", "model","catalog_reference","customer_name","group_name")
+				.searchTheseColumns("catalog_name", "model","catalog_reference","customer_name","group_name")
 				.build();				
 		return queryTemplate;
 	}
@@ -76,6 +76,7 @@ public class MachineUnAssignmentReport extends AbstractDataTableReport{
 		map.put("customer_name", "customer_name");
 		//map.put("status","status");
 		map.put("group_name", "group_name");
+		 map.put("catalog_name", "catalog_name");
 		return map;
 	}
 	

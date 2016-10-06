@@ -257,7 +257,7 @@ public class RoleManagementDaoImp implements RoleManagementDao {
 		Session session = null;
 		SQLQuery query = null;
 		List<PermissionsDto> permissionList=new ArrayList<>();
-		String sql=	"select p.PERMISSION_ID as permissionId,p.PERMISSION_NAME AS permissionName from USERS u,USER_ROLE ur,PERMISSIONS p, ROLE_PERMISSION rp, USER_ORG_MAP um "
+		String sql=	"select distinct p.PERMISSION_ID as permissionId,p.PERMISSION_NAME AS permissionName from USERS u,USER_ROLE ur,PERMISSIONS p, ROLE_PERMISSION rp, USER_ORG_MAP um "
 				+ "where u.USER_ID= :userEmail and u.USER_ID=ur.USER_ID and ur.ROLE_ID=rp.ROLE_ID and p.PERMISSION_ID=rp.PERMISSION_ID " 
 				+ "and rp.ACTIVE=1 and p.ACTIVE=1 and um.USER_ID=u.USER_ID and ur.active=1 and u.active=1 and um.APPROVAL_STATUS=1";
 		try{

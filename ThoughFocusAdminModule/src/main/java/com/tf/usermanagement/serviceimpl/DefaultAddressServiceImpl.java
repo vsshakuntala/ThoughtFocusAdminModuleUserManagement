@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.tf.usermanagement.dao.DefaultAddressDao;
 import com.tf.usermanagement.dto.BillAddressInputDto;
+import com.tf.usermanagement.dto.DefaultAddressCheckDto;
 import com.tf.usermanagement.dto.PaginationDto;
 import com.tf.usermanagement.dto.PaginationResult;
 import com.tf.usermanagement.dto.SalesCustomerDto;
@@ -54,10 +55,10 @@ public class DefaultAddressServiceImpl implements DefaultAddressService {
 	}
 
 	@Override
-	public PaginationResult custgetAll(long userId,PaginationDto paginationDto) {
+	public PaginationResult custgetAll(long userId,long organizationId,PaginationDto paginationDto) {
 		
 		List<SalesCustomerDto> salesCustomerList = new ArrayList<SalesCustomerDto>();
-		salesCustomerList=salescustomerdao.getAllUserCust(userId,paginationDto.getPageNumber()==null?ApiConstants.DEFAULT_PAGE_NUMBER:paginationDto.getPageNumber()
+		salesCustomerList=salescustomerdao.getAllUserCust(userId,organizationId,paginationDto.getPageNumber()==null?ApiConstants.DEFAULT_PAGE_NUMBER:paginationDto.getPageNumber()
 				,paginationDto.getCount()==null?ApiConstants.DEFAULT_PAGE_COUNT:paginationDto.getCount(),paginationDto.getQueryString());
 		
 		long totalCount=salescustomerdao.countAllUserCust(userId, paginationDto.getQueryString());
@@ -126,6 +127,11 @@ public class DefaultAddressServiceImpl implements DefaultAddressService {
 	public List<UserOrgBillShipSalesAreaDto> salesareamapAll(UserOrgBillShipSalesAreaDto userOrgBillShipSalesAreaDto) {
 			return salescustomerdao.getAllSalesAreaMap(userOrgBillShipSalesAreaDto);
 		}
+
+	@Override
+	public boolean saveOrUpdateDefaultAddressForUser(DefaultAddressCheckDto defaultAddressCheckDto) {
+		return salescustomerdao.saveOrUpdateDefaultAddressForUser(defaultAddressCheckDto);
+	}
 
 
 	

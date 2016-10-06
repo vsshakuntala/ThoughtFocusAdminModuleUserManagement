@@ -28,7 +28,9 @@ public class RoleController {
 
 	@RequestMapping(value = { "/getallroles" }, method = RequestMethod.GET)
 	public List<RoleDto> getDivisions() {
+	    LOGGER.debug("start of calling getallroles api");
 		List<RoleDto> rolIdNameList = roleService.getRoles();
+		 LOGGER.debug("end of calling getallroles api");
 		return rolIdNameList;
 	}
 }

@@ -7,6 +7,7 @@ package com.tf.usermanagement.service;
 import java.util.List;
 
 import com.tf.usermanagement.dto.BillAddressInputDto;
+import com.tf.usermanagement.dto.DefaultAddressCheckDto;
 import com.tf.usermanagement.dto.PaginationDto;
 import com.tf.usermanagement.dto.PaginationResult;
 import com.tf.usermanagement.dto.ShipAddressInputDto;
@@ -20,7 +21,7 @@ public interface DefaultAddressService {
 
 	public PaginationResult salescustgetAll(long salesAreaId, long userId,PaginationDto paginationDto);
 
-	public PaginationResult custgetAll(long userId,PaginationDto paginationDto);
+	public PaginationResult custgetAll(long userId,long organizationId,PaginationDto paginationDto);
 
 	public List<BillAddressInputDto> billaddgetAll(long customerId, Integer addressTypeId);
 
@@ -31,4 +32,6 @@ public interface DefaultAddressService {
 	public List<UserOrgBillShipSalesAreaDto> billshipmapAll(UserOrgBillShipSalesAreaDto userOrgBillShipSalesAreaDto);
 
 	public List<UserOrgBillShipSalesAreaDto> salesareamapAll(UserOrgBillShipSalesAreaDto userOrgBillShipSalesAreaDto);
+	
+	public boolean saveOrUpdateDefaultAddressForUser(DefaultAddressCheckDto defaultAddressCheckDto);
 }

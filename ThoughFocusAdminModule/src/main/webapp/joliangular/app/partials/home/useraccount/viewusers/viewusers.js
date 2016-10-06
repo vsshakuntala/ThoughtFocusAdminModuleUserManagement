@@ -87,7 +87,7 @@ usermodule.controller('ViewUsersController',
                     $scope.toDateopened = true;
                 }
             };
-
+        
             /**
              * To get flags based on contact number.
              */
@@ -100,21 +100,39 @@ usermodule.controller('ViewUsersController',
                     return;
                 }
             }
-            
-            $scope.drawCustomeFilteredDataTable = function(){
+
+            $scope.drawCustomeFilteredDataTable = function () {
                 var obj = angular.copy($scope.filteredObjects);
+                $log.debug("filter :"+angular.toJson($scope.filteredObjects))
                 obj.search = {};
+                $log.debug("searchValue :"+angular.toJson($scope.searchValue))
                 obj.search.value = $scope.searchValue;
                 $scope.filteredObjects = angular.copy(obj);
-                console.log(angular.toJson($scope.filteredObjects));
+                console.log("after:"+angular.toJson($scope.filteredObjects));
                 $scope.drawDataTable();
+                $('#globsearch').val('');
+                $scope.filteredObjects.search='';
+                $scope.searchValue='';
             }
+            
+            $(function() {
+                $("form input").keypress(function (e) {
+                    if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                    	$scope.drawCustomeFilteredDataTable();
+                       // $('button[type=submit] .default').click();
+                        //return false;
+                    }
+                });
+            });
 
             /**
             * End of datepicker related configuration and settings
             */
             $scope.drawDataTable = function () {
-                $scope.totalrows = 0;
+                 $log.debug("drawDataTable filter :"+angular.toJson($scope.filteredObjects))
+                 $log.debug(" $scope.filteredObjects.search.value :"+angular.toJson( $scope.filteredObjects.search));
+                var index = -1;
+                //$scope.totalrows = 0;
                 $scope.dtOptions = DTOptionsBuilder.newOptions()
                     .withOption('ajax', {
                         url: $rootScope.baseUrl + 'userlists/getfiltereduserlist',
@@ -123,7 +141,7 @@ usermodule.controller('ViewUsersController',
                     })
                     .withDataProp('data')
                     .withOption('processing', true)
-                    .withOption('oLanguage',{sProcessing:'<img src="app-content/img/blueimp/loading.gif" alt="nothing"/>'})
+                    .withOption('oLanguage', { sProcessing: '<div class="loadposition"><img src="app-content/img/blueimp/loading.gif" alt="nothing"/></div>',sEmptyTable: "No matching results found for this search criteria"})
                     .withOption('serverSide', true)
                     .withOption('searching', false)
                     .withOption('bDestory', true)
@@ -132,6 +150,7 @@ usermodule.controller('ViewUsersController',
                     .withOption('order', [3, 'desc'])
                     .withOption('rowCallback', rowCallback)
                     .withOption('createdRow', function (row, data, dataIndex) {
+                         index++;
                         // Recompiling so we can bind Angular directive to the DT
                         $compile(angular.element(row).contents());
                     });
@@ -139,6 +158,13 @@ usermodule.controller('ViewUsersController',
                 function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                     $scope.totalrows = this.fnSettings().fnRecordsTotal();
                     $scope.$apply();
+                    $(nRow).mouseover(function (e) {
+                        $(nRow).addClass('highlight');
+                    })
+                    $(nRow).mouseout(function (e) {
+                        $(nRow).removeClass('highlight');
+                    })
+
                     $('td', nRow).unbind('click');
                     $('td', nRow).bind('click', function () {
                         $scope.$apply(function () {
@@ -151,7 +177,14 @@ usermodule.controller('ViewUsersController',
                             $log.debug('division : ' + angular.toJson(obj));
                             $state.go('home.userassignment.division', { userDetails: obj }, { reload: true });
                         });
+
+
+
                     });
+                     if (iDisplayIndex === index) {
+                        onresize();
+                        index = -1;
+                    }
                     return nRow;
                 }
                 $scope.dtColumns = [
@@ -167,8 +200,8 @@ usermodule.controller('ViewUsersController',
                         return full.lastName;
                     }),
                     DTColumnBuilder.newColumn('createdDate').withTitle('Registered Date').withOption('name', 'createdDate').renderWith(function (data, type, full) {
-                        if(data===null){
-                        return null;
+                        if (data === null) {
+                            return null;
                         }
                         var date = new Date(data);
                         var month = date.getMonth() + 1;
@@ -229,6 +262,7 @@ usermodule.controller('ViewUsersController',
                 ];
 
                 $scope.dtInstanceCallback = function (dtInstance) {
+                    $log.debug("gggg")
                     $scope.dtInstance = dtInstance;
                     dtInstance.DataTable.on('draw.dt', function () {
                         $scope.dataInTable = [];
@@ -267,14 +301,36 @@ usermodule.controller('ViewUsersController',
                 });
             };
 
+            function formatDate(date) {
+                var d = new Date(date),
+                    month = '' + (d.getMonth() + 1),
+                    day = '' + d.getDate(),
+                    year = d.getFullYear();
+
+                if (month.length < 2) month = '0' + month;
+                if (day.length < 2) day = '0' + day;
+
+                return [year, month, day].join('-');
+            }
+
+
 
             $scope.download = function () {
                 var url = $rootScope.baseUrl + 'userlists/downloaddocument/';
-                var data = applicationUtilityService.buildDataObjectForDataTable($scope.filteredObjects);
+                var obj = {};
+                $log.info('$scope.data : ' + angular.toJson($scope.filteredObjects));
+                obj = angular.copy($scope.filteredObjects);
+                if (!angular.equals($scope.filteredObjects.from_date, '')) {
+                    obj.from_date = formatDate($scope.filteredObjects.from_date);
+                }
+                if (!angular.equals($scope.filteredObjects.to_date, '')) {
+                    obj.to_date = formatDate($scope.filteredObjects.to_date);
+                }
+                var data = applicationUtilityService.buildDataObjectForDataTable(obj);
                 genericService.downloadFile(url, data).then(function () {
-                    $log.debug('file download ');
+                    $.toaster({ priority: 'success', message: downloadSuccesfull });
                 }, function () {
-                    $log.debug('file download failed');
+                    $.toaster({ priority: 'danger', message: downloadFailed });
                 });
             };
 

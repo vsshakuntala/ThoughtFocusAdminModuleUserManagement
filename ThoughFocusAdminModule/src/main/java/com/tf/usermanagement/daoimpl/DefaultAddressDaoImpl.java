@@ -14,6 +14,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.type.StandardBasicTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,14 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.tf.usermanagement.dao.DefaultAddressDao;
+import com.tf.usermanagement.domain.UserOrgBillToShip;
+import com.tf.usermanagement.domain.UserOrgSalesAreaMap;
 import com.tf.usermanagement.dto.BillAddressInputDto;
+import com.tf.usermanagement.dto.DefaultAddressCheckDto;
 import com.tf.usermanagement.dto.SalesCustomerDto;
 import com.tf.usermanagement.dto.SalesOrgDto;
 import com.tf.usermanagement.dto.ShipAddressInputDto;
 import com.tf.usermanagement.dto.UserOrgBillShipSalesAreaDto;
 import com.tf.usermanagement.dto.UserOrgMapDto;
-import com.tf.usermanagement.domain.UserOrgBillToShip;
-import com.tf.usermanagement.domain.UserOrgSalesAreaMap;
 
 @Repository
 public class DefaultAddressDaoImpl implements DefaultAddressDao {
@@ -129,7 +131,7 @@ public class DefaultAddressDaoImpl implements DefaultAddressDao {
 	/*
 	 * this method is to get the customer that belongs to the user area
 	 */
-	public List<SalesCustomerDto> getAllUserCust(long userId,int pageNumber,int count,String queryString) {
+	public List<SalesCustomerDto> getAllUserCust(long userId,long organizationId,int pageNumber,int count,String queryString) {
 
 		Session session = null;
 
@@ -141,6 +143,7 @@ public class DefaultAddressDaoImpl implements DefaultAddressDao {
 					.addScalar("CUSTOMER_ID", StandardBasicTypes.BIG_INTEGER)
 					.addScalar("CUSTOMER_NAME", StandardBasicTypes.STRING);
 			query.setLong("userId", userId);
+			query.setLong("organizationId", organizationId);
 			query.setFirstResult((pageNumber - 1) * (count));
 		    query.setMaxResults(count);
 			List<Object[]> usercust = query.list();
@@ -152,9 +155,13 @@ public class DefaultAddressDaoImpl implements DefaultAddressDao {
 				grpAssignedList.add(salesCustomerDto);
 			}
 		} catch (HibernateException e) {
+			e.printStackTrace();
 			LOGGER.error("Exception while getting the customer " + e.getMessage());
+			e.printStackTrace();
 		} catch (Exception e) {
+			e.printStackTrace();
 			LOGGER.error("Exception in get customer " + e.getMessage());
+			e.printStackTrace();
 		} finally {
 			if (session != null) {
 				session.close();
@@ -169,9 +176,17 @@ public class DefaultAddressDaoImpl implements DefaultAddressDao {
 		
 		if(queryString==null)
 			return 
-					"select userCust.CUSTOMER_ID,customer.CUSTOMER_NAME FROM CUSTOMER customer INNER JOIN USER_CUSTOMER userCust on userCust.CUSTOMER_ID=customer.CUSTOMER_ID where userCust.USER_ID = :userId and userCust.ACTIVE=1 order by userCust.CUSTOMER_ID";
+			"select userCust.CUSTOMER_ID,customer.CUSTOMER_NAME "
+			+ " FROM CUSTOMER customer "
+			+ " INNER JOIN USER_CUSTOMER userCust on userCust.CUSTOMER_ID=customer.CUSTOMER_ID and customer.ACTIVE=1"
+			+ " INNER JOIN CUSTOMER_ORGANIZATION_MAP custOrgMap on custOrgMap.CUSTOMER_ID=userCust.CUSTOMER_ID and custOrgMap.ORGANIZATION_ID= :organizationId"
+			+ " where userCust.USER_ID = :userId and userCust.ACTIVE=1 order by userCust.CUSTOMER_ID ";
 		return 
-				"select userCust.CUSTOMER_ID,customer.CUSTOMER_NAME FROM CUSTOMER customer INNER JOIN USER_CUSTOMER userCust on userCust.CUSTOMER_ID=customer.CUSTOMER_ID where userCust.USER_ID = :userId and userCust.ACTIVE=1 and (customer.CUSTOMER_NAME like '%"+queryString+"%' or userCust.CUSTOMER_ID like '%"+queryString+"%') order by userCust.CUSTOMER_ID";
+			"select userCust.CUSTOMER_ID,customer.CUSTOMER_NAME "
+			+ " FROM CUSTOMER customer "
+			+ " INNER JOIN USER_CUSTOMER userCust on userCust.CUSTOMER_ID=customer.CUSTOMER_ID and customer.ACTIVE=1 "
+			+ " INNER JOIN CUSTOMER_ORGANIZATION_MAP custOrgMap on custOrgMap.CUSTOMER_ID=userCust.CUSTOMER_ID and custOrgMap.ORGANIZATION_ID= :organizationId"
+			+ " where userCust.USER_ID = :userId and userCust.ACTIVE=1 and (customer.CUSTOMER_NAME like '%"+queryString+"%' or userCust.CUSTOMER_ID like '%"+queryString+"%') order by userCust.CUSTOMER_ID";
 	}
 	
 	private String countAllCustomersQueryBuilder(String queryString){
@@ -221,11 +236,12 @@ public class DefaultAddressDaoImpl implements DefaultAddressDao {
 			session = sessionFactory.openSession();
 			SQLQuery query = session
 					.createSQLQuery("SELECT ADDRESS_NAME,ADDRESS_ID" + " FROM ADDRESS"
-							+ " WHERE CUSTOMER_ID =:customerId" + " AND ADDRESS_TYPE_ID = :addressTypeId")
+							+ " WHERE CUSTOMER_ID =:customerId" + " AND ADDRESS_TYPE_ID IN(1,3) AND ACTIVE=1"
+							+ " order by ADDRESS.ADDRESS_TYPE_ID")
 					.addScalar("ADDRESS_ID", StandardBasicTypes.BIG_INTEGER)
 					.addScalar("ADDRESS_NAME", StandardBasicTypes.STRING);
 			query.setLong("customerId", customerId);
-			query.setInteger("addressTypeId", addressTypeId);
+			
 			@SuppressWarnings("unchecked")
 			List<Object[]> billaddlist = query.list();
 			for (Object[] i : billaddlist) {
@@ -260,11 +276,12 @@ public class DefaultAddressDaoImpl implements DefaultAddressDao {
 			session = sessionFactory.openSession();
 			SQLQuery query = session
 					.createSQLQuery("SELECT ADDRESS_NAME,ADDRESS_ID" + " FROM ADDRESS"
-							+ " WHERE CUSTOMER_ID =:customerId" + " AND ADDRESS_TYPE_ID = :addressTypeId")
+							+ " WHERE CUSTOMER_ID =:customerId" + " AND ADDRESS_TYPE_ID IN(2,3) AND ACTIVE=1"
+							+ " order by ADDRESS.ADDRESS_TYPE_ID")
 					.addScalar("ADDRESS_ID", StandardBasicTypes.BIG_INTEGER)
 					.addScalar("ADDRESS_NAME", StandardBasicTypes.STRING);
 			query.setLong("customerId", customerId);
-			query.setInteger("addressTypeId", addressTypeId);
+			
 			@SuppressWarnings("unchecked")
 			List<Object[]> shipaddlist = query.list();
 			for (Object[] i : shipaddlist) {
@@ -332,14 +349,14 @@ public class DefaultAddressDaoImpl implements DefaultAddressDao {
 	private String getAllSalesQueryBuilder(String queryString){
 		
 		if(queryString==null)
-			return "select SALES_AREA_ID,SALES_ORG_NAME,DISTRIBUTION_CHANNEL_NAME from SALES_AREA where ORGANIZATION_ID = :organizationId order by SALES_ORG_NAME";
-		return "select SALES_AREA_ID,SALES_ORG_NAME,DISTRIBUTION_CHANNEL_NAME from SALES_AREA where ORGANIZATION_ID = :organizationId and SALES_ORG_NAME like '%"+queryString+"%' order by SALES_ORG_NAME";
+			return "select SALES_AREA_ID,SALES_ORG_NAME,DISTRIBUTION_CHANNEL_NAME from SALES_AREA where ACTIVE=1 AND ORGANIZATION_ID = :organizationId order by SALES_ORG_NAME";
+		return "select SALES_AREA_ID,SALES_ORG_NAME,DISTRIBUTION_CHANNEL_NAME from SALES_AREA where ACTIVE=1 AND ORGANIZATION_ID = :organizationId and SALES_ORG_NAME like '%"+queryString+"%' order by SALES_ORG_NAME";
 	}
 	private String getCountAllSalesQueryBuilder(String queryString){
 		
 		if(queryString==null)
-			return "select count(SALES_AREA_ID) as count from SALES_AREA where ORGANIZATION_ID = :organizationId ";
-		return "select count(SALES_AREA_ID) as count from SALES_AREA where ORGANIZATION_ID = :organizationId and SALES_ORG_NAME like '%"+queryString+"%' ";
+			return "select count(SALES_AREA_ID) as count from SALES_AREA where ACTIVE=1 AND ORGANIZATION_ID = :organizationId ";
+		return "select count(SALES_AREA_ID) as count from SALES_AREA where ACTIVE=1 AND ORGANIZATION_ID = :organizationId and SALES_ORG_NAME like '%"+queryString+"%' ";
 	}
 	
 	@Override
@@ -382,7 +399,7 @@ public class DefaultAddressDaoImpl implements DefaultAddressDao {
 		try {
 			session = sessionFactory.openSession();
 			SQLQuery query = session
-					.createSQLQuery("select USER_ORG_ID" + " from USER_ORG_MAP" + " where USER_ID = :userId"
+					.createSQLQuery("select USER_ORG_ID" + " from USER_ORG_MAP" + " where ACTIVE=1 AND USER_ID = :userId"
 							+ " and ORGANIZATION_ID = :organizationId")
 					.addScalar("USER_ORG_ID", StandardBasicTypes.BIG_INTEGER);
 			query.setLong("userId", userId);
@@ -442,7 +459,7 @@ public class DefaultAddressDaoImpl implements DefaultAddressDao {
 				Query query = session.createQuery(
 						"SELECT userorgId,billToAddressId,shipToAddressId,customerId"
 								+ " FROM UserOrgBillToShip"
-								+ " WHERE customerId = :customerId"
+								+ " WHERE ACTIVE=1 AND customerId = :customerId"
 								+ " AND userorgId = :userorgId");
 				query.setLong("customerId", customerId);
 				query.setLong("userorgId", userorgId);
@@ -464,6 +481,7 @@ public class DefaultAddressDaoImpl implements DefaultAddressDao {
 					uquery.setLong("shipToAddressId", shipToAddressId);
 					uquery.setLong("userorgId", userorgId);
 					int result = uquery.executeUpdate();
+					LOGGER.info("\n\nSaved result count "+result);
 
 				} else {
 
@@ -519,7 +537,7 @@ public class DefaultAddressDaoImpl implements DefaultAddressDao {
 			try {
 				session = sessionFactory.openSession();
 				Query query = session.createQuery("SELECT userOrgId,salesAreaId" + " FROM UserOrgSalesAreaMap"
-						+ " WHERE userOrgId = :userOrgId" + " AND salesAreaId = :salesAreaId");
+						+ " WHERE ACTIVE=1 AND userOrgId = :userOrgId" + " AND salesAreaId = :salesAreaId");
 				query.setLong("userOrgId", userOrgId);
 				query.setLong("salesAreaId", salesAreaId);
 				@SuppressWarnings("unchecked")
@@ -534,6 +552,7 @@ public class DefaultAddressDaoImpl implements DefaultAddressDao {
 					uquery.setLong("userOrgId", userOrgId);
 					uquery.setLong("salesAreaId", salesAreaId);
 					int result = uquery.executeUpdate();
+					LOGGER.info("\n\nSaved result count "+result);
 				} else {
 					UserOrgSalesAreaMap areaMap = new UserOrgSalesAreaMap();
 					areaMap.setActive(true);
@@ -556,6 +575,91 @@ public class DefaultAddressDaoImpl implements DefaultAddressDao {
 			}
 		}
 		return mapList;
+	}
+
+	@Override
+	public boolean saveOrUpdateDefaultAddressForUser(DefaultAddressCheckDto defaultAddressCheckDto) {
+		System.out.println(defaultAddressCheckDto.toString());
+		Session session = null;
+		Transaction tx = null;
+		boolean result=false;
+		try {
+			session = sessionFactory.openSession();
+			tx=session.beginTransaction();
+			
+			if(defaultAddressCheckDto.getSalesAreaId()>0 && defaultAddressCheckDto.getUserOrgSalesAreaId()==0){
+				//save in user org sales area map
+				
+				UserOrgSalesAreaMap userOrgSalesAreaMap=new UserOrgSalesAreaMap();
+				userOrgSalesAreaMap.setSalesAreaId(defaultAddressCheckDto.getSalesAreaId());
+				userOrgSalesAreaMap.setUserOrgId(defaultAddressCheckDto.getUserOrgId());
+				userOrgSalesAreaMap.setCreatedBy(defaultAddressCheckDto.getAdminId());
+				userOrgSalesAreaMap.setCreatedDate(new Date());
+				userOrgSalesAreaMap.setActive(true);
+				
+				session.save(userOrgSalesAreaMap);
+				
+			}if(defaultAddressCheckDto.getSalesAreaId()>0 && defaultAddressCheckDto.getUserOrgSalesAreaId()>0){
+				//update in user org sales area map
+				
+				UserOrgSalesAreaMap userOrgSalesAreaMap=(UserOrgSalesAreaMap) session.get(UserOrgSalesAreaMap.class,defaultAddressCheckDto.getUserOrgSalesAreaId());
+				
+				if(userOrgSalesAreaMap!=null){
+				userOrgSalesAreaMap.setSalesAreaId(defaultAddressCheckDto.getSalesAreaId());
+				userOrgSalesAreaMap.setUserOrgId(defaultAddressCheckDto.getUserOrgId());
+				userOrgSalesAreaMap.setModifiedBy(defaultAddressCheckDto.getAdminId());
+				userOrgSalesAreaMap.setModifiedDate(new Date());
+				userOrgSalesAreaMap.setActive(true);
+				userOrgSalesAreaMap.setUserOrgSalesAreaId(defaultAddressCheckDto.getUserOrgSalesAreaId());
+				session.update(userOrgSalesAreaMap);
+				}
+			}
+			
+			
+			if(defaultAddressCheckDto.getUserOrgBillShipId()==0){
+				//save
+				UserOrgBillToShip userOrgBillToShip=new UserOrgBillToShip();
+				userOrgBillToShip.setActive(true);
+				userOrgBillToShip.setUserorgId(defaultAddressCheckDto.getUserOrgId());
+				userOrgBillToShip.setBillToAddressId(defaultAddressCheckDto.getBillToAddressId());
+				userOrgBillToShip.setShipToAddressId(defaultAddressCheckDto.getShipToAddressId());
+				userOrgBillToShip.setCreatedBy(defaultAddressCheckDto.getAdminId());
+				userOrgBillToShip.setCreatedDate(new Date());
+				userOrgBillToShip.setCustomerId(defaultAddressCheckDto.getCustomerId());
+				session.save(userOrgBillToShip);
+				
+				
+			}else{
+				//update
+				UserOrgBillToShip userOrgBillToShip=(UserOrgBillToShip) session.get(UserOrgBillToShip.class, defaultAddressCheckDto.getUserOrgBillShipId());
+				userOrgBillToShip.setActive(true);
+				userOrgBillToShip.setUserorgId(defaultAddressCheckDto.getUserOrgId());
+				userOrgBillToShip.setBillToAddressId(defaultAddressCheckDto.getBillToAddressId());
+				userOrgBillToShip.setShipToAddressId(defaultAddressCheckDto.getShipToAddressId());
+				userOrgBillToShip.setModifiedBy(defaultAddressCheckDto.getAdminId());
+				userOrgBillToShip.setModifiedDate(new Date());
+				userOrgBillToShip.setCustomerId(defaultAddressCheckDto.getCustomerId());
+				session.update(userOrgBillToShip);
+			}
+			
+			tx.commit();
+			result=true;
+			
+		} catch (HibernateException e) {
+			tx.rollback();
+			LOGGER.error("Exception in saveOrUpdateDefaultAddressForUser " ,e);
+		} catch (Exception e) {
+			tx.rollback();
+			LOGGER.error("Exception in saveOrUpdateDefaultAddressForUser " , e);
+		} finally {
+			if (session != null) {
+				session.close();
+			}
+		}
+
+		
+		return result;
+		
 	}
 
 	

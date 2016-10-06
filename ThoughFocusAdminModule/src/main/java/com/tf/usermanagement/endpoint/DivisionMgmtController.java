@@ -1,5 +1,6 @@
 package com.tf.usermanagement.endpoint;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -60,10 +61,13 @@ public class DivisionMgmtController {
 	 */
 	@RequestMapping(value = "/getDivisionAssignments/{userId}/{adminId}", method = RequestMethod.GET)
 	private ResponseEntity<List<DivisionAssignmentDto>> getAllDivisionsAssignedForUser(@PathVariable long userId,
-			@PathVariable long adminId) {
+			@PathVariable long adminId,Principal principal) {
 		List<DivisionAssignmentDto> divisionAssignmentDtoList = null;
 		try{
+			adminId=Long.parseLong(principal.getName());
+		    LOGGER.debug("start of calling getDivisionAssignments api");
 			divisionAssignmentDtoList= divisionMgmtService.getAllDivisionAssignment(userId, adminId);
+			 LOGGER.debug("end of calling getDivisionAssignments api");
 			return new ResponseEntity<List<DivisionAssignmentDto>>(divisionAssignmentDtoList,HttpStatus.OK);
 		}
 		catch(EmptyListException e){
@@ -79,26 +83,34 @@ public class DivisionMgmtController {
 
 	@RequestMapping(value = "/deAssignAllUserAllocations", method = RequestMethod.POST)
 	private ResponseEntity<Message> deAssignAllUserAllocationsForOrganization(
-			@RequestBody DeAssignUserToOrgInputDto deAssignUserToOrgInputDto) {
-		if( divisionMgmtService.deAssignAllAllocationsForUserByOrganization(deAssignUserToOrgInputDto)){
+			@RequestBody DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Principal principal) {
+	    LOGGER.debug("start of calling deAssignAllUserAllocations api");
+	    
+	    DeAssignUserToOrgInputDto deAssignUserToOrgInputDtoWithAdminId=deAssignUserToOrgInputDto;
+	    deAssignUserToOrgInputDtoWithAdminId.setModifiedById(Long.parseLong(principal.getName()));
+	    
+		if( divisionMgmtService.deAssignAllAllocationsForUserByOrganization(deAssignUserToOrgInputDtoWithAdminId)){
+		    LOGGER.debug("end of calling deAssignAllUserAllocations api");
 			Message message = Message.statusCode(HttpStatus.OK).message("User is de-assigned to division successfully!")
 					.build();
 			return new ResponseEntity<Message>(message, HttpStatus.OK);
 		}else{
 			Message errorMessage = Message.statusCode(HttpStatus.INTERNAL_SERVER_ERROR)
-					.message("Unable to deAssign All User Allocations division for the user").developerMsg("Unable to add division for the user")
-					.exception("Unable to add division for the user").build();
+					.message("Unable to deAssign All User Allocations division for the user").developerMsg("Unable to deassign division for the user")
+					.exception("Unable to deassign division for the user").build();
 			return new ResponseEntity<Message>(errorMessage, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
 	@RequestMapping(value = "/getUnAssignedDivisionsForUser/{userId}/{adminId}", method = RequestMethod.GET)
 	private ResponseEntity<List<UserUnassignedOrgDto>>  getUnassignedOrganizationsForUser(@PathVariable long userId,
-			@PathVariable long adminId) {
+			@PathVariable long adminId,Principal principal) {
 		List<UserUnassignedOrgDto> unassignedOrgDtoList = null;
-		System.out.println("getUnAssignedDivisionsForUser in controller");
 		try{
+			adminId=Long.parseLong(principal.getName());
+		    LOGGER.debug("start of calling getUnAssignedDivisionsForUser api");
 			unassignedOrgDtoList= divisionMgmtService.getUnassignedOrganizationsForUser(userId, adminId);
+			 LOGGER.debug("end of calling getUnAssignedDivisionsForUser api");
 			return new ResponseEntity<List<UserUnassignedOrgDto>>(unassignedOrgDtoList,HttpStatus.OK);
 		}catch(EmptyListException e){
 			LOGGER.debug(e.getMessage());
@@ -114,8 +126,14 @@ public class DivisionMgmtController {
 
 	@RequestMapping(value = "/addOrAssignUserToOrg", method = RequestMethod.POST,consumes=MediaType.APPLICATION_JSON_VALUE)
 	private ResponseEntity<Message> assignOrAddUserUserToOrganization(
-			@RequestBody AssignOrgDto deAssignUserToOrgInputDto) {
-		if (divisionMgmtService.insertOrUpdateUserOrganizationMap(deAssignUserToOrgInputDto)) {
+			@RequestBody AssignOrgDto deAssignUserToOrgInputDto,Principal principal) {
+	    LOGGER.debug("start of calling addOrAssignUserToOrg api");
+	    
+	    AssignOrgDto deAssignUserToOrgInputDtoWithAdminId=deAssignUserToOrgInputDto;
+	    deAssignUserToOrgInputDtoWithAdminId.setModifiedById(Long.parseLong(principal.getName()));
+	    
+		if (divisionMgmtService.insertOrUpdateUserOrganizationMap(deAssignUserToOrgInputDtoWithAdminId)) {
+		    LOGGER.debug("end of calling addOrAssignUserToOrg api");
 
 			Message message = Message.statusCode(HttpStatus.OK).message("User is assigned to division successfully!")
 					.build();
@@ -135,7 +153,9 @@ public class DivisionMgmtController {
 	private ResponseEntity<List<UserNotesDto>> getNotesListForUser(@PathVariable long userId) {
 		List<UserNotesDto> userNotesDtoList = null;
 		try{
+		    LOGGER.debug("start of calling getNotesOfUser api");
 			userNotesDtoList= divisionMgmtService.getNotesListForUser(userId);
+			 LOGGER.debug("end of calling getNotesOfUser api");
 			return new ResponseEntity<List<UserNotesDto>>(userNotesDtoList,HttpStatus.OK);
 		}catch(EmptyListException e){
 			LOGGER.debug(e.getMessage());
@@ -149,9 +169,16 @@ public class DivisionMgmtController {
 }
 
 	@RequestMapping(value = "/addNotesForUser", method = RequestMethod.POST)
-	private ResponseEntity<Message> addNotesToUser(@RequestBody UserNotesDto userNotesDto) {
-		
-		if (divisionMgmtService.addNotesToUser(userNotesDto)) {
+	private ResponseEntity<Message> addNotesToUser(@RequestBody UserNotesDto userNotesDto,Principal principal) {
+	    LOGGER.debug("start of calling addNotesForUser api");
+	    
+	    UserNotesDto userNotesDtoWithAdminId=userNotesDto;
+	    userNotesDtoWithAdminId.setCreatedBy(Long.parseLong(principal.getName()));
+	    
+		if (divisionMgmtService.addNotesToUser(userNotesDtoWithAdminId)) {
+		    LOGGER.debug("end of calling addNotesForUser api");
+		    
+		    
 			Message message = Message.statusCode(HttpStatus.OK).message("Notes added successfully!").build();
 			return new ResponseEntity<Message>(message, HttpStatus.OK);
 		} else {
@@ -164,6 +191,7 @@ public class DivisionMgmtController {
 	
 	@RequestMapping(value = "/getDefaultAddressForUserOrg/{userOrgId}", method = RequestMethod.GET)
 	private DefaultAddressCheckDto getDefaultAddressForUserOrg(@PathVariable long userOrgId){
+	    LOGGER.debug("start of calling getDefaultAddressForUserOrg api");
 		return divisionMgmtService.getDefaultAddressForUserOrg(userOrgId);
 	}
 	

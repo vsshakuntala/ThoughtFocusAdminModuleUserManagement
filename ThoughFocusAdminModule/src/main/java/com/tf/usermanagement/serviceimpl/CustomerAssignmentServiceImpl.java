@@ -335,7 +335,7 @@ public class CustomerAssignmentServiceImpl implements CustomerAssignmentService 
 		Date today = Calendar.getInstance().getTime();
 
 		// (2) create a date "formatter" (the date format we want)
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-hh:mm:ss");
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 
 		// (3) create a new String using the date format we want
 		String folderName = formatter.format(today);
@@ -350,7 +350,20 @@ public class CustomerAssignmentServiceImpl implements CustomerAssignmentService 
 		font.setBoldweight((short) 1);
 		font.setFontHeightInPoints((short) 12);
 		cellStyle.setFont(font);
+		
+		
+		CellStyle filterStyle = sheet.getWorkbook().createCellStyle();
+		Font fonts = sheet.getWorkbook().createFont();
+		fonts.setBoldweight((short) 6);
+		fonts.setFontHeightInPoints((short) 15);
+		filterStyle.setFont(fonts);
 
+		//filter criteria
+		Row firstrow = sheet.createRow(rownum++);
+		Cell FilterCell = firstrow.createCell(0);
+		FilterCell.setCellStyle(filterStyle);
+		FilterCell.setCellValue("Filter Criteria");
+		//end of filter criteria
 		// Start of create the search header criteria
 		Row row = sheet.createRow(rownum++);
 
@@ -431,7 +444,14 @@ public class CustomerAssignmentServiceImpl implements CustomerAssignmentService 
 			cell1.setCellValue(custDto.getStatus());
 		}
 		// End of create the search data
-
+		
+		//start filter result
+		Row secondrow = sheet.createRow(rownum++);
+		Cell FilterDataCell = secondrow.createCell(0);
+		FilterDataCell.setCellStyle(filterStyle);
+		FilterDataCell.setCellValue("Filter Result");
+		//end of filter result
+		
 		// Start of create the Header of table
 		Row nextNewRow = sheet.createRow(rownum++);
 
@@ -481,7 +501,7 @@ public class CustomerAssignmentServiceImpl implements CustomerAssignmentService 
 			for (CustomerDownloadDto custDtoObj : custList) {
 				Row row1 = sheet.createRow(rownum++);
 				Cell customerNumberCellData1 = row1.createCell(0);
-				customerNumberCellData1.setCellValue(custDtoObj.getCustomerNum());
+				customerNumberCellData1.setCellValue(custDtoObj.getCustomerReference());
 
 				Cell customeNameCellData1 = row1.createCell(1);
 				customeNameCellData1.setCellValue(custDtoObj.getName());

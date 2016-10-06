@@ -416,6 +416,7 @@ public class MachineAssignmentDaoimpl implements MachineAssignmentDao {
 					.addScalar("model", StringType.INSTANCE).addScalar("catalog_reference", StringType.INSTANCE)
 					.addScalar("customer_name", StringType.INSTANCE)
 					.addScalar("group_name", StringType.INSTANCE)
+					.addScalar("catalog_name", StringType.INSTANCE)
 					.setResultTransformer(Transformers.aliasToBean(MachineDownloadDto.class)).list();
 
 		} catch (HibernateException e) {

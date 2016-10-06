@@ -1,5 +1,7 @@
 package com.tf.usermanagement.endpoint;
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -50,7 +52,10 @@ public class CustomerAssignmentController {
     @SuppressWarnings("rawtypes")
     @RequestMapping(value="/customerAssignmentReport",method=RequestMethod.GET)
     public DataTablesOutput custAssignReport(CustomerAssignmentReport.CustomerAssignputDtInput inputDt){
+	
+	LOGGER.debug("start of calling the customer Assignment Report");
     		DataTablesOutput obj = customerAssignmentReport.fetchData(inputDt);
+    		LOGGER.debug("End of calling the customer Assignment Report");
     	return obj;
     }
     
@@ -64,7 +69,9 @@ public class CustomerAssignmentController {
     @RequestMapping(value="/customerUnAssignmentReport",method=RequestMethod.GET)
     public DataTablesOutput custUnAssignReport(CustomerUnAssignmentReport.CustomerUnAssignputDtInput inputDt){
 	customerUnAssignmentReport.setUserId(inputDt.getUserId());
+	LOGGER.debug("Start of calling the customer UnAssignment Report");
     		DataTablesOutput obj = customerUnAssignmentReport.fetchData(inputDt);
+    		LOGGER.debug("End of calling the customer UnAssignment Report");
     	return obj;
     }
     
@@ -76,11 +83,13 @@ public class CustomerAssignmentController {
      */
     @RequestMapping(value="/assigncustomer/{user_id}/{organization_id}/{login_user_id}",method=RequestMethod.POST)
     public ResponseEntity<?> assignCustomer(@PathVariable("user_id") Long userId,@PathVariable("organization_id") Long orgId,
-	    @PathVariable("login_user_id") Long loginUserId,@RequestBody String jsonData){
+	    @PathVariable("login_user_id") Long loginUserId,@RequestBody String jsonData,Principal principal){
 	
-	try{    
+	try{ 
+	    loginUserId = Long.parseLong(principal.getName());
+	    LOGGER.debug("start of calling the assign customer");
 	    String msg= customerAssignmentService.assignCustomer(loginUserId,userId,orgId, jsonData);
-	   
+	    LOGGER.debug("End of calling the customer assign customer");
 	return new ResponseEntity<>(new ResponseMessage(msg), HttpStatus.OK);		
 	    
 	}catch(NullPointerException e){
@@ -100,12 +109,15 @@ public class CustomerAssignmentController {
      */
     @RequestMapping(value="/assignallcustomer/{user_id}/{organization_id}/{login_user_id}",method=RequestMethod.POST)
     public ResponseEntity<?> assignAllCustomer(@PathVariable("user_id") Long userId,@PathVariable("organization_id") Long orgId,
-	    @PathVariable("login_user_id") Long loginUserId,@RequestBody String customer){
+	    @PathVariable("login_user_id") Long loginUserId,@RequestBody String customer,Principal principal){
 	
 	try{    
+	    loginUserId = Long.parseLong(principal.getName());
 	    LOGGER.info("userId "+userId+" orgId "+orgId+" loginId "+loginUserId);
 	    LOGGER.info("customer "+customer);
+	    LOGGER.debug("start of calling the customer assign all customer");
 	    String msg= customerAssignmentService.assignAllCustomer(loginUserId,userId,orgId,customer);
+	    LOGGER.debug("End of calling the customer assign all customer");
 	   
 	return new ResponseEntity<>(new ResponseMessage(msg), HttpStatus.OK);		
 	    
@@ -125,10 +137,13 @@ public class CustomerAssignmentController {
      */
     @RequestMapping(value="/removecustomer/{user_id}/{organization_id}/{login_user_id}",method=RequestMethod.POST)
     public ResponseEntity<?> removeCustomer(@PathVariable("user_id") Long userId,@PathVariable("organization_id") Long orgId,
-	    @PathVariable("login_user_id") Long loginUserId,@RequestBody String jsonData){	
+	    @PathVariable("login_user_id") Long loginUserId,@RequestBody String jsonData,Principal principal){	
 		
 	try{    
+	    loginUserId = Long.parseLong(principal.getName());
+	    LOGGER.debug("start of calling the customer remove customer");
 	    String msg= customerAssignmentService.removeCustomer(loginUserId,userId,orgId, jsonData);
+	    LOGGER.debug("End of calling the customer remove customer");
 	   
 	return new ResponseEntity<>(new ResponseMessage(msg), HttpStatus.OK);		
 	    
@@ -148,10 +163,13 @@ public class CustomerAssignmentController {
      */
     @RequestMapping(value="/removeallcustomer/{user_id}/{organization_id}/{login_user_id}",method=RequestMethod.POST)
     public ResponseEntity<?> removeAllCustomer(@PathVariable("user_id") Long userId,@PathVariable("organization_id") Long orgId,
-	    @PathVariable("login_user_id") Long loginUserId,@RequestBody String searhfilter){
+	    @PathVariable("login_user_id") Long loginUserId,@RequestBody String searhfilter,Principal principal){
 	
 	try{    
+	    loginUserId = Long.parseLong(principal.getName());
+	    LOGGER.debug("start of calling the customer remove all customer");
 	    String msg= customerAssignmentService.removeAllCustomer(loginUserId,userId,orgId,searhfilter);
+	    LOGGER.debug("End of calling the customer remove all customer");
 	   
 	return new ResponseEntity<>(new ResponseMessage(msg), HttpStatus.OK);		
 	    
@@ -177,12 +195,14 @@ public class CustomerAssignmentController {
     @RequestMapping(value = "/downloaddocument/{user_id}/{organization_id}/{login_user_id}",method=RequestMethod.POST)
     public ResponseEntity<?> downloadDocument(HttpServletRequest request,
 	    HttpServletResponse response,@PathVariable("user_id") Long userId,@PathVariable("organization_id") Long orgId,
-	    @PathVariable("login_user_id") Long loginUserId,@RequestBody String searhfilter) {
+	    @PathVariable("login_user_id") Long loginUserId,@RequestBody String searhfilter,Principal principal) {
 	try {
+	    loginUserId = Long.parseLong(principal.getName());
 	    LOGGER.info("in download ");
 	    
 	   LOGGER.info("userId "+userId+" orgId "+orgId+" loginId "+loginUserId);     
 	   LOGGER.info("in download searchfilter : "+searhfilter);
+	   LOGGER.debug("start of calling the download customer ");
 	   return new ResponseEntity<>(customerAssignmentService.downloadCustomerResult(response,loginUserId,userId,orgId,searhfilter),HttpStatus.OK);
 	   // new FileDownloadUtil().doDownload(request, response, docDetails);
 	} catch (Exception e) {
@@ -201,6 +221,7 @@ public class CustomerAssignmentController {
     @RequestMapping(value="/getCustomerCount/{user_id}/{organization_id}", method=RequestMethod.GET)
     public ResponseEntity<?> getavailableCustomerCount(@PathVariable("user_id") Long userId,@PathVariable("organization_id") Long orgId){
 	try{
+	    LOGGER.debug("start of calling the assign customer and available customer count");
 	    return new ResponseEntity<>(customerAssignmentService.getavailableCustomerCount(userId,orgId),HttpStatus.OK);
 	    
 	}catch(Exception e){

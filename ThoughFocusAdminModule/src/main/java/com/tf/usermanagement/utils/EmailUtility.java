@@ -120,15 +120,15 @@ public class EmailUtility {
 	 *            This method is used to send OTP to the user's registered mail
 	 *            id.
 	 */
-	public void sendRestPasswordToUser(String userEmail) {
+	public void sendRestPasswordToUser(String userEmail,String password) {
 
 		try {
-			String otp = genrateOtp();
+			//String otp = genrateOtp();
 			Email email = new Email();
 			email.setToAddress(userEmail);
 			email.setEmailSubject(RESETPASSWORDSUBJECT);
 
-			email.setMessage("To Reset Password Enter Below OTP : " + " <br> " + " YOUR OTP IS : " + otp);
+			email.setMessage("Your new password  : " + " <br> " + "  : " + password);
 
 			sendMail(email);
 		} catch (Exception e) {

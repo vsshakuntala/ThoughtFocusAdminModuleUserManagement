@@ -1,43 +1,45 @@
 <style>
-#mydiv {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	z-index: 2;
-	background-color: grey;
-	opacity: 1;
-}
-
-.ajax-loader {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	margin-left: -32px;
-	/* -1 * image width / 2 */
-	margin-top: -32px;
-	/* -1 * image height / 2 */
-	display: block;
-	opacity: 1;
-}
+	#mydiv {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 2;
+		background-color: grey;
+		opacity: 1;
+	}
+	
+	.ajax-loader {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		margin-left: -32px;
+		/* -1 * image width / 2 */
+		margin-top: -32px;
+		/* -1 * image height / 2 */
+		display: block;
+		opacity: 1;
+	}
+	
+	.control-label{
+		text-align: left !important;
+	}
 </style>
 <div class="row" ng-controller="UpdateUserController">
 	<div class="col-md-12">
-		<div class="modal" id="modal_large" tabindex="-1" role="dialog"
-			aria-labelledby="largeModalHead" aria-hidden="true">
+		<div class="modal" id="modal_large" tabindex="-1" role="dialog" aria-labelledby="largeModalHead" aria-hidden="true">
 			<div class="modal-dialog modal-lg">
 				<div class="modal-content">
 					<form name="updateUserForm" ng-submit="updateUserForm.$valid && submitUpdateForm(user)" class="form-horizontal" role="form"
-                    novalidate>
+						novalidate>
 						<div class="panel panel-default">
 							<div class="panel-heading ">
 								<h3 class="panel-title updateTitle text-center">
 									<strong>Update User</strong>
 								</h3>
 								<ul class="panel-controls">
-									<li><button type="button" id="close-modal" class="close"
-											data-dismiss="modal">
+									<li><button type="button" id="close-modal" class="close" data-dismiss="modal">
 											<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 										</button></li>
 								</ul>
@@ -45,18 +47,15 @@
 							<div class="col-sm-6 ">
 								<div class="panel-body newuser">
 									<div class="form-group ">
-										<label class="col-md-3 col-xs-12 control-label">User
+										<label for="userName" class="control-label col-md-3">User
 											Name<em>*</em>
 										</label>
 										<div class="col-md-6 col-xs-12">
 											<div class="input-group">
-												<input type="text" ng-model="user.userName" name="userName"
-													id="uName" class="form-control" required readonly />
+												<input type="text" ng-model="user.userName" name="userName" id="uName" class="form-control" required readonly />
 												<div ng-show="updateUserForm.$submitted">
-													<small class="error"
-														ng-show="updateUserForm.userName.$error.required">
-														User name is required </small> <small class="error"
-														ng-show="!updateUserForm.userName.$error.required && (user.userName !== user.email)">
+													<small class="error" ng-show="updateUserForm.userName.$error.required">
+														User name is required </small> <small class="error" ng-show="!updateUserForm.userName.$error.required && (user.userName !== user.email)">
 														User name does not match with email</small>
 												</div>
 											</div>
@@ -68,15 +67,12 @@
 										</label>
 										<div class="col-md-6 col-xs-12">
 											<div class="input-group">
-												<input type="text" allow-pattern="[a-z]"
-													ng-model="user.firstName" name="fName" id="fName"
-													class="form-control" maxlength="25" required />
+												<input type="text" allow-pattern="[a-z]" ng-model="user.firstName" name="fName" id="fName" class="form-control" maxlength="25"
+													required />
 												<div ng-show="updateUserForm.$submitted">
-													<small class="error"
-														ng-show="updateUserForm.fName.$error.required">
-														First name is required </small> <small class="error"
-														ng-show="updateUserForm.fName.$error.maxlength">Maximum
-														length is 100 Characters only </small>
+													<small class="error" ng-show="updateUserForm.fName.$error.required">
+														First name is required </small> <small class="error" ng-show="updateUserForm.fName.$error.maxlength">Maximum
+														length is 25 Characters only </small>
 												</div>
 											</div>
 										</div>
@@ -86,8 +82,7 @@
 											Name </label>
 										<div class="col-md-6 col-xs-12">
 											<div class="input-group">
-												<input type="text" ng-model="user.middleName" name="mName"
-													id="mName" class="form-control" maxlength="100" />
+												<input type="text" ng-model="user.middleName" name="mName" id="mName" class="form-control" maxlength="100" />
 											</div>
 										</div>
 									</div>
@@ -97,12 +92,13 @@
 										</label>
 										<div class="col-md-6 col-xs-12">
 											<div class="input-group">
-												<input type="text" ng-model="user.lastName" name="lName"
-													id="lName" class="form-control" maxlength="25" required />
+												<input type="text" allow-pattern="[a-z]" ng-model="user.lastName" name="lName" id="lName" class="form-control" maxlength="25"
+													required />
 												<div ng-show="updateUserForm.$submitted">
-													<small class="error"
-														ng-show="updateUserForm.lName.$error.required">
+													<small class="error" ng-show="updateUserForm.lName.$error.required">
 														Last name is required </small>
+													<small class="error" ng-show="updateUserForm.lName.$error.maxlength">Maximum
+														length is 25 Characters only </small>
 												</div>
 											</div>
 										</div>
@@ -111,13 +107,10 @@
 										<label for="Email" class="control-label col-md-3">Email<em>*</em></label>
 										<div class="col-md-6 col-xs-12">
 											<div class="input-group">
-												<input type="email" ng-model="user.email" name="uEmail"
-													id="uEmail" class="form-control" required readonly />
+												<input type="email" ng-model="user.email" name="uEmail" id="uEmail" class="form-control" required readonly />
 												<div ng-show="updateUserForm.$submitted">
-													<small class="error"
-														ng-show="updateUserForm.uEmail.$error.required">
-														Email is required </small> <small class="error"
-														ng-show="updateUserForm.uEmail.$error.email">
+													<small class="error" ng-show="updateUserForm.uEmail.$error.required">
+														Email is required </small> <small class="error" ng-show="updateUserForm.uEmail.$error.email">
 														Enter a valid email </small>
 												</div>
 											</div>
@@ -136,13 +129,10 @@
                                             </div>-->
 											<div class="input-group">
 												<!--<label for="tel">Telephone number</label>-->
-												<input type="text" required class="form-control" id="mobile"
-													name="mobile" ng-model="user.phoneNumber" ng-intl-tel-input>
+												<input type="text" required class="form-control" id="mobile" name="mobile" ng-model="user.phoneNumber" maxlength="50" ng-intl-tel-input>
 												<div ng-show="updateUserForm.$submitted">
-													<small class="error"
-														ng-show="updateUserForm.mobile.$untouched && updateUserForm.mobile.$error.required">Phone
-														number is required</small> <small class="error"
-														ng-show="updateUserForm.mobile.$touched && updateUserForm.mobile.$invalid">Phone
+													<small class="error" ng-show="updateUserForm.mobile.$untouched && updateUserForm.mobile.$error.required">Phone
+														number is required</small> <small class="error" ng-show="updateUserForm.mobile.$touched && updateUserForm.mobile.$invalid">Phone
 														number is invalid</small>
 												</div>
 											</div>
@@ -153,9 +143,7 @@
 										</label>
 										<div class="col-md-6 col-xs-12">
 											<div class="input-group">
-												<input type="text" ng-model="user.companyName"
-													name="company" id="company" class="form-control"
-													maxlength="50" />
+												<input type="text" ng-model="user.companyName" name="company" id="company" class="form-control" maxlength="50" />
 											</div>
 										</div>
 									</div>
@@ -164,9 +152,7 @@
 											Account </label>
 										<div class="col-md-6 col-xs-12">
 											<div class="input-group">
-												<input type="text" ng-model="user.customerAccount"
-													name="customeraccount" id="customeraccount"
-													class="form-control" />
+												<input type="text" ng-model="user.customerAccount" name="customeraccount" id="customeraccount" class="form-control" />
 											</div>
 										</div>
 									</div>
@@ -187,17 +173,17 @@
 														ng-show="updateUserForm.userLanguage.$error.required">
 														Language is required </small>
 												</div>-->
-                                                <ui-select ng-required="true" class="form-control" on-select="languageSelected($select.selected)" style="border:none;padding:0px;" name="userLanguage"
-                                                    ng-model="userLanguage" theme="select2" title="Select language">
-                                                    <ui-select-match placeholder="Language">{{$select.selected.languageDescription}}</ui-select-match>
-                                                    <ui-select-choices repeat="language in languageList | propsFilter: {languageDescription: $select.search}">
-                                                        <div ng-bind-html="language.languageDescription | highlight: $select.search"></div>
-                                                    </ui-select-choices>
-                                                </ui-select>
-                                                <div ng-show="updateUserForm.$submitted">
-                                                    <small class="error" ng-show="updateUserForm.userLanguage.$error.required">
+												<ui-select ng-required="true" class="form-control" on-select="languageSelected($select.selected)" style="border:none;padding:0px;"
+													name="userLanguage" ng-model="userLanguage" theme="select2" title="Select language">
+													<ui-select-match placeholder="Language">{{$select.selected.languageDescription}}</ui-select-match>
+													<ui-select-choices repeat="language in languageList | propsFilter: {languageDescription: $select.search}">
+														<div ng-bind-html="language.languageDescription | highlight: $select.search"></div>
+													</ui-select-choices>
+												</ui-select>
+												<div ng-show="updateUserForm.$submitted">
+													<small class="error" ng-show="updateUserForm.userLanguage.$error.required">
                                             Billing address is required </small>
-                                                </div>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -211,19 +197,26 @@
 											<div class="row">
 												<div class="messages messages-img">
 													<div class="item in item-visible">
-														<textarea placeholder="Write your notes here"
-															ng-model="user.notes" name="notes" id="notes"
-															class="form-control new-user-notes" rows="7"></textarea>
+														<textarea placeholder="Write your notes here" ng-model="user.notes" name="notes" id="notes" class="form-control new-user-notes"
+															rows="7"></textarea>
 													</div>
 													<div class="item in item-visible notes-scroll">
 														<div ng-repeat="note in notes">
-															<div class="row"">
-																<textarea class="form-control " id="inputNote "
+															<!--<div class="row"">
+																<textarea class="form-control notes-textarea" id="inputNote "
 																	rows="3
                                                                 "
 																	style="resize: none;" readonly>{{note.notes}} 
                                                                         {{note.userName}} , {{note.createdDate|date:'dd-MMM-yyyy , h:mma'}}
                                                         </textarea>
+															</div>-->
+															<div class="form-control notes-textarea" style="margin-bottom: 15px;">
+																<div class="row" id="inputNote" style="resize: none;" readonly>
+																	<span>{{note.notes}}</span>
+																</div>
+																<div class="row" id="inputNote" style="resize: none;" readonly>
+																	<span class="pull-right">{{note.userName}} , {{note.createdDate|date:'dd-MMM-yyyy , h:mma'}}</span>
+																</div>
 															</div>
 														</div>
 													</div>
@@ -237,12 +230,9 @@
 								<!-- BUTTONS -->
 								<div class="button pull-right ">
 									<!-- REGISTER BUTTON -->
-									<input class="btn btn-success load_button" value="Update"
-										type="submit" />
+									<input class="btn btn-success load_button" value="Update" type="submit" />
 									<!-- CANCEL BUTTON -->
-									<input type="button" data-dismiss="modal"
-										class="btn btn-danger" name="cancel" value="Cancel"
-										id="cancel" />
+									<input type="button" data-dismiss="modal" class="btn btn-danger" name="cancel" value="Cancel" id="cancel" />
 								</div>
 							</div>
 						</div>

@@ -77,7 +77,7 @@ customermodule.controller('CustomerController',
                     //TODO: INVALID SESSION
                 }
             }
-            
+
             $scope.angular = angular;
             $scope.orgName = $scope.organization.organizationName;
             $scope.statuses = [{ status: 'assigned', value: 'Assigned' }, { status: 'notassigned', value: 'Not Assigned' }];
@@ -85,6 +85,7 @@ customermodule.controller('CustomerController',
             $scope.filteredObjectsCustomer = {
                 userId: $scope.userDetails.userId,
                 orgId: $scope.organization.organizationId,
+                customerId:'',
                 customerName: '',
                 customerNumber: '',
                 cBill: '',
@@ -95,8 +96,8 @@ customermodule.controller('CustomerController',
                 status: $scope.statuses[0].status,
             };
             $scope.searchValue = '';
-            
-            
+
+
             $scope.totalrows = 0;
             $scope.selectedObjects = [];
             $scope.download = function () {
@@ -114,107 +115,188 @@ customermodule.controller('CustomerController',
                 }
                 else {
                     $rootScope.stopSpin();
-                   $.toaster({ priority: 'info', message: noDataToDownload });
+                    $.toaster({ priority: 'info', message: noDataToDownload });
                 }
             };
+
             /**
-            * 
-            * Assign and Assignall function
-            */
+             * 
+             * Assign function
+             */
             $scope.assign = function (type) {
-                $log.debug("selected obj :"+$scope.selectedObjects)
+                $log.debug("selected :"+angular.toJson($scope.selectedObjects))
                 var assignUtil = function (url, jsonData) {
-                    $rootScope.startSpin();
                     genericService.addObject(url, jsonData).then(function (data) {
-                        $('#assign-all-close').trigger('click');
-                        $('#assign-close').trigger('click');
-                        $.toaster({ priority: 'success', message: assignCustomerFromUnAssignedListSuccess });
                         $rootScope.stopSpin();
+                        $.toaster({ priority: 'success', message: assignCustomerFromUnAssignedListSuccess });
                         $scope.reloadDataTable();
                     }, function () {
-                        $('#assign-all-close').trigger('click');
-                        $('#assign-close').trigger('click');
                         $rootScope.stopSpin();
-                        $.toaster({ priority: 'danger', message: assignCustomerFromUnAssignedListFailed });
+                        $.toaster({ priority: 'failed', message: assignCustomerFromUnAssignedListFailed });
                     });
                 }
-                if (angular.equals($scope.filteredObjectsCustomer.status, 'notassigned') && angular.equals(type, 'all') && !angular.equals($scope.totalrows, 0)) {
-                    var url = $rootScope.baseUrl + 'assignallcustomer/' + $scope.filteredObjectsCustomer.userId + '/' + $scope.filteredObjectsCustomer.orgId + '/' + $scope.logedIn_user_id;
-                    var data = JSON.stringify($scope.filteredObjectsCustomer);
-                    $('#assign-all-close').trigger('click');
-                    assignUtil(url, data);
 
-                } else if (angular.equals($scope.filteredObjectsCustomer.status, 'notassigned') && !angular.equals(type, 'all')) {
-                    if ($scope.selectedObjects.length) {
-                        var url = $rootScope.baseUrl + 'assigncustomer/' + $scope.filteredObjectsCustomer.userId + '/' + $scope.filteredObjectsCustomer.orgId + '/' + $scope.logedIn_user_id;
-                        var data = {};
-                        data.custList = $scope.selectedObjects;
-                        $('#assign-close').trigger('click');
-                        assignUtil(url, data);
-                    } else {
-                        $('#assign-close').trigger('click');
-                        $rootScope.stopSpin();
-                        $.toaster({ priority: 'danger', message: selectatleastoneCustomerToAssign });
-                    }
+                if (angular.equals($scope.filteredObjectsCustomer.status, 'notassigned') && !angular.equals(type, 'all') && !angular.equals($scope.totalrows, 0)) {
+                    BootstrapDialog.confirm({
+                        title: 'Assign',
+                        message: 'Are you sure you want to assign selected customer?', callback: function (result) {
+                            if (result) {
+                                if ($scope.selectedObjects.length) {
+                                    $rootScope.startSpin();
+                                    var url = $rootScope.baseUrl + 'assigncustomer/' + $scope.filteredObjectsCustomer.userId + '/' + $scope.filteredObjectsCustomer.orgId + '/' + $scope.logedIn_user_id;
+                                    var data = {};
+                                    data.custList = $scope.selectedObjects;
+                                    assignUtil(url, data);
+                                }
+                                else {
+                                    $rootScope.stopSpin();
+                                    $.toaster({ priority: 'danger', message: selectatleastoneCustomerToAssign });
+                                }
+                            } else {
+                                $rootScope.stopSpin();
+
+                            }
+                        }
+                    });
                 } else if (angular.equals($scope.totalrows, 0) && angular.equals($scope.filteredObjectsCustomer.status, 'notassigned')) {
-                    $('#assign-all-close').trigger('click');
                     $rootScope.stopSpin();
                     $.toaster({ priority: 'info', message: cannotAssigncustomerFromEmptyList });
                 } else if (angular.equals($scope.filteredObjectsCustomer.status, 'assigned')) {
-                    $('#assign-all-close').trigger('click');
-                    $('#assign-close').trigger('click');
                     $rootScope.stopSpin();
                     $.toaster({ priority: 'info', message: cannotAssignCustomerFromAssignedList });
                 }
-            }/**
+
+            }
+            /**
              * 
-             * Remove and Removeall function
+             *  Assignall function
              */
-            $scope.remove = function (type) {
-                $log.debug("selected obj :"+$scope.selectedObjects)
-                $rootScope.startSpin();
-                var removeUtil = function (url, jsonData) {
+            $scope.assignall = function (type) {
+                var assignUtil = function (url, jsonData) {
                     genericService.addObject(url, jsonData).then(function (data) {
-                        $('#remove-close').trigger('click');
-                        $('#remove-all-close').trigger('click');
-                        $.toaster({ priority: 'success', message: removeCustomerFromAssignedListSuccess });
-                         $rootScope.stopSpin();
+                        $rootScope.stopSpin();
+                        $.toaster({ priority: 'success', message: assignCustomerFromUnAssignedListSuccess });
                         $scope.reloadDataTable();
                     }, function () {
-                        $('#remove-close').trigger('click');
-                        $('#remove-all-close').trigger('click');
-                         $rootScope.stopSpin();
-                        $.toaster({ priority: 'danger', message: removeCustomerFromAssignedListFailed });
+                        $rootScope.stopSpin();
+                        $.toaster({ priority: 'failed', message: assignCustomerFromUnAssignedListFailed });
                     });
                 }
-                if (angular.equals($scope.filteredObjectsCustomer.status, 'assigned') && angular.equals(type, 'all') && !angular.equals($scope.totalrows, 0)) {
-                    var url = $rootScope.baseUrl + 'removeallcustomer/' + $scope.filteredObjectsCustomer.userId + '/' + $scope.filteredObjectsCustomer.orgId + '/' + $scope.logedIn_user_id;
-                    var data = JSON.stringify($scope.filteredObjectsCustomer);
-                    $('#remove-all-close').trigger('click');
-                    removeUtil(url, data);
-                } else if (angular.equals($scope.filteredObjectsCustomer.status, 'assigned') && !angular.equals(type, 'all')) {
-                    if ($scope.selectedObjects.length) {
-                        var url = $rootScope.baseUrl + 'removecustomer/' + $scope.filteredObjectsCustomer.userId + '/' + $scope.filteredObjectsCustomer.orgId + '/' + $scope.logedIn_user_id;
-                        var data = {};
-                        data.custList = $scope.selectedObjects;
-                        $('#remove-close').trigger('click');
-                        removeUtil(url, data);
-                    } else {
-                        $('#remove-close').trigger('click');
-                        $rootScope.stopSpin();
-                        $.toaster({ priority: 'danger', message: selectatleastoneCustomerToRemove });
 
-                    }
+                if (angular.equals($scope.filteredObjectsCustomer.status, 'notassigned') && angular.equals(type, 'all') && !angular.equals($scope.totalrows, 0)) {
+                    BootstrapDialog.confirm({
+                        title: 'Assign All',
+                        message: 'Are you sure you want to assign all customer ?', callback: function (result) {
+                            if (result) {
+                                $rootScope.startSpin();
+                                var url = $rootScope.baseUrl + 'assignallcustomer/' + $scope.filteredObjectsCustomer.userId + '/' + $scope.filteredObjectsCustomer.orgId + '/' + $scope.logedIn_user_id;
+                                var data = JSON.stringify($scope.filteredObjectsCustomer);
+                                assignUtil(url, data);
+                            }
+                            else {
+                                $rootScope.stopSpin();
+
+                            }
+                        }
+                    });
+                } else if (angular.equals($scope.totalrows, 0) && angular.equals($scope.filteredObjectsCustomer.status, 'notassigned')) {
+                    $rootScope.stopSpin();
+                    $.toaster({ priority: 'info', message: cannotAssigncustomerFromEmptyList });
+                } else if (angular.equals($scope.filteredObjectsCustomer.status, 'assigned')) {
+                    $rootScope.stopSpin();
+                    $.toaster({ priority: 'info', message: cannotAssignCustomerFromAssignedList });
+                }
+            }
+
+
+            /**
+          * 
+          * remove function
+          */
+            $scope.remove = function (type) {
+
+                var removeUtil = function (url, jsonData) {
+                    genericService.addObject(url, jsonData).then(function (data) {
+                        $rootScope.stopSpin();
+                        $.toaster({ priority: 'success', message: removeCustomerFromAssignedListSuccess });
+                        $scope.reloadDataTable();
+                    }, function () {
+                        $rootScope.stopSpin();
+                        $.toaster({ priority: 'failed', message: removeCustomerFromAssignedListFailed });
+                    });
+                }
+
+                if (angular.equals($scope.filteredObjectsCustomer.status, 'assigned') && !angular.equals(type, 'all') && !angular.equals($scope.totalrows, 0)) {
+                    BootstrapDialog.confirm({
+                        title: 'Remove',
+                        message: 'Are you sure you want to remove machine from user?', callback: function (result) {
+                            if (result) {
+                                if ($scope.selectedObjects.length) {
+                                    $rootScope.startSpin();
+                                    var url = $rootScope.baseUrl + 'removecustomer/' + $scope.filteredObjectsCustomer.userId + '/' + $scope.filteredObjectsCustomer.orgId + '/' + $scope.logedIn_user_id;
+                                    var data = {};
+                                    data.custList = $scope.selectedObjects;
+                                    removeUtil(url, data);
+                                } else {
+                                    $rootScope.stopSpin();
+                                    $.toaster({ priority: 'danger', message: selectatleastoneCustomerToRemove });
+
+                                }
+                            } else {
+                                $rootScope.stopSpin();
+
+                            }
+                        }
+                    });
                 } else if (angular.equals($scope.totalrows, 0) && angular.equals($scope.filteredObjectsCustomer.status, 'assigned')) {
-                    $('#remove-all-close').trigger('click');
                     $rootScope.stopSpin();
                     $.toaster({ priority: 'info', message: cannotRemovecustomerFromEmptyList });
                 } else if (angular.equals($scope.filteredObjectsCustomer.status, 'notassigned')) {
-                    $('#remove-close').trigger('click');
-                    $('#remove-all-close').trigger('click');
                     $rootScope.stopSpin();
                     $.toaster({ priority: 'info', message: cannotRemoveCustomerFromUnAssignedList });
                 }
+
+            }
+            /**
+             * 
+             *  removeall function
+             */
+            $scope.removeall = function (type) {
+
+                var removeUtil = function (url, jsonData) {
+                    genericService.addObject(url, jsonData).then(function (data) {
+                        $rootScope.stopSpin();
+                        $.toaster({ priority: 'success', message: removeCustomerFromAssignedListSuccess });
+                        $scope.reloadDataTable();
+                    }, function () {
+                        $rootScope.stopSpin();
+                        $.toaster({ priority: 'failed', message: removeCustomerFromAssignedListFailed });
+                    });
+                }
+
+                if (angular.equals($scope.filteredObjectsCustomer.status, 'assigned') && angular.equals(type, 'all') && !angular.equals($scope.totalrows, 0)) {
+                    BootstrapDialog.confirm({
+                        title: 'Remove All',
+                        message: 'Are you sure you want to remove all machine from user?', callback: function (result) {
+                            if (result) {
+                                $rootScope.startSpin();
+                                var url = $rootScope.baseUrl + 'removeallcustomer/' + $scope.filteredObjectsCustomer.userId + '/' + $scope.filteredObjectsCustomer.orgId + '/' + $scope.logedIn_user_id;
+                                var data = JSON.stringify($scope.filteredObjectsCustomer);
+                                removeUtil(url, data);
+                            } else {
+                                $rootScope.stopSpin();
+
+                            }
+                        }
+                    });
+                } else if (angular.equals($scope.totalrows, 0) && angular.equals($scope.filteredObjectsCustomer.status, 'assigned')) {
+                    $rootScope.stopSpin();
+                    $.toaster({ priority: 'info', message: cannotRemovecustomerFromEmptyList });
+                } else if (angular.equals($scope.filteredObjectsCustomer.status, 'notassigned')) {
+                    $rootScope.stopSpin();
+                    $.toaster({ priority: 'info', message: cannotRemoveCustomerFromUnAssignedList });
+                }
+
             }
 
             allCustomerCount();
@@ -235,43 +317,55 @@ customermodule.controller('CustomerController',
                     return $rootScope.baseUrl + 'customerUnAssignmentReport';
                 }
             }
-            
-            $scope.drawCustomeFilteredDataTable = function(){
+
+            $scope.drawCustomeFilteredDataTable = function () {
                 var obj = angular.copy($scope.filteredObjectsCustomer);
                 obj.search = {};
                 obj.search.value = $scope.searchValue;
                 $scope.filteredObjectsCustomer = angular.copy(obj);
                 console.log(angular.toJson($scope.filteredObjectsCustomer));
                 $scope.drawDataTable();
+                $('#globsearch').val('');
+                $scope.filteredObjectsCustomer.search='';
+                $scope.searchValue='';
             }
+            
+            $(function() {
+                $("form input").keypress(function (e) {
+                    if ((e.which && e.which == 13) || (e.keyCode && e.keyCode == 13)) {
+                    	$scope.drawCustomeFilteredDataTable();
+                    }
+                });
+            });
 
             $scope.dtInstance = {};
             $scope.reloadDataTable = function () {
                 $scope.dtInstance.rerender();
                 allCustomerCount();
-                 $scope.selectedObjects = [];
+                $scope.selectedObjects = [];
                 $scope.totalrows = 0;
             }
 
-            function objectForDownload(){
+            function objectForDownload() {
                 $scope.downloadfilteredCustomer = {
-                userId: $scope.filteredObjectsCustomer.userId,
-                orgId: $scope.filteredObjectsCustomer.orgId,
-                customername: $scope.filteredObjectsCustomer.customerName,
-                customernum: $scope.filteredObjectsCustomer.customerNumber,
-                cBilbilltonuml: $scope.filteredObjectsCustomer.cBill,
-                addressone:$scope.filteredObjectsCustomer.addressOne,
-                city: $scope.filteredObjectsCustomer.cCity,
-                state: $scope.filteredObjectsCustomer.cState,
-                postal: $scope.filteredObjectsCustomer.cPostal,
-                status: $scope.filteredObjectsCustomer.status,
+                    userId: $scope.filteredObjectsCustomer.userId,
+                    orgId: $scope.filteredObjectsCustomer.orgId,
+                    customername: $scope.filteredObjectsCustomer.customerName,
+                    customernum: $scope.filteredObjectsCustomer.customerNumber,
+                    customerId:$scope.filteredObjectsCustomer.customerId,
+                    cBilbilltonuml: $scope.filteredObjectsCustomer.cBill,
+                    addressone: $scope.filteredObjectsCustomer.addressOne,
+                    city: $scope.filteredObjectsCustomer.cCity,
+                    state: $scope.filteredObjectsCustomer.cState,
+                    postal: $scope.filteredObjectsCustomer.cPostal,
+                    status: $scope.filteredObjectsCustomer.status,
 
-            };
+                };
             }
             $scope.drawDataTable = function () {
                 objectForDownload();
                 var index = -1;
-                $scope.totalrows = 0;
+                //$scope.totalrows = 0;
                 $scope.dtOptions = DTOptionsBuilder.newOptions()
                     .withOption('ajax', {
                         url: getUrl(),
@@ -281,7 +375,7 @@ customermodule.controller('CustomerController',
                     .withDataProp('data')
                     .withOption('processing', true)
                     .withOption('serverSide', true)
-                    .withOption('oLanguage',{sProcessing:'<img src="app-content/img/blueimp/loading.gif" alt="nothing"/>'})
+                    .withOption('oLanguage', { sProcessing: '<div class="loadposition"><img src="app-content/img/blueimp/loading.gif" alt="nothing"/></div>', sEmptyTable: "No matching results found for this search criteria" })
                     .withOption('searching', false)
                     .withOption('bDestory', true)
                     .withPaginationType('full_numbers')
@@ -295,11 +389,17 @@ customermodule.controller('CustomerController',
                     });
                 function rowCallback(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                     $scope.totalrows = this.fnSettings().fnRecordsTotal();
+                    $(nRow).mouseover(function (e) {
+                        $(nRow).addClass('highlight');
+                    })
+                    $(nRow).mouseout(function (e) {
+                        $(nRow).removeClass('highlight');
+                    })
                     $scope.$apply();
                     $('td:first-child>input', nRow).unbind('click');
                     $('td:first-child>input', nRow).bind('click', function () {
                         $scope.$apply(function () {
-                            $scope.selectedObjects = applicationUtilityService.addUniqueObjectToList($scope.selectedObjects, aData.customerNumber);
+                            $scope.selectedObjects = applicationUtilityService.addUniqueObjectToList($scope.selectedObjects, aData.customerId);
                         });
                     });
                     if (iDisplayIndex === index) {
@@ -315,14 +415,14 @@ customermodule.controller('CustomerController',
 
                                 return '<input type="checkbox" class="checkbox" disabled>';
                             else
-                                return '<input type="checkbox" class="checkbox" ng-model="selectedObjects" ng-value=' + data.customerNumber + '>';
+                                return '<input type="checkbox" class="checkbox" ng-model="selectedObjects" ng-value=' + data.customerId + '>';
                         }),
                     DTColumnBuilder.newColumn('customerNumber').withTitle('Customer #').withOption('name', 'customerNumber'),
                     DTColumnBuilder.newColumn('customerName').withTitle('Customer Name').withOption('name', 'customerName'),
                     DTColumnBuilder.newColumn('addressOne').withTitle('Address1').withOption('name', 'addressOne'),
-                    DTColumnBuilder.newColumn('city').withTitle('City').withOption('name', 'cCity'),
-                    DTColumnBuilder.newColumn('state').withTitle('State').withOption('name', 'cState'),
-                    DTColumnBuilder.newColumn('postal').withTitle('Postal code').withOption('name', 'cPostal'),
+                    DTColumnBuilder.newColumn('city').withTitle('City').withOption('name', 'city'),
+                    DTColumnBuilder.newColumn('state').withTitle('State').withOption('name', 'state'),
+                    DTColumnBuilder.newColumn('postal').withTitle('Postal code').withOption('name', 'postal'),
                     DTColumnBuilder.newColumn('country').withTitle('Country').withOption('name', 'country'),
                     //DTColumnBuilder.newColumn('Status').withTitle('Status').withOption('name', 'Status').notSortable(),
                     DTColumnBuilder.newColumn('Type').withTitle('Group Name').withOption('name', 'Type')

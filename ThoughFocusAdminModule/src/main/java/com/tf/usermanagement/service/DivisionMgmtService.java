@@ -44,18 +44,6 @@ public interface DivisionMgmtService {
 
 	public List<UserUnassignedOrgDto> getUnassignedOrganizationsForUser(long userId, long adminId);
 
-	public boolean deAssignCatalogsOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto);
-
-	public boolean deAssignCustomerOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto);
-
-	public boolean deAssignGroupOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto);
-
-	public boolean deAssignRoleOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto);
-
-	public boolean deAssignUserFromOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto);
-	
-	public boolean deActivateUser(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto);
-
 	public boolean deAssignAllAllocationsForUserByOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto);
 
 	public List<AdminOrgListDto> getOrganizationListOfAdmin(long adminId);

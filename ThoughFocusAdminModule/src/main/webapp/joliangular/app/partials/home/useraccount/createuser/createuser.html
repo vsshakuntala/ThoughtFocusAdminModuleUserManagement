@@ -21,13 +21,17 @@
         display: block;
         opacity: 1;
     }
+    
+    .control-label{
+		text-align: left !important;
+	}
 </style>
 <div class="row" ng-controller="CreateUserController">
     <div class="col-md-12">
         <div class="modal" id="modal_large" tabindex="-1" role="dialog" aria-labelledby="largeModalHead" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form name="createUserForm" id="createUserForm" ng-submit="createUserForm.$valid && isMatching() && submitRegdForm()" class="form-horizontal"
+                    <form name="createUserForm" id="createUserForm" ng-submit="createUserForm.$valid && submitRegdForm()" class="form-horizontal"
                         role="form" novalidate>
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -39,18 +43,16 @@
                             <div class="col-sm-6 ">
                                 <div class="panel-body newuser">
                                     <div class="form-group ">
-                                        <label class="col-md-3 col-xs-12 control-label">User Name<em>*</em></label>
+                                        <label for="userName" class="control-label col-md-3">User Name<em>*</em></label>
                                         <div class="col-md-6 col-xs-12">
                                             <div class="input-group">
-                                                <input type="email" ng-pattern="/^[A-Za-z0-9._]*\@[A-Za-z]*\.[A-Za-z]{2,5}$/" ng-model="user.userName" name="userName" id="uName"
-                                                    class="form-control" maxlength="100" required />
+                                                <input type="email" ng-pattern="/^[A-Za-z0-9._]*\@[A-Za-z]*\.[A-Za-z]{2,5}*\.[A-Za-z]{2,5}$/" ng-model-options="{ allowInvalid: true }" ng-model="user.userName" name="userName" id="uName"
+                                                    class="form-control" maxlength="50" required />
                                                 <div ng-show="createUserForm.$submitted">
                                                     <small class="error" ng-show="createUserForm.userName.$untouched && createUserForm.userName.$error.required">
 										User name is required </small>
                                                     <small class="error" ng-show="createUserForm.userName.$touched && createUserForm.userName.$invalid"> Enter a
 										valid Username </small>
-                                                    <small class="error" ng-show="!createUserForm.userName.$error.required && (user.userName !== user.email)">
-										User name does not match with email</small>
                                                 </div>
                                             </div>
                                         </div>
@@ -81,7 +83,7 @@
                                         <label for="lastName" class="control-label col-md-3">Last Name<em>*</em></label>
                                         <div class="col-md-6 col-xs-12">
                                             <div class="input-group">
-                                                <input type="text" ng-model="user.lastName" name="lName" id="lName" class="form-control" maxlength="25" required />
+                                                <input type="text" allow-pattern="[a-z]" ng-model="user.lastName" name="lName" id="lName" class="form-control" maxlength="25" required />
                                                 <div ng-show="createUserForm.$submitted">
                                                     <small class="error" ng-show="createUserForm.lName.$error.required"> Last Name is required </small>
                                                 </div>
@@ -92,9 +94,9 @@
                                         <label for="Email" class="control-label col-md-3">Email<em>*</em></label>
                                         <div class="col-md-6 col-xs-12">
                                             <div class="input-group">
-                                                <input type="email" ng-pattern="/^[A-Za-z0-9._]*\@[A-Za-z]*\.[A-Za-z]{2,5}$/" ng-model="user.email" name="uEmail" id="uEmail"
+                                                <input type="email" ng-pattern="/^[A-Za-z0-9._]*\@[A-Za-z]*\.[A-Za-z]{2,5}*\.[A-Za-z]{2,5}$/" ng-model="user.userName" name="uEmail" id="uEmail"
                                                     class="form-control ng-valid-email ng-valid ng-valid-pattern" maxlength="50"
-                                                    required />
+                                                    required readonly />
                                                 <div ng-show="createUserForm.$submitted">
                                                     <small class="error" ng-show="createUserForm.uEmail.$untouched && createUserForm.uEmail.$error.required"> Email
 										is required </small> <small class="error" ng-show="createUserForm.uEmail.$touched && createUserForm.uEmail.$invalid"> Enter a
@@ -116,7 +118,7 @@
                                             </div>-->
                                             <div class="input-group">
                                                 <!--<label for="tel">Telephone number</label>-->
-                                                <input type="text" required class="form-control" id="mobile" name="mobile" ng-model="user.phoneNumber" ng-intl-tel-input>
+                                                <input type="text" maxlength="50" required class="form-control" id="mobile" name="mobile" ng-model="user.phoneNumber" ng-intl-tel-input>
                                                 <div ng-show="createUserForm.$submitted">
                                                     <small class="error" ng-show="createUserForm.mobile.$untouched && createUserForm.mobile.$error.required">Phone number is required</small>
                                                     <small class="error" ng-show="createUserForm.mobile.$touched && createUserForm.mobile.$invalid">Phone number is invalid</small>
@@ -168,16 +170,16 @@
                                                     <small class="error" ng-show="createUserForm.userLanguage.$error.required">
 										Language is required </small>
                                                 </div>-->
-                                                <ui-select ng-required="true" class="form-control" on-select="languageSelected($select.selected)" style="border:none;padding:0px;" name="userLanguage"
-                                                    ng-model="userLanguage" theme="select2" title="Select language">
+                                                <ui-select ng-required="true" class="form-control ng-valid ng-dirty" on-select="languageSelected($select.selected)" style="border:none;padding:0px;" name="userLanguage"
+                                                    ng-model="userLanguage" theme="select2" title="Select language" id="userLanguage" required>
                                                     <ui-select-match placeholder="Language">{{$select.selected.languageDescription}}</ui-select-match>
                                                     <ui-select-choices repeat="language in languageList | propsFilter: {languageDescription: $select.search}">
                                                         <div ng-bind-html="language.languageDescription | highlight: $select.search"></div>
                                                     </ui-select-choices>
                                                 </ui-select>
                                                 <div ng-show="createUserForm.$submitted">
-                                                    <small class="error" ng-show="createUserForm.userLanguage.$error.required">
-                                            Billing address is required </small>
+                                                    <small class="error"  ng-if="user.userLanguage==''">
+                                            Language is required </small>
                                                 </div>
                                             </div>
                                         </div>

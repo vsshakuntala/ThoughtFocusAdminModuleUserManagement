@@ -66,7 +66,7 @@
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h2>Default Address</h2>
-                        <form name="addressForm" id="addressForm" ng-submit="addressForm.$valid && saveDefaultAddress()" class="form-horizontal"
+                        <form name="addressForm" id="addressForm" ng-submit="addressForm.$valid &&  saveDefaultAddress()" class="form-horizontal"
                         role="form" novalidate>
                             <div class="row">
                                 <div class="address-form-group">
@@ -78,10 +78,11 @@
 										<option ng-repeat="area in salesAreaList track by $index "
 											value="{{area.salesAreaId}} " ng-selected="area.salesAreaId===selectedObject.salesAreaId ">{{area.salesOrgName}}</option>
 									</select>-->
-                                        <ui-select ng-required="true" name="sales" ng-model="selectedObjectName.salesArea" id="sales" theme="select2" on-select="salesAreaSelected()" ng-disabled="disabled"
+                                        <ui-select ng-required="false" name="sales" ng-model="selectedObjectName.salesArea" id="sales" theme="select2" on-select="salesAreaSelected()" ng-disabled="salesAreaList.length===0"
                                             title="" uis-open-close="onOpenClose(isOpen,'sales')">
-                                            <ui-select-match placeholder="Salea Area">{{selectedObjectName.salesArea}}</ui-select-match>
-                                            <ui-select-choices repeat="area in salesAreaList track by $index">
+                                            <ui-select-match placeholder="Sales Area">{{selectedObjectName.salesArea.salesOrgName}}</ui-select-match>
+
+                                            <ui-select-choices repeat="area in salesAreaList track by $index" >
                                                 <div ng-bind-html="area.salesOrgName"></div>
                                             </ui-select-choices>
                                         </ui-select>
@@ -130,7 +131,7 @@
                                             title="" uis-open-close="onOpenClose(isOpen,'customer')">
                                             <ui-select-match placeholder="Customer List" >{{selectedObjectName.customer}}</ui-select-match>
                                             <ui-select-choices repeat="cust in customerList track by $index">
-                                                <div ng-bind-html="cust.customerName"></div>
+                                                <div ng-bind-html="cust.customerName" id="choicelist"></div>
                                             </ui-select-choices>
                                         </ui-select>
                                         <div ng-show="addressForm.$submitted">
@@ -153,7 +154,7 @@
 									</select>-->
                                         <ui-select ng-required="true" name="billing" ng-model="selectedObjectName.billing" theme="select2" on-select="billingAddressSelected()" title="Choose a Billing Address">
                                             <ui-select-match placeholder="Billing Address">{{selectedObjectName.billing.addressName}}</ui-select-match>
-                                            <ui-select-choices repeat="bill in billingAddressList | propsFilter: {addressName: $select.search}">
+                                            <ui-select-choices repeat="bill in billingAddressList | propsFilter: {addressName: $select.search}" id="choicelist">
                                                 <div ng-bind-html="bill.addressName | highlight: $select.search"></div>
                                             </ui-select-choices>
                                         </ui-select>

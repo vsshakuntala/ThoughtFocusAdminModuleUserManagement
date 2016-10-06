@@ -1,15 +1,13 @@
 package com.tf.usermanagement.dto;
 
-import java.util.Date;
-import java.util.List;
 
 public class UserListFilterDTO {
 	private String divisions;
 	private String roles;
 	private String status;
-	private Date from_date;
-	private Date to_date;
-	private String company;
+	private String from_date;
+	private String to_date;
+	private String companyName;
 	private String name;
 	public String getDivisions() {
 		return divisions;
@@ -29,31 +27,26 @@ public class UserListFilterDTO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-	public Date getFrom_date() {
+	public String getFrom_date() {
 		return from_date;
 	}
-	public void setFrom_date(Date from_date) {
+	public void setFrom_date(String from_date) {
 		this.from_date = from_date;
 	}
-	public Date getTo_date() {
+	public String getTo_date() {
 		return to_date;
 	}
-	public void setTo_date(Date to_date) {
+	public void setTo_date(String to_date) {
 		this.to_date = to_date;
 	}
-	public String getCompany() {
-		return company;
-	}
-	public void setCompany(String company) {
-		this.company = company;
-	}
+	
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public UserListFilterDTO(String divisions, String roles, String status, Date from_date, Date to_date,
+	public UserListFilterDTO(String divisions, String roles, String status, String from_date, String to_date,
 			String company, String name) {
 		super();
 		this.divisions = divisions;
@@ -61,8 +54,14 @@ public class UserListFilterDTO {
 		this.status = status;
 		this.from_date = from_date;
 		this.to_date = to_date;
-		this.company = company;
+		this.companyName = company;
 		this.name = name;
+	}
+	public String getCompanyName() {
+	    return companyName;
+	}
+	public void setCompanyName(String companyName) {
+	    this.companyName = companyName;
 	}
 	
 	

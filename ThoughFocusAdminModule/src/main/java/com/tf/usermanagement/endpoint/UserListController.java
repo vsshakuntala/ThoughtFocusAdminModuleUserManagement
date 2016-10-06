@@ -25,7 +25,7 @@ import com.tf.usermanagement.service.RoleService;
 import com.tf.usermanagement.service.UserListService;
 
 @RestController
-@RequestMapping(value="/userlists")
+@RequestMapping(value = "/userlists")
 public class UserListController {
 
 	@Autowired
@@ -36,39 +36,46 @@ public class UserListController {
 	private RoleService roleService;
 	@Autowired
 	private UserListService userListService;
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(UserListController.class);
-	
-	@RequestMapping(value="/getfiltereduserlist",method=RequestMethod.GET)
+
+	@RequestMapping(value = "/getfiltereduserlist", method = RequestMethod.GET)
 	public DataTablesOutput getFiltereduser(UserFilterReport.UserFilterReportDtInput filterData) {
-		LOGGER.info("User report input :{}",filterData.getRoles());
-		DataTablesOutput obj=userFilterReport.fetchData(filterData);
+		LOGGER.info("User report input :{}", filterData.getRoles());
+		LOGGER.debug("start of calling getfiltereduserlist api");
+		DataTablesOutput obj = userFilterReport.fetchData(filterData);
+		LOGGER.debug("end of calling getfiltereduserlist api");
 		return obj;
 	}
-	
-	@RequestMapping(value="/getalldivisions",method=RequestMethod.GET)
-	public List<DivisionDto> getDivisions(){
+
+	@RequestMapping(value = "/getalldivisions", method = RequestMethod.GET)
+	public List<DivisionDto> getDivisions() {
+		LOGGER.debug("start of calling getalldivisions api");
 		List<DivisionDto> orgIdNameList = divisionService.getAllDivision();
+		LOGGER.debug("end of calling getalldivisions api");
 		return orgIdNameList;
 	}
-	
-	@RequestMapping(value ="/getallroles" , method = RequestMethod.GET)
+
+	@RequestMapping(value = "/getallroles", method = RequestMethod.GET)
 	public List<RoleDto> getRoles() {
+		LOGGER.debug("start of calling getallroles api");
 		List<RoleDto> rolIdNameList = roleService.getRoles();
+		LOGGER.debug("end of calling getallroles api");
 		return rolIdNameList;
 	}
-	
-	@RequestMapping(value = "/downloaddocument/",method=RequestMethod.POST)
-    public ResponseEntity<?> downloadDocument(HttpServletRequest request,
-	    HttpServletResponse response,@RequestBody String searhfilter) {
-	try {
-	    LOGGER.info("in download ");
-	    LOGGER.info("search inputs"+searhfilter);
-	    return new ResponseEntity<>(userListService.downloadCustomerResult(response,searhfilter),HttpStatus.OK);
-	} catch (Exception e) {
-	    LOGGER.error("error while downloading the fiel"+e.getMessage());
-	    return new ResponseEntity<>(new ResponseMessage(e.getMessage()),HttpStatus.BAD_REQUEST);
-	}
 
-    }
+	@RequestMapping(value = "/downloaddocument/", method = RequestMethod.POST)
+	public ResponseEntity<?> downloadDocument(HttpServletRequest request, HttpServletResponse response,
+			@RequestBody String searhfilter) {
+		try {
+			LOGGER.info("in download ");
+			LOGGER.info("search inputs" + searhfilter);
+			LOGGER.debug("start of calling downloaddocument api");
+			return new ResponseEntity<>(userListService.downloadCustomerResult(response, searhfilter), HttpStatus.OK);
+		} catch (Exception e) {
+			LOGGER.error("error while downloading the fiel" + e.getMessage());
+			return new ResponseEntity<>(new ResponseMessage(e.getMessage()), HttpStatus.BAD_REQUEST);
+		}
+
+	}
 }

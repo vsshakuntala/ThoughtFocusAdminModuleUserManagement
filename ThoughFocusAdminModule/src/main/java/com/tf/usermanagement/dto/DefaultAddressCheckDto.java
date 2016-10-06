@@ -14,7 +14,25 @@ public class DefaultAddressCheckDto {
 	private long customerId;
 	private String salesAreaName;
 	private String customerName;
+	private long userOrgBillShipId;
+	private long userOrgSalesAreaId;
+	private long userOrgId;
+	private long adminId;
 	
+	
+	
+	public long getAdminId() {
+		return adminId;
+	}
+	public void setAdminId(long adminId) {
+		this.adminId = adminId;
+	}
+	public long getUserOrgId() {
+		return userOrgId;
+	}
+	public void setUserOrgId(long userOrgId) {
+		this.userOrgId = userOrgId;
+	}
 	//getters and setters
 	public long getSalesAreaId() {
 		return salesAreaId;
@@ -52,6 +70,30 @@ public class DefaultAddressCheckDto {
 	public void setCustomerName(String customerName) {
 		this.customerName = customerName;
 	}
+	public long getUserOrgBillShipId() {
+		return userOrgBillShipId;
+	}
+	public void setUserOrgBillShipId(long userOrgBillShipId) {
+		this.userOrgBillShipId = userOrgBillShipId;
+	}
+	public long getUserOrgSalesAreaId() {
+		return userOrgSalesAreaId;
+	}
+	public void setUserOrgSalesAreaId(long userOrgSalesAreaId) {
+		this.userOrgSalesAreaId = userOrgSalesAreaId;
+	}
+	@Override
+	public String toString() {
+		return "DefaultAddressCheckDto [salesAreaId=" + salesAreaId + ", billToAddressId=" + billToAddressId
+				+ ", shipToAddressId=" + shipToAddressId + ", customerId=" + customerId + ", salesAreaName="
+				+ salesAreaName + ", customerName=" + customerName + ", userOrgBillShipId=" + userOrgBillShipId
+				+ ", userOrgSalesAreaId=" + userOrgSalesAreaId + ", userOrgId=" + userOrgId + ", adminId=" + adminId
+				+ "]";
+	}
+	
+	//to string
+	
+	
 	
 	
 }

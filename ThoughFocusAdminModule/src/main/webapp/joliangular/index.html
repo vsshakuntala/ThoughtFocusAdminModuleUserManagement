@@ -16,11 +16,13 @@
 <!--<link href="app-content/css/dropdown.css" rel="stylesheet">-->
 <link href="app-content/css/intlTelInput.css" rel="stylesheet">
 <link href="app-content/css/address.css" rel="stylesheet">
+<link href="app-content/css/loadingposition.css" rel="stylesheet">
 <!-- EOF CSS INCLUDE -->
 <!-- START OF CUSTOM CSS -->
 <link rel="stylesheet" type="text/css"
 	href="app-content/css/machinemanagement.css" />
 <link rel="stylesheet" type="text/css" href="app-content/css/role.css" />
+<link rel="stylesheet" type="text/css" href="app-content/css/highlightrow.css" />
 <link rel="stylesheet" type="text/css" href="app-content/css/treasure-overlay-spinner.min.css" />
 
 <link rel="stylesheet" type="text/css"
@@ -37,12 +39,13 @@
 	href="app-content/css/selectize.default.css" />
 <link rel="stylesheet" type="text/css"
 	href="app-content/css/custom-icon-2/custom-icon-style.css" />
+	<link  rel="stylesheet" type="text/css"  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/css/bootstrap-dialog.min.css">
 <!-- END OF CUSTOM CSS -->
 </head>
 
 <body ng-class="{'spinnerrunning' : spinnerActive}">
 	<!-- START PAGE CONTAINER -->
-	<div class=" page-container ">
+	<div class=" page-container " >
 		<div ui-view></div>
 		<span us-spinner="{radius:30, width:8, length: 16}"
 			spinner-key="spinner-1 "></span>
@@ -145,6 +148,7 @@
 		src="app-content/js/plugins/checklist/checklist.js "></script>
 	<script type="text/javascript "
 		src="app-content/js/plugins/uibootstrap/uibootstrap.js "></script> 
+		<!--<script type="text/javascript" src="app-content/js/plugins/bootstrap-dialog.js"></script>-->
 		<!-- <script type="text/javascript "
 		src="http://hodgepodgers.github.io/ng-intl-tel-input/bower_components/intl-tel-input/build/js/intlTelInput.js"></script>
 		<script type="text/javascript "
@@ -195,6 +199,10 @@
 		
 	<!--START OF ANGULAR MODULE FILES-->
 	<!-- END SCRIPTS -->
+	<script type="text/javascript " src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap3-dialog/1.34.7/js/bootstrap-dialog.min.js"></script>
+	
+
+
 </body>
 
 </html>

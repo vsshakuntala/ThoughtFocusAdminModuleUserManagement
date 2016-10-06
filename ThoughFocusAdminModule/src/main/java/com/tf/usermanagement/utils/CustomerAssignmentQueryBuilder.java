@@ -16,8 +16,8 @@ public class CustomerAssignmentQueryBuilder {
   
     
     private String NEWUPDATEDUNASSIGNEDQUERY1="select customerNumber from "
-    	+ "(select customerNumber,customerName,addressOne,city,state,postal,country,billto,Status,Type,active "
-    	+ "from (select com.CUSTOMER_ID AS customerNumber,"
+    	+ "(select customerNumber,customerReference,customerName,addressOne,city,state,postal,country,billto,Status,Type,active "
+    	+ "from (select com.CUSTOMER_ID AS customerNumber,c.CUSTOMER_REFERENCE AS customerReference,"
     	+ "(Select CUSTOMER_NAME FROM CUSTOMER WHERE CUSTOMER_ID = com.CUSTOMER_ID) AS customerName,"
     	+ "(SELECT TOP 1 ADDRESS1 FROM ADDRESS WHERE CUSTOMER_ID = com.CUSTOMER_ID AND ADDRESS_TYPE_ID = 1) AS addressOne,"
     	+ "(SELECT TOP 1 CITY FROM ADDRESS WHERE CUSTOMER_ID = com.CUSTOMER_ID AND ADDRESS_TYPE_ID = 1) AS city,"
@@ -26,13 +26,13 @@ public class CustomerAssignmentQueryBuilder {
     	+ "(SELECT TOP 1 COUNTRY FROM ADDRESS WHERE CUSTOMER_ID = com.CUSTOMER_ID AND ADDRESS_TYPE_ID = 1) AS country,"
     	+ "(SELECT TOP 1 ADDRESS_REFERENCE FROM ADDRESS WHERE CUSTOMER_ID = com.CUSTOMER_ID AND ADDRESS_TYPE_ID = 1) AS billto,"
     	+ "(CASE com.ACTIVE WHEN 1 THEN 'UnASSIGNED' END) AS Status,'' AS Type,com.active AS active "
-    	+ "from CUSTOMER_ORGANIZATION_MAP com "
+    	+ "from CUSTOMER_ORGANIZATION_MAP com inner join CUSTOMER c on c.CUSTOMER_ID=com.CUSTOMER_ID AND c.ACTIVE=1 "
     	+ "where com.ORGANIZATION_ID=";
     private String NEWUPDATEDUNASSIGNEDQUERY2=" and com.ACTIVE=1 and com.CUSTOMER_ID not in "
     	+ "(SELECT distinct UsrCust.CUSTOMER_ID AS ASSIGNEDID_CUSTID FROM USERS Usr "
     	+ "INNER JOIN USER_CUSTOMER UsrCust ON Usr.USER_ID = UsrCust.USER_ID AND UsrCust.ACTIVE = 1 "
     	+ "INNER JOIN CUSTOMER Cust ON Cust.CUSTOMER_ID = UsrCust.CUSTOMER_ID AND Cust.ACTIVE = 1 "
-    	+ "LEFT JOIN CUSTOMER_ORGANIZATION_MAP CustOrg ON UsrCust.CUSTOMER_ID = CustOrg.CUSTOMER_ID AND CustOrg.ACTIVE = 1 "    	
+    	+ "INNER JOIN CUSTOMER_ORGANIZATION_MAP CustOrg ON UsrCust.CUSTOMER_ID = CustOrg.CUSTOMER_ID AND CustOrg.ACTIVE = 1 "    	
     	+ "WHERE Usr.USER_ID = ";
     
   private final String UPDATEDASSIGNEDQUERY1="SELECT distinct UsrCust.CUSTOMER_ID AS ASSIGNEDID_CUSTID "
@@ -80,7 +80,7 @@ public class CustomerAssignmentQueryBuilder {
 	}
 	
 	if(custNumber != null && custNumber.trim().length() > 0){
-	    builder.append("AND Cust.CUSTOMER_ID LIKE '").append(getBuilderString(custNumber)).append("' ");
+	    builder.append("AND Cust.CUSTOMER_REFERENCE LIKE '").append(getBuilderString(custNumber)).append("' ");
 	    }
 	
 	
@@ -129,7 +129,7 @@ public class CustomerAssignmentQueryBuilder {
 	}
 	
 	if(custNumber != null && custNumber.trim().length() > 0){
-	    builder.append("AND t.customerNumber LIKE '").append(getBuilderString(custNumber)).append("' ");
+	    builder.append("AND t.customerReference LIKE '").append(getBuilderString(custNumber)).append("' ");
 	    }
 	
 	builder.append(getBuilderStringUnAssign(billToNumber,addressOne,city,state,postalCode));

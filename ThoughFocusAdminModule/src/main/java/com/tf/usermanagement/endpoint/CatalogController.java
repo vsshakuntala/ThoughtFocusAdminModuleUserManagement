@@ -25,7 +25,9 @@ public class CatalogController {
 	public ResponseEntity<Integer> getCatalogCountForOrg(@PathVariable Long orgId) {
 		Integer count = null;
 		try {
+		    LOGGER.debug("start of calling catalogcount api");
 			count = catalogService.catalogCountBasedOnOrg(orgId);
+			  LOGGER.debug("end of calling catalogcount api");
 			if (count != null) {
 				return new ResponseEntity<Integer>(count, HttpStatus.OK);
 			}
@@ -43,7 +45,9 @@ public class CatalogController {
 	public ResponseEntity<Integer> getCatalogCountForActiveOrg(@PathVariable long orgId, @PathVariable long userId) {
 		Integer count = null;
 		try {
+		    LOGGER.debug("start of calling catalogcountforactiveorg api");
 			count = catalogService.getCatalogCount(orgId, userId);
+			  LOGGER.debug("end of calling catalogcountforactiveorg api");
 			return new ResponseEntity<Integer>(count, HttpStatus.OK);
 		} catch (CatalogException e) {
 			LOGGER.error(e.getMessage());
@@ -57,9 +61,9 @@ public class CatalogController {
 	public ResponseEntity<Long> getCatalogAssignedCount(@PathVariable long orgId, @PathVariable long userId){
 		Long count = null;
 		try {
-			
+		    LOGGER.debug("start of calling catalogAssignedCount api");
 			count = catalogService.getCatalogAssignedCount(orgId, userId);
-			System.out.println("COUNT in controller:"+count);
+			  LOGGER.debug("end of calling catalogAssignedCount api");
 			return new ResponseEntity<Long>(count, HttpStatus.OK);
 		} catch (CatalogException e) {
 			LOGGER.error(e.getMessage());

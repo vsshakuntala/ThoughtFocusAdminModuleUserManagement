@@ -1,5 +1,7 @@
 package com.tf.usermanagement.endpoint;
 
+import java.security.Principal;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -44,11 +46,14 @@ public class MachineAssignmentController {
 	 */
 	@RequestMapping(value = "/removemachine/{user_id}/{org_id}/{login_user_id}", method = RequestMethod.POST)
 	public ResponseEntity<?> removeMachine(@PathVariable("user_id") Long userId, @PathVariable("org_id") Long orgId,
-			@PathVariable("login_user_id") Long loginUserId, @RequestBody String assignedCatalogList) {
+			@PathVariable("login_user_id") Long loginUserId, @RequestBody String assignedCatalogList,Principal principal) {
 		LOGGER.info("In removeMachine :" + assignedCatalogList);
 		try {
+		    LOGGER.debug("start of calling removemachine api");
+		    loginUserId=Long.parseLong(principal.getName());
 			String msg = machineAssignmentService.removeMachine(loginUserId, userId, orgId, assignedCatalogList);
 
+			    LOGGER.debug("end of calling removemachine api");
 			return new ResponseEntity<>(new ResponseMessage(msg), HttpStatus.OK);
 
 		} catch (NullPointerException e) {
@@ -65,13 +70,14 @@ public class MachineAssignmentController {
 	@RequestMapping(value = "/downloadmachinedocument/{user_id}/{organization_id}/{login_user_id}", method = RequestMethod.POST)
 	public ResponseEntity<?> downloadDocument(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("user_id") Long userId, @PathVariable("organization_id") Long orgId,
-			@PathVariable("login_user_id") Long loginUserId, @RequestBody String searhfilter) {
+			@PathVariable("login_user_id") Long loginUserId, @RequestBody String searhfilter,Principal principal) {
 		try {
+			  loginUserId=Long.parseLong(principal.getName());
 			LOGGER.info("in download machines");
 
 			LOGGER.info(
 					"userId " + userId + " orgId " + orgId + " loginId " + loginUserId + "searhfilter|" + searhfilter);
-
+			 LOGGER.debug("start of calling downloadmachinedocument api");
 			return new ResponseEntity<>(
 					machineAssignmentService.downloadMachineResult(response, loginUserId, userId, orgId, searhfilter),
 					HttpStatus.OK);
@@ -85,24 +91,30 @@ public class MachineAssignmentController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/machineassignmentreport", method = RequestMethod.GET)
 	public DataTablesOutput empReport(MachineReport.MachineAssignmentDtInput inputDt) {
+	    LOGGER.debug("start of calling machineassignmentreport api");
 		DataTablesOutput obj = machineAssignmentReport.fetchData(inputDt);
+		LOGGER.debug("end of calling machineassignmentreport api");
 		return obj;
 	}
 
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value = "/machineunassignmentreport", method = RequestMethod.GET)
 	public DataTablesOutput empReport(MachineUnAssignmentReport.MachineAssignmentDtInput inputDt) {
+	    LOGGER.debug("start of calling machineunassignmentreport api");
 		DataTablesOutput obj = machineUnAssignmentReport.fetchData(inputDt);
+		LOGGER.debug("end of calling machineunassignmentreport api");
 		return obj;
 	}
 
 	@RequestMapping(value = "/assignmachine/{user_id}/{org_id}/{logIn_user_id}", method = RequestMethod.POST)
 	public ResponseEntity<?> assignMachine(@PathVariable("user_id") Long userId, @PathVariable("org_id") Long orgId,
-			@PathVariable("logIn_user_id") Long loginUserId, @RequestBody String assignedCatalogList) {
+			@PathVariable("logIn_user_id") Long loginUserId, @RequestBody String assignedCatalogList,Principal principal) {
 
 		try {
+			 loginUserId=Long.parseLong(principal.getName());
+		    LOGGER.debug("start of calling assignmachine api");
 			String msg = machineAssignmentService.assignMachine(loginUserId, userId, orgId, assignedCatalogList);
-
+			LOGGER.debug("end of calling assignmachine api");
 			return new ResponseEntity<>(new ResponseMessage(msg), HttpStatus.OK);
 
 		} catch (NullPointerException e) {
@@ -123,10 +135,12 @@ public class MachineAssignmentController {
 	@RequestMapping(value = "/assignallmachine/{userId}/{organizationId}/{loginUserId}", method = RequestMethod.POST)
 	public ResponseEntity<?> assignAllMachine(@PathVariable("loginUserId") Long loginUserId,
 			@PathVariable("userId") Long userId, @PathVariable("organizationId") Long organizationId,
-			@RequestBody String machine) {
+			@RequestBody String machine,Principal principal) {
 		try {
+			loginUserId=Long.parseLong(principal.getName());
+		    LOGGER.debug("start of calling assignallmachine api");
 			String msg = machineAssignmentService.assignAllMachine(loginUserId, userId, organizationId, machine);
-
+			LOGGER.debug("end of calling assignallmachine api");
 			return new ResponseEntity<>(new ResponseMessage(msg), HttpStatus.OK);
 
 		} catch (NullPointerException e) {
@@ -148,10 +162,12 @@ public class MachineAssignmentController {
 	@RequestMapping(value = "/removeallmachine/{userId}/{organizationId}/{loginUserId}", method = RequestMethod.POST)
 	public ResponseEntity<?> removeAllMachine(@PathVariable("loginUserId") Long loginUserId,
 			@PathVariable("userId") Long userId, @PathVariable("organizationId") Long organizationId,
-			@RequestBody String machine) {
+			@RequestBody String machine,Principal principal) {
 		try {
+			loginUserId=Long.parseLong(principal.getName());
+		    LOGGER.debug("start of calling removeallmachine api");
 			String msg = machineAssignmentService.removeAllMachine(loginUserId, userId, organizationId, machine);
-
+			LOGGER.debug("end of calling removeallmachine api");
 			return new ResponseEntity<>(new ResponseMessage(msg), HttpStatus.OK);
 
 		} catch (NullPointerException e) {
@@ -169,7 +185,9 @@ public class MachineAssignmentController {
 	public CatalogCountForOrgDto getCatalogCount(@PathVariable("usr_id") Long usrId,
 			@PathVariable("org_id") Long orgId) {
 		try {
+		    LOGGER.debug("start of calling getCatalogCount api");
 			CatalogCountForOrgDto catalogCount = machineAssignmentService.getCatalogsCountForOrganization(usrId, orgId);
+			LOGGER.debug("end of calling getCatalogCount api");
 			return catalogCount;
 
 		} catch (NullPointerException e) {
@@ -183,9 +201,9 @@ public class MachineAssignmentController {
 	public ResponseEntity<Long> getCatalogAssignedCount(@PathVariable long orgId, @PathVariable long userId){
 		Long count = null;
 		try {
-			
+		    LOGGER.debug("start of calling catalogAssignedCount api");
 			count = machineAssignmentService.getCatalogAssignedCount(orgId, userId);
-			System.out.println("COUNT in controller:"+count);
+			LOGGER.debug("end of calling catalogAssignedCount api");
 			return new ResponseEntity<Long>(count, HttpStatus.OK);
 		} catch (CatalogException e) {
 			LOGGER.error(e.getMessage());

@@ -45,8 +45,8 @@ public class CustomerAssignmentReport extends AbstractDataTableReport{
 		+ "where usr.user_id=:userId AND grp.ORGANIZATION_ID=:orgId)) t";
 	
 	
-	String updatedQuery ="((SELECT UsrCust.CUSTOMER_ID AS customerNumber,Cust.CUSTOMER_NAME AS customerName,"
-		+ " '' as Type,Usr.USER_ID AS userId,CustOrg.ORGANIZATION_ID AS orgId,"		
+	String updatedQuery ="((SELECT distinct Cust.CUSTOMER_REFERENCE AS customerNumber,Cust.CUSTOMER_NAME AS customerName,"
+		+ " '' as Type,Usr.USER_ID AS userId,CustOrg.ORGANIZATION_ID AS orgId,Cust.CUSTOMER_ID AS customerId,"		
 		+ "(SELECT TOP 1 ADDRESS1 FROM ADDRESS WHERE CUSTOMER_ID = UsrCust.CUSTOMER_ID AND ADDRESS_TYPE_ID = 1 AND ACTIVE=1) AS addressOne,"
 		+ "(SELECT TOP 1 CITY FROM ADDRESS WHERE CUSTOMER_ID = UsrCust.CUSTOMER_ID AND ADDRESS_TYPE_ID = 1 AND ACTIVE=1) AS city,"
 		+ "(SELECT TOP 1 STATE FROM ADDRESS WHERE CUSTOMER_ID = UsrCust.CUSTOMER_ID AND ADDRESS_TYPE_ID = 1 AND ACTIVE=1) AS state,"
@@ -57,8 +57,8 @@ public class CustomerAssignmentReport extends AbstractDataTableReport{
 		+ "INNER JOIN CUSTOMER Cust ON Cust.CUSTOMER_ID = UsrCust.CUSTOMER_ID AND Cust.ACTIVE = 1 "
 		+ "INNER JOIN CUSTOMER_ORGANIZATION_MAP CustOrg ON UsrCust.CUSTOMER_ID = CustOrg.CUSTOMER_ID AND CustOrg.ACTIVE = 1 "		
 		+ "WHERE  Usr.USER_ID = :userId AND CustOrg.ORGANIZATION_ID = :orgId )UNION ALL "
-		+ "( SELECT DISTINCT GrpCust.CUSTOMER_ID AS customerNumber,c.customer_name AS customerName,Grp.GROUP_NAME AS TYPE,"
-		+ "Usr.USER_ID AS userId,grp.ORGANIZATION_ID AS orgId,"
+		+ "( SELECT DISTINCT c.CUSTOMER_REFERENCE AS customerNumber,c.customer_name AS customerName,Grp.GROUP_NAME AS TYPE,"
+		+ "Usr.USER_ID AS userId,grp.ORGANIZATION_ID AS orgId,c.CUSTOMER_ID AS customerId,"
 		+ "(SELECT TOP 1 ADDRESS1 FROM ADDRESS WHERE CUSTOMER_ID = GrpCust.CUSTOMER_ID AND ADDRESS_TYPE_ID = 1 AND ACTIVE=1) AS addressOne,"
 		+ "(SELECT TOP 1 CITY FROM ADDRESS WHERE CUSTOMER_ID = GrpCust.CUSTOMER_ID AND ADDRESS_TYPE_ID = 1 AND ACTIVE=1) AS city,"
 		+ "(SELECT TOP 1 STATE FROM ADDRESS WHERE CUSTOMER_ID = GrpCust.CUSTOMER_ID AND ADDRESS_TYPE_ID = 1 AND ACTIVE=1) AS state,"
@@ -73,7 +73,7 @@ public class CustomerAssignmentReport extends AbstractDataTableReport{
 		+ "where usr.user_id=:userId AND grp.ORGANIZATION_ID=:orgId)) t";	
 	
 	
-	QueryTemplate queryTemplate = qtb.fetchColumns("customerNumber,customerName,Type,userId,orgId,addressOne,city,state,postal,country,billto")
+	QueryTemplate queryTemplate = qtb.fetchColumns("customerNumber,customerName,Type,userId,orgId,addressOne,city,state,postal,country,billto,customerId")
 		.from(updatedQuery)
 		.addFilterExpressionWithKey(USERID_FILTER, "t.userId = :userId")
 		.addFilterExpressionWithKey(ORGID_FILTER,"t.orgId = :orgId")			
@@ -92,7 +92,7 @@ public class CustomerAssignmentReport extends AbstractDataTableReport{
     @Override
     protected Map<String, String> mapDataTableColNameToDBCol() {
 	Map<String, String> map = new HashMap<>();
-	map.put("customerName", "customerNumber");
+	map.put("customerName", "customerName");
 	map.put("customerNumber", "customerNumber");
 	map.put("country", "country");
 	map.put("addressOne", "addressOne");
@@ -100,6 +100,7 @@ public class CustomerAssignmentReport extends AbstractDataTableReport{
 	map.put("state", "state");
 	map.put("postal", "postal");
 	map.put("Type", "Type");
+	map.put("customerId", "customerId");
 	
 	return map;
     }

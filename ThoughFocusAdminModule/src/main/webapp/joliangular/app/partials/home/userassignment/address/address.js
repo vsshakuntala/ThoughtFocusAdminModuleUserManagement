@@ -185,7 +185,7 @@ addressmodule.controller('AddressController',
                                 url = $rootScope.baseUrl + 'addassgn/getcatlist/' + $scope.selectedObject.salesAreaId + '/' + $scope.userDetails.userId;
                             } else {
                                 // url = $rootScope.baseUrl + 'addassgn/allcustomerlist/48111';
-                                url = $rootScope.baseUrl + 'addassgn/allcustomerlist/' + $scope.userDetails.userId;
+                                url = $rootScope.baseUrl + 'addassgn/allcustomerlist/' + $scope.userDetails.userId + '/' + $scope.organization.organizationId;
                             }
                             var obj = prepareApiObject(pageNumberForCustomer, countPerPage, queryString);
                             genericService.addObject(url, obj).then(function (data) {
@@ -240,7 +240,7 @@ addressmodule.controller('AddressController',
                             if ($scope.selectedObject.salesAreaId !== 0) {
                                 url = $rootScope.baseUrl + 'addassgn/getcatlist/' + $scope.selectedObject.salesAreaId + '/' + $scope.userDetails.userId;
                             } else {
-                                url = $rootScope.baseUrl + 'addassgn/allcustomerlist/' + $scope.userDetails.userId;
+                                url = $rootScope.baseUrl + 'addassgn/allcustomerlist/' + $scope.userDetails.userId + '/' + $scope.organization.organizationId;
                                 // url = $rootScope.baseUrl + 'addassgn/allcustomerlist/48111';
                             }
                             var obj = prepareApiObject(pageNumberForCustomer, countPerPage, queryString);
@@ -326,7 +326,7 @@ addressmodule.controller('AddressController',
                 $scope.customerList = [];
                 queryString = null;
                 var obj = prepareApiObject(pageNumberForCustomer, countPerPage, queryString);
-                var url = $rootScope.baseUrl + 'addassgn/allcustomerlist/' + $scope.userDetails.userId;
+                var url = $rootScope.baseUrl + 'addassgn/allcustomerlist/' + $scope.userDetails.userId + '/' + $scope.organization.organizationId;
                 genericService.addObject(url, obj).then(function (data) {
                     $scope.customerList = data.data;
                     if ($scope.customerList.length !== 0 && $scope.defaultAddressIds.customerId) {
@@ -339,7 +339,7 @@ addressmodule.controller('AddressController',
                         } else {
                             queryString = $scope.defaultAddressIds.customerName;
                             var obj = prepareApiObject(pageNumberForCustomer, 1000, queryString);
-                            url = $rootScope.baseUrl + 'addassgn/allcustomerlist/' + $scope.userDetails.userId;
+                            url = $rootScope.baseUrl + 'addassgn/allcustomerlist/' + $scope.userDetails.userId + '/' + $scope.organization.organizationId;
                             genericService.addObject(url, obj).then(function (data) {
                                 var obj = $filter('filter')(data.data, { customerId: $scope.defaultAddressIds.customerId }, true);
                                 $scope.customerList.push(angular.copy(obj[0]));
@@ -376,7 +376,7 @@ addressmodule.controller('AddressController',
                         } else {
                             queryString = $scope.defaultAddressIds.customerName;
                             var obj = prepareApiObject(pageNumberForCustomer, 1000, queryString);
-                            url = $rootScope.baseUrl + 'addassgn/allcustomerlist/' + $scope.userDetails.userId;
+                            url = $rootScope.baseUrl + 'addassgn/allcustomerlist/' + $scope.userDetails.userId + '/' + $scope.organization.organizationId;
                             genericService.addObject(url, obj).then(function (data) {
                                 var obj = $filter('filter')(data.data, { customerId: $scope.defaultAddressIds.customerId }, true);
                                 $scope.customerList.push(angular.copy(obj[0]));
@@ -394,6 +394,7 @@ addressmodule.controller('AddressController',
             }
 
             $scope.customerSelected = function () {
+                
                 $scope.selectedObject.customerId = $scope.selectedObjectName.customer.customerId;
                 if ($scope.selectedObject.customerId !== 0) {
                     if ($scope.addressForm.$submitted && !$scope.addressForm.customer.$error.required) {
@@ -408,14 +409,22 @@ addressmodule.controller('AddressController',
                     $scope.getBillingAddress();
                 }
             }
-
+             $("#choicelist").mouseover(function (e) {
+                 $log.debug("jhjhj");
+                        $("#choicelist").addClass('highlight');
+                    })
+                    $("#choicelist").mouseout(function (e) {
+                        $("#choicelist").removeClass('highlight');
+                    })
             $scope.getBillingAddress = function () {
+                
                 genericService.getObjects($rootScope.baseUrl + 'addassgn/getbilladd/' + $scope.selectedObject.customerId + '/' + addressTypeForBillingAddress).then(function (response) {
                     if (response.length) {
                         $scope.billingAddressList = response;
                         var obj = $filter('filter')($scope.billingAddressList, { addressId: $scope.defaultAddressIds.billToAddressId }, true);
                         if (obj.length) {
                             $scope.selectedObject.billToAddressId = obj[0].addressId;
+                            $scope.selectedObjectName.billing = obj[0];
                             $scope.billingAddressSelected();
                         }
                     } else {
@@ -436,12 +445,13 @@ addressmodule.controller('AddressController',
             }
 
             $scope.getShippingAddress = function () {
-                genericService.getObjects($rootScope.baseUrl + 'addassgn/getshipadd/' + $scope.selectedObject.billToAddressId + '/' + addressTypeForShippingAddress).then(function (response) {
+                genericService.getObjects($rootScope.baseUrl + 'addassgn/getshipadd/' + $scope.selectedObject.customerId + '/' + addressTypeForShippingAddress).then(function (response) {
                     if (response.length) {
                         $scope.shippingAddressList = response;
                         var obj = $filter('filter')($scope.shippingAddressList, { addressId: $scope.defaultAddressIds.shipToAddressId }, true);
                         if (obj.length) {
                             $scope.selectedObject.shipToAddressId = obj[0].addressId;
+                            $scope.selectedObjectName.shipping = obj[0];
                         }
                     } else {
                     }
@@ -458,9 +468,9 @@ addressmodule.controller('AddressController',
             }
 
             $scope.saveDefaultAddress = function () {
-                console.log('asd ' + $scope.salesvalidationRequired);
                 if ($scope.salesvalidationRequired && $scope.addressForm.$submitted && $scope.selectedObject.salesAreaId === 0) {
                     $scope.addressForm.sales.$error.required = true;
+                    return;
                 }
                 if ($scope.addressForm.$submitted && ($scope.selectedObject.customerId === 0 || $scope.selectedObject.billToAddressId === 0 || $scope.selectedObject.shipToAddressId === 0)) {
                     if ($scope.selectedObject.customerId === 0) {
@@ -476,19 +486,28 @@ addressmodule.controller('AddressController',
                     var obj = angular.copy($scope.selectedObject);
                     obj.userId = $scope.userDetails.userId;
                     obj.adminId = $rootScope.adminId;
-                    obj.organizationId = $scope.userOrganizationId;
-                    obj.userOrgId = $scope.organization.organizationId;
-                    genericService.addObject($rootScope.baseUrl + 'addassgn/getsalesareamap', obj).then(function (response) {
-                        genericService.addObject($rootScope.baseUrl + 'addassgn/getbillshipmap', obj).then(function (response) {
-                            $.toaster({ priority: 'success', message: defaultAddressSavedSucess });
-                        }, function (response) {
-                            $.toaster({ priority: 'danger', message: defaultAddressSavedFailed });
-                        });
+                    obj.organizationId = $scope.organization.organizationId;
+                    obj.userOrgId = $scope.userOrganizationId;
+                    obj.userOrgBillShipId = $scope.defaultAddressIds.userOrgBillShipId;
+                    obj.userOrgBillShipId = $scope.defaultAddressIds.userOrgBillShipId;
+                    obj.userOrgSalesAreaId = $scope.defaultAddressIds.userOrgSalesAreaId;
+                    // genericService.addObject($rootScope.baseUrl + 'addassgn/getsalesareamap', obj).then(function (response) {
+                    //     genericService.addObject($rootScope.baseUrl + 'addassgn/getbillshipmap', obj).then(function (response) {
+                    //         $.toaster({ priority: 'success', message: defaultAddressSavedSucess });
+                    //         $state.go('home.userassignment.division', {}, { reload: true });
+                    //     }, function (response) {
+                    //         $.toaster({ priority: 'danger', message: defaultAddressSavedFailed });
+                    //     });
+                    // }, function (response) {
+                    //     $.toaster({ priority: 'danger', message: defaultAddressSavedFailed });
+                    // });
+                    genericService.addObject($rootScope.baseUrl + 'addassgn/saveOrUpdateDefaultAddress', obj).then(function (response) {
+                        $.toaster({ priority: 'success', message: defaultAddressSavedSucess });
+                        $state.go('home.userassignment.division', {}, { reload: true });
                     }, function (response) {
                         $.toaster({ priority: 'danger', message: defaultAddressSavedFailed });
                     });
                 }
-
             }
 
             $scope.cancel = function () {

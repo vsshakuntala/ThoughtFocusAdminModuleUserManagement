@@ -241,9 +241,21 @@ public class MachineAssignmentServiceimpl implements MachineAssignmentService{
 			        font.setBoldweight((short)1);
 			        font.setFontHeightInPoints((short) 12);
 			        cellStyle.setFont(font);
-			        //Start of create the search header criteria
+			        CellStyle filterStyle = sheet.getWorkbook().createCellStyle();
+					Font fonts = sheet.getWorkbook().createFont();
+					fonts.setBoldweight((short) 6);
+					fonts.setFontHeightInPoints((short) 15);
+					filterStyle.setFont(fonts);
+
+					//filter criteria
+					Row firstrow = sheet.createRow(rownum++);
+					Cell FilterCell = firstrow.createCell(0);
+					FilterCell.setCellStyle(filterStyle);
+					FilterCell.setCellValue("Filter Criteria");
+					//end of filter criteria
+
+					//Start of create the search header criteria
 			        Row row = sheet.createRow(rownum++);
-			        
 			        Cell customeNameCell = row.createCell(0);				     
 			        customeNameCell.setCellStyle(cellStyle);
 			        customeNameCell.setCellValue("Serial #");
@@ -308,8 +320,15 @@ public class MachineAssignmentServiceimpl implements MachineAssignmentService{
 			        }
 			        
 			      //End of create the search data
-			     
-			      //Start of create the Header of table
+
+			        //start filter result
+					Row secondrow = sheet.createRow(rownum++);
+					Cell FilterDataCell = secondrow.createCell(0);
+					FilterDataCell.setCellStyle(filterStyle);
+					FilterDataCell.setCellValue("Filter Result");
+					//end of filter result
+
+					//Start of create the Header of table
 			        Row nextNewRow = sheet.createRow(rownum++);				        
 			     
 			        Cell customerNumberCellData = nextNewRow.createCell(0);
@@ -337,6 +356,7 @@ public class MachineAssignmentServiceimpl implements MachineAssignmentService{
 			        postalCellData.setCellValue("Group Name");
 			     
 			        //End of create the Header of table
+			      
 			        
 			        //Start of insert the data from database
 			       if(machineList != null && !machineList.isEmpty()){
@@ -345,7 +365,7 @@ public class MachineAssignmentServiceimpl implements MachineAssignmentService{
 				       Row row1 = sheet.createRow(rownum++);
 				       
 				       Cell customerNumberCellData1 = row1.createCell(0);
-				        customerNumberCellData1.setCellValue(machineDtoObj.getCatalog_id());
+				        customerNumberCellData1.setCellValue(machineDtoObj.getCatalog_name());
 				        
 				        Cell customeNameCellData1 = row1.createCell(1);				     
 				        customeNameCellData1.setCellValue(machineDtoObj.getModel());				     

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.genalpha</groupId>
 	<artifactId>ThoughtFocusAdminModule</artifactId>
-	<version>0.0.9-SNAPSHOT</version>
+	<version>0.1.6-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>ThoughFocusAdminModule</name>
 	<description>Admin module for Thought Focus</description>
@@ -42,24 +42,22 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	<!-- 	<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-		</dependency> -->
-		
-			<dependency>
+		<!-- <dependency> <groupId>commons-dbcp</groupId> <artifactId>commons-dbcp</artifactId> 
+			</dependency> -->
+
+		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-dbcp2</artifactId>
-		</dependency> 
-		
+		</dependency>
+
 		<!-- <dependency> <groupId>com.spaneos</groupId> <artifactId>dtssp-util</artifactId> 
 			<version>1.0.3-SNAPSHOT</version> <type>jar</type> </dependency> -->
 
 		<dependency>
-      <groupId>com.spaneos</groupId>
-      <artifactId>dtssp-util-mssql</artifactId>
-      <version>1.0.6-RELEASE</version>
- </dependency>
+			<groupId>com.spaneos</groupId>
+			<artifactId>dtssp-util-mssql</artifactId>
+			<version>1.0.6-RELEASE</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.alexkasko.springjdbc</groupId>
@@ -118,10 +116,11 @@
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-core</artifactId>
 		</dependency>
+		<!-- Spring security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
+		</dependency> 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jersey</artifactId>
@@ -177,13 +176,36 @@
 			<artifactId>javax.mail</artifactId>
 			<version>1.5.2</version>
 		</dependency>
-		
+
 		<!-- Http post server calls -->
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 			<version>4.5.1</version>
 		</dependency>
+
+		<!-- logging log4j-->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j</artifactId>
+		</dependency>
+		
+		<!-- logging ends -->
 
 	</dependencies>
 

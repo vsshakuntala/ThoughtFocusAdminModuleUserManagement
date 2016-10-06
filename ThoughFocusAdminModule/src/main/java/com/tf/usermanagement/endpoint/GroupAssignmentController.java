@@ -1,5 +1,6 @@
 package com.tf.usermanagement.endpoint;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -65,7 +66,9 @@ public class GroupAssignmentController {
 	//Long userId=110L;
 	//Integer orgId=1;
 	LOGGER.info("userId "+userId+" orgId "+orgId+" loginId "+loginId);
+	  LOGGER.debug("srart of calling the get all group");
 	GroupAllDto grpList = groupAssignmentService.getAllGroup(userId,orgId);
+	  LOGGER.debug("End of calling the get all group");
 	return grpList;
     }
     
@@ -74,12 +77,15 @@ public class GroupAssignmentController {
      */
     @RequestMapping(value="/updategroup/{user_id}/{organization_id}/{login_user_id}", method=RequestMethod.POST)
     public ResponseEntity<?> updateGroup(@PathVariable("user_id") Long userId,@PathVariable("organization_id") Integer orgId,
-	    @PathVariable("login_user_id") Long loginId,@RequestBody String jsonData){
+	    @PathVariable("login_user_id") Long loginId,@RequestBody String jsonData,Principal principal){
 	
 	try{    
+	    loginId = Long.parseLong(principal.getName());
 	    //Long userId=110L;
 	    LOGGER.info("userId "+userId+" orgId "+orgId+" loginId "+loginId);
+	    LOGGER.debug("srart of calling the update all group");
 	String grpList = groupAssignmentService.updateGroup(jsonData,userId,loginId);
+	  LOGGER.debug("end of calling the update all group");
 	LOGGER.info("message "+grpList);
 	   
 	return new ResponseEntity<>(new ResponseMessage(grpList), HttpStatus.OK);		

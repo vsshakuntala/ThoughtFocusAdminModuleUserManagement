@@ -58,6 +58,13 @@ tf.run(
                     StorageService.remove('userDetails');
                 }
             });
+            
+            genericService.getObjects('../' + 'usermgmtrest/getuseremailbyid/'+0).then(function (data) {
+               $log.debug('getEmailbyId: ' + angular.toJson(data));
+               $rootScope.adminEmail = data['emailId'];
+           }, function () {
+               $log.debug('getEmailbyId failed: ' + angular.toJson(data));
+           });
 
             $rootScope.startSpin = function () {
                 if (!$rootScope.spinnerActive) {

@@ -2,6 +2,9 @@ package com.tf.usermanagement.dao;
 
 import java.util.List;
 
+import org.hibernate.Session;
+
+import com.tf.usermanagement.domain.Organization;
 import com.tf.usermanagement.domain.UserOrganizationMap;
 import com.tf.usermanagement.dto.AdminOrgListDto;
 import com.tf.usermanagement.dto.AssignOrgDto;
@@ -40,17 +43,19 @@ public interface DivisionMgmtDao {
 
 	public List<DefaultAddressCountDto> getDefaultAddressCountByOrganization(long userId);
 
-	public boolean deAssignCatalogsOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto);
+	public boolean deAssignCatalogsOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session);
 
-	public boolean deAssignCustomerOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto);
+	public boolean deAssignCustomerOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session);
 
-	public boolean deAssignGroupOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto);
+	public boolean deAssignGroupOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session);
 
-	public boolean deAssignRoleOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto);
+	public boolean deAssignRoleOfOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session);
+	
+	public boolean deAssignDefaultAddress(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session);
 
-	public boolean deAssignUserFromOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto);
+	public boolean deAssignUserFromOrganization(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session);
 
-	public boolean deActivateUser(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto);
+	public boolean deActivateUser(DeAssignUserToOrgInputDto deAssignUserToOrgInputDto,Session session);
 
 	public List<AdminOrgListDto> getOrganizationListOfAdmin(long adminId);
 
@@ -62,6 +67,10 @@ public interface DivisionMgmtDao {
 	public List<UserNotesDto> getNotesListForUser(long userId);
 
 	public boolean addNotesToUser(UserNotesDto userNotesDto);
+	
+	public boolean addNotesToUserForDeassignmentOfOrg(UserNotesDto userNotesDto,Session session);
 
 	public DefaultAddressCheckDto getDefaultAddressForUserOrg(long userOrgId);
+
+	Organization getOrganizationById(long orgId);
 }

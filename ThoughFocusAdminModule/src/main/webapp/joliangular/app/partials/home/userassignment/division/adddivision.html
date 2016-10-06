@@ -35,7 +35,7 @@
                                                 </select>-->
                                                         </div>
                                                         <div class="">
-                                                            <select multiple="false" class="form-control" ng-model="unassignedSelectedDivision" ng-options="division.organizationName for division in unAssignedDivision | filter : searchAssignedList | orderBy : 'organizationName'">
+                                                            <select multiple="false" class="form-control" ng-model="unassignedSelectedDivision" ng-options="division.organizationName for division in unAssignedDivision | filter : searchUnassignedList | orderBy : 'organizationName'">
                                                         <!--<option ng-repeat="division in assignedDivision | filter : searchAssignedList | orderBy : 'organizationName'" value="division.organizationName">{{division.organizationName}}</option>-->
                                                     </select>
                                                         </div>
@@ -91,14 +91,23 @@
                                     <div class="panel-body">
                                         <div class="messages messages-img">
                                             <div class="item in item-visible">
-                                                <textarea placeholder="Write your notes here" ng-model="user.notes" name="notes" id="notes" class="form-control new-user-notes" rows="7"></textarea>
+                                                <textarea placeholder="Write your notes here" ng-model="user.notes" name="notes" id="notes" class="form-control new-user-notes"
+                                                    rows="7"></textarea>
                                             </div>
                                             <div class="item in item-visible notes-scroll">
                                                 <div ng-repeat="note in notes">
-                                                    <div class="row" style="margin-bottom: 15px;">
+                                                    <!--<div class="row" style="margin-bottom: 15px;">
                                                         <textarea class="form-control" id="inputNote" rows="3" style="resize: none;" readonly>{{note.notes}} 
                                                                         {{note.userName}} , {{note.createdDate|date:'dd-MMM-yyyy , h:mma'}}
                                                         </textarea>
+                                                    </div>-->
+                                                    <div class="form-control notes-textarea" style="margin-bottom: 15px;">
+                                                        <div class="row" id="inputNote" style="resize: none;" readonly>
+                                                            <span>{{note.notes}}</span>
+                                                        </div>
+                                                        <div class="row" id="inputNote" style="resize: none;" readonly>
+                                                            <span class="pull-right">{{note.userName}} , {{note.createdDate|date:'dd-MMM-yyyy , h:mma'}}</span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -108,7 +117,7 @@
                             </div>
                             <div class="col-sm-offset-4 col-sm-12 text-center button-margin">
 
-                                <button type="button" class="btn btn-success mb-control" data-box="#confirm-assignment">Save</button>
+                                <button type="button" class="btn btn-success mb-control" ng-click="updateDivisionAssignment()">Save</button>
                                 <input type="button" data-dismiss="modal" class="btn btn-danger" id="cancel" name="cancel" value="Cancel" />
                             </div>
                         </div>
@@ -119,25 +128,6 @@
     </div>
 </div>
 
-<!-- MESSAGE BOX-->
-<div class="message-box animated fadeIn" data-sound="alert" id="confirm-assignment">
-    <div class="mb-container">
-        <div class="mb-middle">
-            <div class="mb-title"><strong>Confirm</strong> ?</div>
-            <div class="mb-content">
-                <p>Are you sure you want to Save?</p>
-                <p>Press No if you want to continue work. Press Yes to Save.</p>
-            </div>
-            <div class="mb-footer">
-                <div class="pull-right">
-                    <a ng-click="updateDivisionAssignment()" class="btn btn-success btn-lg">Yes</a>
-                    <button class="btn btn-default btn-lg mb-control-close" id="confirm-close">No</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- END MESSAGE BOX-->
 <!--<div class="messages messages-img">
                                             <div class="item in item-visible">
                                                 <textarea ng-model="notes" name="notes" id="notes" class="form-control new-user-notes"></textarea>

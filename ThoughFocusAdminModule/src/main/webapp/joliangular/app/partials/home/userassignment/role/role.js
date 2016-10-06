@@ -36,10 +36,11 @@ rolemodule.controller('RoleController',
         '$rootScope',
         'genericService',
         '$stateParams',
+        '$state',
         'StorageService',
         'roleService',
         'ROLECONSTANTS',
-        function ($scope, $log, $filter, $rootScope, genericService, $stateParams, StorageService, roleService, ROLECONSTANTS) {
+        function ($scope, $log, $filter, $rootScope, genericService, $stateParams, $state, StorageService, roleService, ROLECONSTANTS) {
 
             if (angular.isDefined($stateParams.userDetails) && $stateParams.userDetails !== null) {
                 $scope.userDetails = angular.copy($stateParams.userDetails);
@@ -72,6 +73,7 @@ rolemodule.controller('RoleController',
             $scope.assignedSelectedRole = [];
             $scope.assignedCheck = 'uncheck';
             $scope.checkToggleAssigned = function (assignedCheck) {
+                $scope.permissions = [];
                 $scope.assignedSelectedRole = [];
                 if (assignedCheck.toString() === 'check') {
                     for (var i = 0; i < $scope.assignedRole.length; i++) {
@@ -82,6 +84,7 @@ rolemodule.controller('RoleController',
             $scope.unassignedSelectedRole = [];
             $scope.unAssignedCheck = 'uncheck';
             $scope.checkToggleUnAssigned = function (unAssignedCheck) {
+                $scope.permissions = [];
                 $scope.unassignedSelectedRole = [];
                 if (unAssignedCheck.toString() === 'check') {
                     for (var i = 0; i < $scope.unAssignedRole.length; i++) {
@@ -135,29 +138,39 @@ rolemodule.controller('RoleController',
                 }
                 return -1;
             }
-
+            $scope.unAssignedCountForSave = 0;
+            $scope.AssignedCountForSave = 0;
             $scope.saverole = function () {
-                var url = $rootScope.baseUrl + 'rolemgnt/updaterole/' + $scope.userDetails.userId + '/' + $scope.organization.organizationId;
-                var obj = JSON.stringify({
-                    params: {
-                        assigned: $scope.assignedRole,
-                        unAssigned: $scope.unAssignedRole
-                    }
-                });
-                $rootScope.startSpin();
-                genericService.addObject(url, obj).then(function (data) {
-                    $rootScope.stopSpin();
-                    $.toaster({ priority: 'success', message: "role updated sucessfully" });
-                    $log.debug("In updaterole api :" + angular.toJson(data));
-                }, function (data) {
-                    $log.debug("in failure");
-                    $rootScope.stopSpin();
-                });
+                if ((angular.isUndefined($scope.unAssignedCountForSave) || !$scope.unAssignedCountForSave) && (angular.isUndefined($scope.AssignedCountForSave) || !$scope.AssignedCountForSave)) {
+                    $.toaster({ priority: 'warning', message: 'Select atleast One Role to Assign or unassign' });
+                    return;
+                }
+                else {
+                    var url = $rootScope.baseUrl + 'rolemgnt/updaterole/' + $scope.userDetails.userId + '/' + $scope.organization.organizationId;
+                    var obj = JSON.stringify({
+                        params: {
+                            assigned: $scope.assignedRole,
+                            unAssigned: $scope.unAssignedRole
+                        }
+                    });
+                    $rootScope.startSpin();
+                    genericService.addObject(url, obj).then(function (data) {
+                        $rootScope.stopSpin();
+                        $.toaster({ priority: 'success', message: "role updated sucessfully" });
+                        $scope.unAssignedCountForSave = 0;
+                        $scope.AssignedCountForSave = 0;
+                        $state.go('home.userassignment.division', { userDetails: $scope.userDetails, organization: $scope.orgobj }, { reolad: true });
+                        $log.debug("In updaterole api :" + angular.toJson(data));
+                    }, function (data) {
+                        $log.debug("in failure");
+                        $rootScope.stopSpin();
+                    });
+                }
             }
 
             $scope.moveToAssigned = function (unassignedSelectedRole) {
                 if (angular.isUndefined(unassignedSelectedRole) || !unassignedSelectedRole.length) {
-                    $.toaster({ priority: 'warning', message: atleatOneDivisionAssign });
+                    $.toaster({ priority: 'warning', message: 'Select atleast One Role to Assign' });
                     return;
                 }
                 angular.forEach(unassignedSelectedRole, function (value, key) {
@@ -170,11 +183,12 @@ rolemodule.controller('RoleController',
                     }
                 }
                 newInput = [];
+                $scope.unAssignedCountForSave = unassignedSelectedRole.length;
                 unassignedSelectedRole = [];
             }
             $scope.moveToUnAssigned = function (assignedSelectedRole) {
                 if (angular.isUndefined(assignedSelectedRole) || !assignedSelectedRole.length) {
-                    $.toaster({ priority: 'warning', message: atleatOneDivisionUnAssign });
+                    $.toaster({ priority: 'warning', message: 'Select atleast One Role to UnAssign' });
                     return;
                 }
                 angular.forEach(assignedSelectedRole, function (value, key) {
@@ -188,6 +202,7 @@ rolemodule.controller('RoleController',
                     }
                 }
                 newInput = [];
+                $scope.AssignedCountForSave = assignedSelectedRole.length;
                 assignedSelectedRole = [];
             }
 

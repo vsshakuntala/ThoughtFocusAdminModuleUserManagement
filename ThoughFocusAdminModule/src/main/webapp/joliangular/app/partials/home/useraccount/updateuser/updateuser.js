@@ -26,12 +26,13 @@ usermodule.config(
 usermodule.controller('UpdateUserController',
     ['$scope',
         '$log',
+        '$filter',
         '$rootScope',
         'updateUserService',
         'UPDATEUSERCONSTANTS',
         'genericService',
         '$state',
-        function ($scope, $log, $rootScope, userService, UPDATEUSERCONSTANTS, genericService, $state) {
+        function ($scope, $log, $filter, $rootScope, userService, UPDATEUSERCONSTANTS, genericService, $state) {
             // $scope.userId = $scope.userDetails.userId;
             // angular.element('#mydiv').hide() 
             $scope.loading = true;
@@ -55,7 +56,10 @@ usermodule.controller('UpdateUserController',
                     //$scope.user.phoneNumber = $scope.user.phoneNumber.substr($scope.user.countryFlag.length, $scope.user.phoneNumber.length);
                     $scope.user.phone = response.phoneNumber;
                     $scope.user = response;
-
+                    var obj = $filter('filter')($scope.languageList, { languageId: $scope.user.userLanguage }, true);
+                    if (obj.length) {
+                        $scope.userLanguage = obj[0];
+                    }
                     // $log.info('number : ' + $("#phone").intlTelInput("setNumber", $scope.user.phoneNumber));
                     $scope.user.phoneNumber = $scope.user.phoneNumber;
                     genericService.getObjectById($rootScope.baseUrl + 'usermgmtrest/getactiveuser/' + $scope.userDetails.userId).then(function (response) {
@@ -95,7 +99,7 @@ usermodule.controller('UpdateUserController',
                 if ($scope.user.userLanguage) {
                     $log.debug("Update successfuly");
                     var countryData = $("#mobile").intlTelInput("getSelectedCountryData");
-                    $scope.user.countryFlag = countryData.dialCode;
+                    $scope.user.countryFlag = countryData.iso2;
                     //$scope.user.phoneNumber = $scope.user.phoneNumber.substr($scope.user.countryFlag.length, $scope.user.phoneNumber.length);
                     $log.info('user phoneNumber: ' + angular.toJson($scope.user.phoneNumber));
                     var aliasName = $scope.user.firstName + " " + $scope.user.lastName;
@@ -104,6 +108,7 @@ usermodule.controller('UpdateUserController',
                     user.userDivision = user.commonUserDivisions.slice(0);
                     $rootScope.startSpin();
                     genericService.putObject($rootScope.baseUrl + 'usermgmtrest/updateuser', user).then(function (response) {
+                        $rootScope.stopSpin();
                         $.toaster({ priority: 'success', message: response.message });
                         $('#close-modal').trigger('click');
                         $rootScope.stopSpin();

@@ -7,3 +7,16 @@
 .label.pendingSpan{
 background-color: #f0ad4e;
 }
+.admindetail
+{
+	margin-top: 10px;
+}
+
+.bootstrap-dialog-footer-buttons .btn.btn-default{
+width: 85px;
+}
+.bootstrap-dialog-footer-buttons .btn.btn-primary{
+	width: 85px;
+	background-color: #428bca !important;
+	    border-color: #428bca !important;	
+}

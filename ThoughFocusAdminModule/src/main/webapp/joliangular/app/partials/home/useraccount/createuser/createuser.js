@@ -84,10 +84,10 @@ usermodule.controller('CreateUserController',
             };
             $scope.getAllDivisions();
             $scope.getAllLanguages();
-            $scope.isMatching = function () {
-                $log.debug(angular.equals($scope.user.userName, $scope.user.email));
-                return angular.equals($scope.user.userName, $scope.user.email);
-            }
+            // $scope.isMatching = function () {
+            //     $log.debug(angular.equals($scope.user.userName, $scope.user.email));
+            //     return angular.equals($scope.user.userName, $scope.user.email);
+            // }
             /**
             * Auto generation of password
             */
@@ -115,6 +115,7 @@ usermodule.controller('CreateUserController',
             /*CREATING NEW USER*/
             $scope.submitRegdForm = function () {
                 if ($scope.user.userLanguage) {
+                    $scope.user.email = angular.copy($scope.user.userName)
                     var countryData = $("#mobile").intlTelInput("getSelectedCountryData");
                     $scope.user.countryFlag = countryData.iso2;
                     //$scope.user.phoneNumber = $scope.user.phoneNumber.substr($scope.user.countryFlag.length, $scope.user.phoneNumber.length);
@@ -128,12 +129,14 @@ usermodule.controller('CreateUserController',
                     $log.debug("Created User: " + angular.toJson($scope.user));
                     $rootScope.startSpin();
                     genericService.getObjects($rootScope.baseUrl + 'usermgmtrest/checkemailexistance?email=' + $scope.user.email).then(function (response) {
+                        $rootScope.stopSpin();
+                        $rootScope.startSpin();
                         genericService.addObject($rootScope.baseUrl + 'usermgmtrest/createuser', $scope.user).then(function (data) {
                             $log.debug("" + $scope.user);
+                            $rootScope.stopSpin();
                             $.toaster({ priority: 'success', message: registrationSuccessful });
                             closeForm();
                             $('#close-modal').trigger('click');
-                            $rootScope.stopSpin();
                         }, function (data) {
                             $rootScope.stopSpin();
                             $.toaster({ priority: 'danger', message: registrationFailed });
